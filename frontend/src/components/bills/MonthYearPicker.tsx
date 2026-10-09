@@ -11,11 +11,13 @@ interface Props {
   id?: string;
   value: string; // "YYYY-MM" or "" when unset
   min?: string; // "YYYY-MM" — earlier months are disabled
+  disabled?: boolean; // shows the value but cannot change it
+  clearable?: boolean; // shows the clear button when a value is set (default true)
   onChange: (value: string) => void;
 }
 
 // Same popup and header as DatePicker, but picks a month + year (no day) and can be cleared.
-export default function MonthYearPicker({ id, value, min, onChange }: Props) {
+export default function MonthYearPicker({ id, value, min, disabled, clearable = true, onChange }: Props) {
   const locale = useLocale();
   const thisYear = Number(useToday().slice(0, 4));
   const [selYear, selMonth] = value ? value.split("-").map(Number) : [0, 0];
@@ -27,9 +29,10 @@ export default function MonthYearPicker({ id, value, min, onChange }: Props) {
   return (
     <CalendarPopup
       id={id}
+      disabled={disabled}
       label={value ? formatDate(locale, selYear, selMonth, 1, { month: "long", year: "numeric" }) : "---"}
       onToggle={() => setViewYear(value ? selYear : thisYear)}
-      trailing={value && (
+      trailing={clearable && value && (
         <button
           type="button"
           onClick={() => onChange("")}

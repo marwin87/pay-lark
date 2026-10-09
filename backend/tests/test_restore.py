@@ -446,7 +446,7 @@ def test_v4_backup_round_trips_categories(client):
     assert r.status_code == 201
 
     backup = client.get("/export/json", headers=auth(tok)).json()
-    assert backup["schema_version"] == 7
+    assert backup["schema_version"] == 8
     assert any(c["name"] == "Hobbies" for c in backup["categories"])
 
     r = _upload(client, tok, backup)
@@ -852,3 +852,56 @@ def test_restore_non_object_or_bad_version_returns_422(client, body):
         headers=auth(tok),
     )
     assert r.status_code == 422
+
+
+def test_multi_day_bill_round_trips_through_backup(client):
+    """due_days and each payment's slot survive export → restore → re-export."""
+    tok = register_and_login(client, "rt_multi@test.com")
+    r = client.post(
+        "/bills",
+        json={
+            **_BILL_ALPHA,
+            "category_id": category_id(client, tok, "utilities"),
+            "due_days": [3, 10, 17],
+        },
+        headers=auth(tok),
+    )
+    assert r.status_code == 201, r.text
+    sync_payments(client, tok)
+
+    backup = client.get("/export/json", headers=auth(tok)).json()
+    assert backup["schema_version"] == 8
+    assert backup["bill_templates"][0]["due_days"] == [3, 10, 17]
+    slots = sorted(i["slot"] for i in backup["payment_instances"])
+    assert slots == [0, 1, 2]
+
+    assert _upload(client, tok, backup).status_code == 200
+    after = client.get("/export/json", headers=auth(tok)).json()
+    assert after["bill_templates"][0]["due_days"] == [3, 10, 17]
+    assert sorted(i["slot"] for i in after["payment_instances"]) == [0, 1, 2]
+
+
+def test_v7_backup_without_slot_restores_as_single_slot(client):
+    """Backups from before multi-day bills carry neither due_days nor slot."""
+    tok = register_and_login(client, "v7_restore@test.com")
+    template = {
+        "id": 1,
+        "name": "Old bill",
+        "category": "utilities",
+        "frequency": "monthly",
+        "amount": 50.0,
+        "currency": "PLN",
+        "due_day": 5,
+        "notes": None,
+        "is_archived": False,
+        "start_period": "2026-05",
+        "created_at": "2026-01-01T00:00:00+00:00",
+    }
+    backup = _make_backup([template], [_make_instance_dict(1, "2026-05")], 7)
+
+    r = _upload(client, tok, backup)
+
+    assert r.status_code == 200, r.text
+    after = client.get("/export/json", headers=auth(tok)).json()
+    assert after["payment_instances"][0]["slot"] == 0
+    assert after["bill_templates"][0]["due_days"] is None

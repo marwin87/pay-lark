@@ -6,6 +6,7 @@ Notable changes to Pay Tracker, release by release.
 
 ### Features
 
+- Pay one bill on several days of the month (e.g. single gym entries), or on chosen dates for one-off bills
 - Bigger month arrows on the dashboard, the 12-month chart scrolls year by year and its bars pick the month, and the dashboard and Payments month pickers swipe on touch screens
 - Browse the dashboard and Payments up to 5 years back and ahead
 - About tab in Settings with app details and licenses

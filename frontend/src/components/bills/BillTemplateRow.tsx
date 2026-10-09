@@ -26,9 +26,18 @@ interface Props {
 }
 
 export function formatDueLabel(template: BillTemplateOut, locale: string): string | null {
-  const { frequency, due_day, due_month, start_period } = template;
+  const { frequency, due_day, due_days, due_month, start_period, dates } = template;
+  const days = due_days ?? (due_day != null ? [due_day] : []);
 
   if (frequency === "one_off") {
+    if (dates.length > 0) {
+      const short = (iso: string) =>
+        new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", timeZone: "UTC" }).format(
+          new Date(`${iso}T00:00:00Z`),
+        );
+      const shown = dates.slice(0, 3).map(short).join(", ");
+      return dates.length > 3 ? `${shown} +${dates.length - 3}` : shown;
+    }
     if (!start_period) return null;
     const [year, month] = start_period.split("-").map(Number);
     const monthName = new Intl.DateTimeFormat(locale, { month: "short" }).format(
@@ -40,14 +49,14 @@ export function formatDueLabel(template: BillTemplateOut, locale: string): strin
     );
   }
 
-  if (frequency === "annual" && due_day != null && due_month != null) {
+  if (frequency === "annual" && days.length > 0 && due_month != null) {
     const monthName = new Intl.DateTimeFormat(locale, { month: "short" }).format(
       new Date(2000, due_month - 1)
     );
-    return `${monthName} ${due_day}`;
+    return `${monthName} ${days.join(", ")}`;
   }
 
-  if (due_day != null) return String(due_day);
+  if (days.length > 0) return days.join(", ");
   return null;
 }
 
@@ -169,6 +178,7 @@ export default function BillTemplateRow({
         <div className="rounded-b-xl border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-5">
           <BillTemplateForm
             startPeriod={template.start_period}
+            paidDates={template.paid_dates}
             initial={{
               name: template.name,
               category_id: template.category.id,
@@ -177,6 +187,8 @@ export default function BillTemplateRow({
               amount: template.amount,
               currency: template.currency,
               due_day: template.due_day,
+              due_days: template.due_days,
+              dates: template.dates,
               due_month: template.due_month,
               end_period: template.end_period,
               notes: template.notes,

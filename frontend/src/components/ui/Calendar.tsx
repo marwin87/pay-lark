@@ -23,7 +23,8 @@ interface Props {
   year: number;
   month: number; // 1–12
   today: string; // YYYY-MM-DD
-  selected?: string | null;
+  /** One date, or several (multi-select pickers). */
+  selected?: string | string[] | null;
   onSelect: (iso: string) => void;
   getDay?: (iso: string) => DayState;
   /** "fill": solid green cell (pickers). "ring": ring only, keeps getDay colours (status calendar). */
@@ -34,9 +35,9 @@ interface Props {
   nav?: { onChange: (ym: string) => void; min?: string; max?: string };
 }
 
-const BASE = "relative flex h-8 w-full items-center justify-center rounded-lg text-sm transition-colors";
-const ENABLED = "text-slate-700 hover:bg-green-50 hover:text-green-800 dark:text-slate-300 dark:hover:bg-green-900/30 dark:hover:text-green-300";
-const DISABLED = "cursor-not-allowed text-slate-300 dark:text-slate-600";
+export const DAY_CELL = "relative flex h-8 w-full items-center justify-center rounded-lg text-sm transition-colors";
+export const DAY_ENABLED = "text-slate-700 hover:bg-green-50 hover:text-green-800 dark:text-slate-300 dark:hover:bg-green-900/30 dark:hover:text-green-300";
+export const DAY_DISABLED = "cursor-not-allowed text-slate-300 dark:text-slate-600";
 const ARROW = "rounded-lg p-1 text-slate-400 transition-colors hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent dark:hover:bg-slate-700";
 
 /** Title + prev/next arrows. Shared with the month picker. */
@@ -94,11 +95,11 @@ export default function Calendar({ year, month, today, selected, onSelect, getDa
         {Array.from({ length: daysInMonth(year, month) }, (_, i) => i + 1).map((d) => {
           const iso = isoDate(year, month, d);
           const { disabled, className, badge } = getDay?.(iso) ?? {};
-          const isSelected = selected === iso;
+          const isSelected = Array.isArray(selected) ? selected.includes(iso) : selected === iso;
           const isToday = iso === today;
           const colours = isSelected && selectedStyle === "fill"
             ? "bg-green-700 font-semibold text-white"
-            : className ?? (disabled ? DISABLED : ENABLED);
+            : className ?? (disabled ? DAY_DISABLED : DAY_ENABLED);
           const ring = isSelected && selectedStyle === "ring"
             ? "ring-2 ring-green-600 dark:ring-emerald-400"
             : isToday && !isSelected
@@ -109,10 +110,11 @@ export default function Calendar({ year, month, today, selected, onSelect, getDa
               key={d}
               type="button"
               disabled={disabled}
+              aria-pressed={isSelected}
               data-selected={isSelected || undefined}
               data-today={isToday || undefined}
               onClick={() => onSelect(iso)}
-              className={`${BASE} ${colours} ${ring} ${isToday ? "font-bold" : ""}`}
+              className={`${DAY_CELL} ${colours} ${ring} ${isToday ? "font-bold" : ""}`}
             >
               {d}
               {badge}

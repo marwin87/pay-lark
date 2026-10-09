@@ -32,10 +32,11 @@ test('editing a bill persists amount, category, frequency, due day and pause', a
   await page.locator('#bill-interval').click();
   await page.getByRole('option', { name: '3 months' }).click();
 
-  // Step: due day — the trigger shows the current "month day" (due_month defaults to now)
-  const monthName = new Intl.DateTimeFormat('en', { month: 'long' }).format(new Date());
-  await page.getByRole('button', { name: new RegExp(`${monthName} 15|15 ${monthName}`) }).click();
+  // Step: due day — open the days calendar (15 is selected), swap it for 20
+  await page.getByLabel('Payment days').click();
+  await page.getByRole('button', { name: '15', exact: true }).click();
   await page.getByRole('button', { name: '20', exact: true }).click();
+  await page.keyboard.press('Escape');
 
   await page.getByRole('button', { name: 'Save' }).click();
 

@@ -12,7 +12,12 @@ export interface BillTemplateOut {
   amount: string;
   currency: string;
   due_day: number | null;
+  /** Several payment days per cycle; null = just due_day. */
+  due_days: number[] | null;
   due_month: number | null;
+  /** One-off bills: their payment dates, and which of them are already paid. */
+  dates: string[];
+  paid_dates: string[];
   start_period: string | null;
   end_period: string | null;
   notes: string | null;
@@ -28,6 +33,9 @@ export interface BillTemplateCreate {
   amount: string;
   currency?: string;
   due_day?: number | null;
+  due_days?: number[] | null;
+  /** One-off only: every payment date (YYYY-MM-DD), any months. */
+  dates?: string[] | null;
   due_month?: number | null;
   end_period?: string | null;
   notes?: string | null;

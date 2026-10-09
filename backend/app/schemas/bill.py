@@ -19,6 +19,14 @@ Money = Annotated[Decimal, Field(ge=0, le=Decimal("9999999999.99"))]
 BillName = Annotated[str, Field(min_length=1, max_length=255)]
 Currency = Annotated[str, Field(max_length=10)]
 Notes = Annotated[str, Field(max_length=2000)]
+# Payment days of one cycle: 1-31, any order on input, stored sorted and unique.
+DueDays = Annotated[list[Annotated[int, Field(ge=1, le=31)]], Field(max_length=31)]
+# Explicit dates of a one-off bill (any months).
+OneOffDates = Annotated[list[date], Field(min_length=1, max_length=366)]
+
+
+def _sorted_unique(value: list | None) -> list | None:
+    return None if value is None else sorted(set(value))
 
 
 def check_interval(frequency: BillFrequency, interval: int) -> None:
@@ -39,10 +47,18 @@ class BillTemplateCreate(BaseModel):
     due_month: int | None = Field(None, ge=1, le=12)  # month for annual/one_off
     end_period: str | None = Field(None, pattern=_PERIOD_RE)  # last recurring month
     notes: Notes | None = None
+    due_days: DueDays | None = None  # several days per cycle; due_day mirrors the first
+    dates: OneOffDates | None = None  # one-off only
+
+    _normalize_days = field_validator("due_days", "dates")(_sorted_unique)
 
     @model_validator(mode="after")
     def _interval_fits_frequency(self) -> "BillTemplateCreate":
         check_interval(self.frequency, self.interval)
+        if self.dates is not None and self.frequency != BillFrequency.one_off:
+            raise ValueError("dates are only for one_off bills")
+        if self.due_days and self.frequency == BillFrequency.one_off:
+            raise ValueError("due_days are not for one_off bills, use dates")
         return self
 
 
@@ -63,6 +79,10 @@ class BillTemplateUpdate(BaseModel):
     end_period: str | None = Field(None, pattern=_PERIOD_RE)  # null clears the end
     notes: Notes | None = None
     recreate_deleted_future: bool = False  # transient control flag — not persisted
+    due_days: DueDays | None = None  # null clears back to the single due_day
+    dates: OneOffDates | None = None  # one-off only: the full new list of dates
+
+    _normalize_days = field_validator("due_days", "dates")(_sorted_unique)
 
     @model_validator(mode="after")
     def _no_null_on_required_fields(self) -> "BillTemplateUpdate":
@@ -85,6 +105,9 @@ class BillTemplateOut(BaseModel):
     amount: Decimal
     currency: str
     due_day: int | None
+    due_days: list[int] | None = None  # null = just due_day
+    dates: list[date] = []  # one-off bills: their payment dates
+    paid_dates: list[date] = []  # subset of `dates` that is already paid
     notes: str | None
     is_archived: bool
     created_at: datetime
@@ -181,6 +204,7 @@ class BackupTemplate(BaseModel):
     amount: Decimal
     currency: str
     due_day: int | None
+    due_days: list[int] | None = None  # v8+: several payment days per cycle
     notes: str | None
     is_archived: bool
     start_period: str | None
@@ -207,6 +231,7 @@ class BackupInstance(BaseModel):
     id: int
     bill_id: int
     period: str
+    slot: int = 0  # v8+: which of the template's days this payment is for
     due_date: str
     amount: Decimal
     status: PaymentStatus

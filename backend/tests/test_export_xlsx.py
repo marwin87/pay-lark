@@ -368,3 +368,24 @@ def test_xlsx_status_follows_due_date_not_stored_value(client_db):
     }
     assert status["Stored overdue"] == "Upcoming"
     assert status["Stored upcoming"] == "Overdue"
+
+
+def test_xlsx_has_a_row_per_payment_day(client):
+    """A bill with three days a month exports three rows for every active month."""
+    tok = register_and_login(client, "xlsx_multi@test.com")
+    r = client.post(
+        "/bills",
+        json={
+            **_BILL_A,
+            "category_id": category_id(client, tok),
+            "due_month": 1,
+            "due_days": [3, 10, 17],
+        },
+        headers=auth(tok),
+    )
+    assert r.status_code == 201, r.text
+
+    r = client.get(f"/export/xlsx?year={today_utc().year}", headers=auth(tok))
+
+    assert r.status_code == 200
+    assert _data_rows(r.content) == 36

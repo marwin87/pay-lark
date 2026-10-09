@@ -39,6 +39,37 @@ def _due_date_for_period(period: str, due_day: int | None) -> date:
     return date(year, month, min(day, last_day))
 
 
+def _existing_slots(
+    db: Session, bill_id: int, periods: list[str]
+) -> dict[str, set[int]]:
+    """Slots that already have a row (soft-deleted ones included: they are tombstones)."""
+    slots: dict[str, set[int]] = {}
+    for row in db.query(PaymentInstance.period, PaymentInstance.slot).filter(
+        PaymentInstance.bill_id == bill_id,
+        PaymentInstance.period.in_(periods),
+    ):
+        slots.setdefault(row.period, set()).add(row.slot)
+    return slots
+
+
+def _missing_instances(
+    template: BillTemplate, period: str, have: set[int]
+) -> list[PaymentInstance]:
+    """One new instance per day of the template that has no row yet in `period`."""
+    return [
+        PaymentInstance(
+            bill_id=template.id,
+            period=period,
+            slot=slot,
+            due_date=_due_date_for_period(period, day),
+            amount=template.amount,
+            status=PaymentStatus.upcoming,
+        )
+        for slot, day in enumerate(template.days)
+        if slot not in have
+    ]
+
+
 def _bill_active_in_period(template: BillTemplate, period: str) -> bool:
     """Return True if this template's frequency schedule falls on the given period."""
     # Use start_period (YYYY-MM) as the recurrence anchor when set.
@@ -78,26 +109,10 @@ def backfill_template_instances(
     if not active_periods:
         return
 
-    # Single query for all existing periods — avoids N+1 per period.
-    existing_periods = {
-        row.period
-        for row in db.query(PaymentInstance.period).filter(
-            PaymentInstance.bill_id == template.id,
-            PaymentInstance.period.in_(active_periods),
-        )
-    }
-
+    # Single query for all existing slots — avoids N+1 per period.
+    existing = _existing_slots(db, template.id, active_periods)
     for p in active_periods:
-        if p not in existing_periods:
-            db.add(
-                PaymentInstance(
-                    bill_id=template.id,
-                    period=p,
-                    due_date=_due_date_for_period(p, template.due_day),
-                    amount=template.amount,
-                    status=PaymentStatus.upcoming,
-                )
-            )
+        db.add_all(_missing_instances(template, p, existing.get(p, set())))
 
     if db.new:
         try:
@@ -137,25 +152,8 @@ def _seed_period(db: Session, period: str, user_id: int) -> None:
     for template in templates:
         if not _bill_active_in_period(template, period):
             continue
-        existing = (
-            db.query(PaymentInstance)
-            .filter(
-                PaymentInstance.bill_id == template.id,
-                PaymentInstance.period == period,
-            )
-            .first()
-        )
-        if existing:
-            continue
-        db.add(
-            PaymentInstance(
-                bill_id=template.id,
-                period=period,
-                due_date=_due_date_for_period(period, template.due_day),
-                amount=template.amount,
-                status=PaymentStatus.upcoming,
-            )
-        )
+        have = _existing_slots(db, template.id, [period]).get(period, set())
+        db.add_all(_missing_instances(template, period, have))
 
 
 def generate_next_instance(
@@ -169,37 +167,21 @@ def generate_next_instance(
     if template.end_period and next_period > template.end_period:
         return None
 
-    # idempotent: skip if already exists
-    existing = (
+    # idempotent: only the days that have no row yet get created
+    have = _existing_slots(db, template.id, [next_period]).get(next_period, set())
+    created = _missing_instances(template, next_period, have)
+    if created:
+        db.add_all(created)
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+    return (
         db.query(PaymentInstance)
         .filter(
             PaymentInstance.bill_id == template.id,
             PaymentInstance.period == next_period,
         )
+        .order_by(PaymentInstance.slot)
         .first()
     )
-    if existing:
-        return existing
-
-    instance = PaymentInstance(
-        bill_id=template.id,
-        period=next_period,
-        due_date=_due_date_for_period(next_period, template.due_day),
-        amount=template.amount,
-        status=PaymentStatus.upcoming,
-    )
-    db.add(instance)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        return (
-            db.query(PaymentInstance)
-            .filter(
-                PaymentInstance.bill_id == template.id,
-                PaymentInstance.period == next_period,
-            )
-            .first()
-        )
-    db.refresh(instance)
-    return instance

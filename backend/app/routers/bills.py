@@ -22,6 +22,7 @@ from app.schemas.bill import (
 )
 from app.schemas.category import CategoryOut
 from app.services.recurrence import (
+    _bill_active_in_period,
     _due_date_for_period,
     backfill_template_instances,
     ensure_current_period_instances,
@@ -39,6 +40,87 @@ def _check_category_ownership(db: Session, category_id: int, user_id: int) -> No
         raise HTTPException(status_code=404, detail="Category not found")
     if category.user_id != user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
+
+
+def _day_columns(days: list[int] | None) -> dict:
+    """Template columns for a chosen day list: due_day mirrors the first day and
+    due_days is only stored for 2+ days, so single-day bills look exactly as before."""
+    if not days:
+        return {"due_days": None}
+    return {"due_day": days[0], "due_days": days if len(days) > 1 else None}
+
+
+def _one_off_instances(
+    bill: BillTemplate, dates: list[date], taken: dict[str, set[int]]
+) -> list[PaymentInstance]:
+    """New instances for the given dates; each takes the lowest free slot of its month."""
+    created = []
+    for d in dates:
+        period = d.strftime("%Y-%m")
+        used = taken.setdefault(period, set())
+        slot = next(i for i in range(len(used) + 1) if i not in used)
+        used.add(slot)
+        created.append(
+            PaymentInstance(
+                bill_id=bill.id,
+                period=period,
+                slot=slot,
+                due_date=d,
+                amount=bill.amount,
+                status=PaymentStatus.upcoming,
+            )
+        )
+    return created
+
+
+def _sync_one_off_dates(db: Session, bill: BillTemplate, dates: list[date]) -> None:
+    """Make the bill's live payments match `dates`. Paid payments are history and stay;
+    a deleted (tombstone) payment on a re-added date is brought back."""
+    rows = db.query(PaymentInstance).filter(PaymentInstance.bill_id == bill.id).all()
+    wanted = set(dates)
+    live_dates: set[date] = set()
+    removed: set[int] = set()
+    for inst in rows:
+        if inst.is_deleted:
+            if inst.due_date in wanted and inst.status != PaymentStatus.paid:
+                inst.is_deleted = False
+                inst.amount = bill.amount
+                live_dates.add(inst.due_date)
+        elif inst.due_date in wanted:
+            live_dates.add(inst.due_date)
+        elif inst.status != PaymentStatus.paid:
+            removed.add(inst.id)
+            db.delete(inst)
+    db.flush()  # deletes first, so a freed slot can be reused by an insert below
+    remaining = [i for i in rows if i.id not in removed]
+    taken: dict[str, set[int]] = {}
+    for inst in remaining:
+        taken.setdefault(inst.period, set()).add(inst.slot)
+    db.add_all(
+        _one_off_instances(bill, [d for d in dates if d not in live_dates], taken)
+    )
+    kept = {i.due_date for i in remaining if not i.is_deleted}
+    bill.start_period = min(kept | wanted).strftime("%Y-%m")
+
+
+def _apply_day_change(db: Session, bill: BillTemplate) -> None:
+    """After the day list changed: unpaid payments follow their slot's new day, and
+    unpaid payments of slots that no longer exist are dropped (system-made rows, so no
+    tombstone, same as the end_period cleanup). Paid payments are never touched."""
+    days = bill.days
+    unpaid = (
+        db.query(PaymentInstance)
+        .filter(
+            PaymentInstance.bill_id == bill.id,
+            PaymentInstance.status != PaymentStatus.paid,
+        )
+        .all()
+    )
+    for inst in unpaid:
+        if inst.slot >= len(days):
+            db.delete(inst)
+        elif not inst.is_deleted:
+            inst.due_date = _due_date_for_period(inst.period, days[inst.slot])
 
 
 def _live_instance(db: Session, instance_id: int, user_id: int) -> PaymentInstance:
@@ -136,7 +218,12 @@ def create_bill(
         start_period = now.strftime("%Y-%m")
     if body.end_period and body.end_period < start_period:
         raise HTTPException(status_code=422, detail="end_period is before start")
-    data = body.model_dump(exclude={"due_month"})
+    if body.dates:
+        start_period = body.dates[0].strftime("%Y-%m")
+    data = body.model_dump(exclude={"due_month", "dates", "due_days"})
+    data.update(_day_columns(body.due_days))
+    if body.dates:
+        data["due_day"] = None
     bill = BillTemplate(**data, user_id=me.id, start_period=start_period)
     db.add(bill)
     db.commit()
@@ -145,6 +232,10 @@ def create_bill(
     current_period = now.strftime("%Y-%m")
     if body.frequency in RECURRING and start_period < current_period:
         backfill_template_instances(db, bill, start_period, current_period)
+    elif body.dates:
+        # Explicit dates (any months): one payment each, created right away.
+        db.add_all(_one_off_instances(bill, body.dates, {}))
+        db.commit()
     elif body.frequency == BF.one_off:
         # A one-off bill never repeats, so it gets exactly one instance,
         # created right away instead of waiting on the recurring backfill.
@@ -392,17 +483,29 @@ def update_bill(
     updates = body.model_dump(exclude_unset=True)
     updates.pop("recreate_deleted_future", None)
     due_month = updates.pop("due_month", None)
+    dates = updates.pop("dates", None)
+    if "due_days" in updates:
+        updates.update(_day_columns(updates["due_days"]))
+    elif "due_day" in updates:
+        updates["due_days"] = None  # a lone due_day means "one day"
     if "category_id" in updates:
         _check_category_ownership(db, updates["category_id"], me.id)
     if updates.get("interval") is None:
         updates.pop("interval", None)
-    due_day_changed = "due_day" in updates and updates["due_day"] != bill.due_day
+    days_before = bill.days
+    schedule_before = (bill.frequency, bill.interval, bill.start_period)
     for field, value in updates.items():
         setattr(bill, field, value)
+    if dates is not None and bill.frequency != BF.one_off:
+        raise HTTPException(status_code=422, detail="dates are only for one_off bills")
 
     # Recalculate start_period when due_month changes for annual/one_off
     effective_frequency = updates.get("frequency", bill.frequency)
-    if due_month is not None and effective_frequency in (BF.annual, BF.one_off):
+    if (
+        due_month is not None
+        and effective_frequency in (BF.annual, BF.one_off)
+        and not dates
+    ):
         now = now_for(me)
         year = now.year if due_month >= now.month else now.year + 1
         bill.start_period = f"{year:04d}-{due_month:02d}"
@@ -424,18 +527,33 @@ def update_bill(
             PaymentInstance.status != PaymentStatus.paid,
         ).delete(synchronize_session=False)
 
-    if due_day_changed:
-        unpaid = (
+    if (bill.frequency, bill.interval, bill.start_period) != schedule_before:
+        # The cycle changed (e.g. every month → every 3 months): unpaid payments from now on
+        # that the new cycle skips are system-made, so drop them like the end_period cleanup
+        # does. Past ones stay (a missed payment is history), tombstones stay (user choices),
+        # and months the new cycle adds get seeded on their next visit.
+        current_period = today_for(me).strftime("%Y-%m")
+        stale = (
             db.query(PaymentInstance)
             .filter(
                 PaymentInstance.bill_id == bill.id,
+                PaymentInstance.period >= current_period,
                 PaymentInstance.status != PaymentStatus.paid,
                 PaymentInstance.is_deleted.is_(False),
             )
             .all()
         )
-        for inst in unpaid:
-            inst.due_date = _due_date_for_period(inst.period, bill.due_day)
+        for inst in stale:
+            if bill.frequency != BF.one_off and not _bill_active_in_period(
+                bill, inst.period
+            ):
+                db.delete(inst)
+
+    if bill.days != days_before:
+        _apply_day_change(db, bill)
+
+    if dates is not None:
+        _sync_one_off_dates(db, bill, dates)
 
     if body.recreate_deleted_future:
         current_period = today_for(me).strftime("%Y-%m")
@@ -453,7 +571,11 @@ def update_bill(
             if inst.status == PaymentStatus.paid:
                 continue  # paid history comes back as it was, never reset to upcoming
             inst.amount = bill.amount
-            inst.due_date = _due_date_for_period(inst.period, bill.due_day)
+            if bill.frequency != BF.one_off:
+                days = bill.days
+                inst.due_date = _due_date_for_period(
+                    inst.period, days[min(inst.slot, len(days) - 1)]
+                )
             inst.status = PaymentStatus.upcoming
 
     db.commit()

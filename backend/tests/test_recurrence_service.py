@@ -352,14 +352,14 @@ def test_generate_next_instance_integrity_error_fallback(
     real_query = db_session.query
     pre_check_intercepted = [False]
 
-    def mock_query(model):
-        if model is PaymentInstance and not pre_check_intercepted[0]:
+    def mock_query(*models):
+        # the pre-check lists the existing (period, slot) pairs
+        if models[0] is PaymentInstance.period and not pre_check_intercepted[0]:
             pre_check_intercepted[0] = True
             stub = MagicMock()
-            stub.filter.return_value = stub
-            stub.first.return_value = None
+            stub.filter.return_value = []
             return stub
-        return real_query(model)
+        return real_query(*models)
 
     commit_raised = [False]
 
@@ -687,3 +687,124 @@ def test_end_period_interval_4_not_on_schedule(db_session) -> None:
     assert periods == ["2026-01", "2026-05", "2026-09"]
     assert generate_next_instance(db_session, bill, "2026-09") is None
     assert generate_next_instance(db_session, bill, "2026-05").period == "2026-09"
+
+
+# ── multi-day bills (slots) ──────────────────────────────────────────────────
+
+
+def _multi_day_bill(db, user_id: int, days: list[int], **kwargs) -> BillTemplate:
+    bill = _make_bill(db, user_id, due_day=days[0], **kwargs)
+    bill.due_days = days
+    db.commit()
+    return bill
+
+
+def _rows(db, bill_id: int, period: str) -> list[PaymentInstance]:
+    return (
+        db.query(PaymentInstance)
+        .filter(PaymentInstance.bill_id == bill_id, PaymentInstance.period == period)
+        .order_by(PaymentInstance.slot)
+        .all()
+    )
+
+
+def test_seed_period_creates_one_instance_per_day(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10, 17], start_period="2026-05")
+
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+
+    rows = _rows(db_session, bill.id, "2026-05")
+    assert [(r.slot, r.due_date) for r in rows] == [
+        (0, date(2026, 5, 3)),
+        (1, date(2026, 5, 10)),
+        (2, date(2026, 5, 17)),
+    ]
+
+
+def test_seed_period_is_idempotent_for_multi_day_bills(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10], start_period="2026-05")
+
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+
+    assert len(_rows(db_session, bill.id, "2026-05")) == 2
+
+
+def test_seed_period_does_not_regenerate_a_deleted_slot(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10, 17], start_period="2026-05")
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+    _rows(db_session, bill.id, "2026-05")[1].is_deleted = True
+    db_session.commit()
+
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+
+    rows = _rows(db_session, bill.id, "2026-05")
+    assert len(rows) == 3
+    assert [r.is_deleted for r in rows] == [False, True, False]
+
+
+def test_seed_period_fills_only_missing_slots(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10], start_period="2026-05")
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+    bill.due_days = [3, 10, 20]
+    db_session.commit()
+
+    ensure_current_period_instances(db_session, "2026-05", user.id)
+
+    assert [r.slot for r in _rows(db_session, bill.id, "2026-05")] == [0, 1, 2]
+
+
+def test_multi_day_bill_follows_interval(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(
+        db_session, user.id, [5, 20], interval=2, start_period="2026-05"
+    )
+
+    ensure_current_period_instances(db_session, "2026-06", user.id)
+    ensure_current_period_instances(db_session, "2026-07", user.id)
+
+    assert _rows(db_session, bill.id, "2026-06") == []
+    assert len(_rows(db_session, bill.id, "2026-07")) == 2
+
+
+def test_multi_day_bill_clamps_days_to_month_end(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [15, 31], start_period="2026-01")
+
+    ensure_current_period_instances(db_session, "2026-02", user.id)
+
+    assert [r.due_date for r in _rows(db_session, bill.id, "2026-02")] == [
+        date(2026, 2, 15),
+        date(2026, 2, 28),
+    ]
+
+
+def test_backfill_creates_every_slot_for_every_period(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10], start_period="2026-01")
+
+    backfill_template_instances(db_session, bill, "2026-01", "2026-03")
+    backfill_template_instances(db_session, bill, "2026-01", "2026-03")
+
+    total = (
+        db_session.query(PaymentInstance)
+        .filter(PaymentInstance.bill_id == bill.id)
+        .count()
+    )
+    assert total == 6
+
+
+def test_generate_next_instance_creates_all_days_of_next_period(db_session) -> None:
+    user = _make_user(db_session)
+    bill = _multi_day_bill(db_session, user.id, [3, 10, 17], start_period="2026-05")
+
+    first = generate_next_instance(db_session, bill, "2026-05")
+    again = generate_next_instance(db_session, bill, "2026-05")
+
+    assert first is not None and first.slot == 0
+    assert again is not None and again.id == first.id
+    assert len(_rows(db_session, bill.id, "2026-06")) == 3

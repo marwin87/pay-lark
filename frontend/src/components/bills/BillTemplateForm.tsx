@@ -3,12 +3,12 @@
 import { FormEvent, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
-import { daysInMonth, isoDate } from "@/lib/calendar";
 import { todayIn } from "@/lib/today";
 import CategoryCombobox from "./CategoryCombobox";
 import MonthYearPicker from "./MonthYearPicker";
 import CurrencyPicker from "@/components/CurrencyPicker";
-import DatePicker from "@/components/ui/DatePicker";
+import DaysOfMonthPicker from "@/components/ui/DaysOfMonthPicker";
+import MultiDatePicker from "@/components/ui/MultiDatePicker";
 import Dropdown from "@/components/ui/Dropdown";
 import { LOCALE_DEFAULT_CURRENCY } from "@/lib/currency";
 import { formatAmount } from "@/lib/summary";
@@ -22,6 +22,7 @@ const RECURRING_FREQUENCIES: BillFrequency[] = ["monthly"];
 interface Props {
   initial?: Partial<BillTemplateCreate>;
   startPeriod?: string | null; // saved start (YYYY-MM) when editing
+  paidDates?: string[]; // one-off dates already paid: they stay (history)
   defaultCurrency?: string | null;
   onSave: (data: BillTemplateCreate) => Promise<void>;
   onCancel: () => void;
@@ -40,7 +41,7 @@ function lastPayment(start: string, end: string, step: number) {
 interface Errors {
   name?: string;
   amount?: string;
-  due_day?: string;
+  days?: string;
   category?: string;
 }
 
@@ -49,7 +50,7 @@ const inputClass =
 
 const labelClass = "block text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5";
 
-export default function BillTemplateForm({ initial, startPeriod, defaultCurrency, onSave, onCancel }: Props) {
+export default function BillTemplateForm({ initial, startPeriod, paidDates, defaultCurrency, onSave, onCancel }: Props) {
   const t = useTranslations("BillTemplateForm");
   const tFreq = useTranslations("Frequencies");
   const locale = useLocale();
@@ -71,9 +72,11 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
   const initialCurrency =
     initial?.currency ?? defaultCurrency ?? LOCALE_DEFAULT_CURRENCY[locale] ?? "EUR";
   const [currency, setCurrency] = useState(initialCurrency);
-  const [dueDay, setDueDay] = useState(
-    initial?.due_day != null ? String(initial.due_day) : String(todayDay),
+  // Payment days of one cycle (monthly/annual) and explicit dates (one-off)
+  const [dueDays, setDueDays] = useState<number[]>(
+    initial?.due_days ?? (initial?.due_day != null ? [initial.due_day] : [todayDay]),
   );
+  const [dates, setDates] = useState<string[]>(initial?.dates?.length ? initial.dates : [todayStr]);
   const [dueMonth, setDueMonth] = useState(
     initial?.due_month != null ? String(initial.due_month) : String(todayMonth),
   );
@@ -91,10 +94,9 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
   const effectiveStart =
     startPeriod ?? `${todayYear}-${String(parseInt(dueMonth, 10) || todayMonth).padStart(2, "0")}`;
   const minEnd = effectiveStart > currentPeriod ? effectiveStart : currentPeriod;
-  // Day-of-year anchor: the picker shows the real calendar of the year the bill starts in
-  const startYear = Number(effectiveStart.slice(0, 4));
-  const startMonth = parseInt(dueMonth, 10) || todayMonth;
-  const startDate = isoDate(startYear, startMonth, Math.min(parseInt(dueDay, 10) || todayDay, daysInMonth(startYear, startMonth)));
+  // The server keeps an existing monthly bill's start (it anchors the cycle and its history)
+  const startLocked = !!startPeriod && frequency === "monthly";
+  const startMonth = startLocked ? Number(startPeriod.slice(5, 7)) : parseInt(dueMonth, 10) || todayMonth;
   const maxInterval = frequency === "annual" ? 5 : 12;
   const effectiveInterval = frequency === "one_off" ? 1 : Math.min(interval, maxInterval);
   const step = effectiveInterval * (frequency === "annual" ? 12 : 1);
@@ -104,12 +106,14 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
     name: string;
     amount: string;
     categoryId: number | "";
+    days?: boolean;
   }): Errors {
     const e: Errors = {};
     if (!fields.name.trim()) e.name = t("nameRequired");
     if (fields.amount.trim() && isNaN(Number(fields.amount.trim().replace(",", "."))))
       e.amount = t("amountInvalid");
     if (!fields.categoryId) e.category = t("categoryRequired");
+    if (fields.days === false) e.days = t(frequency === "one_off" ? "datesRequired" : "daysRequired");
     return e;
   }
 
@@ -127,7 +131,7 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitAttempted(true);
-    const errs = validate({ name, amount, categoryId });
+    const errs = validate({ name, amount, categoryId, days: (frequency === "one_off" ? dates : dueDays).length > 0 });
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
@@ -141,8 +145,9 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
         interval: effectiveInterval,
         amount: amount.trim().replace(",", ".") || "0",
         currency: currency || "EUR",
-        due_day: dueDay ? parseInt(dueDay, 10) : null,
-        due_month: dueMonth ? parseInt(dueMonth, 10) : null,
+        ...(frequency === "one_off"
+          ? { dates, due_day: null, due_days: null, due_month: null }
+          : { due_days: dueDays, due_day: dueDays[0], due_month: startMonth }),
         end_period: isRecurring ? endPeriod || null : null,
         notes: notes.trim() || null,
       };
@@ -245,19 +250,46 @@ export default function BillTemplateForm({ initial, startPeriod, defaultCurrency
         )}
       </div>
 
-      {/* Row 3: Start date + optional end month (fixed-term bills) */}
+      {/* Row 3: when it is paid + optional end month (fixed-term bills) */}
       <div className={isRecurring ? "grid gap-4 sm:grid-cols-2" : ""}>
-        <div>
-          <label className={labelClass}>
-            {isRecurring ? t("startDateLabel") : t("dueDateLabel")}
-          </label>
-          <DatePicker
-            value={startDate}
-            min={`${startYear}-01-01`}
-            max={`${startYear}-12-31`}
-            hideYear
-            onChange={(iso) => { setDueMonth(String(Number(iso.slice(5, 7)))); setDueDay(String(Number(iso.slice(8, 10)))); }}
-          />
+        <div className="flex flex-col gap-4">
+          {frequency === "one_off" ? (
+            <div>
+              <label className={labelClass}>{t("datesLabel")}</label>
+              <MultiDatePicker value={dates} onChange={setDates} lockedDates={paidDates} />
+            </div>
+          ) : (
+            <>
+              <div>
+                <label htmlFor="bill-start-month" className={labelClass}>
+                  {isRecurring ? t("startMonthLabel") : t("annualMonthLabel")}
+                </label>
+                <MonthYearPicker
+                  id="bill-start-month"
+                  value={`${effectiveStart.slice(0, 4)}-${String(startMonth).padStart(2, "0")}`}
+                  clearable={false}
+                  disabled={startLocked}
+                  onChange={(ym) => ym && setDueMonth(String(Number(ym.slice(5, 7))))}
+                />
+                {startLocked && (
+                  <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">{t("startLocked")}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="bill-days" className={labelClass}>{t("daysLabel")}</label>
+                <DaysOfMonthPicker
+                  id="bill-days"
+                  value={dueDays}
+                  year={Number(effectiveStart.slice(0, 4))}
+                  month={startMonth}
+                  stepMonths={step}
+                  onChange={setDueDays}
+                />
+                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t("daysHint")}</p>
+              </div>
+            </>
+          )}
+          {errors.days && <p className="text-xs text-red-500">{errors.days}</p>}
         </div>
         {isRecurring && (
           <div>

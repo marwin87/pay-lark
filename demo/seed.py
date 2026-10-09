@@ -206,6 +206,73 @@ def inject_history(data: dict) -> dict:
     return data
 
 
+def inject_multi_day_bills(data: dict) -> dict:
+    """Two bills that pay on several days: a monthly one (3rd, 10th and 17th, one
+    payment each) and a one-off with dates in two different months. Dated relative to
+    today like the other generated rows, so it looks right whenever the script runs."""
+    today = today_in_demo_zone()
+    ENTERTAINMENT = 2
+
+    def period_at(offset: int) -> tuple[int, int]:
+        idx = today.year * 12 + today.month - 1 + offset
+        return idx // 12, idx % 12 + 1
+
+    sy, sm = period_at(-3)
+    cy, cm = period_at(0)
+    data["bill_templates"].extend([
+        {
+            "id": 29, "name": "Climbing Gym Entries",
+            "category_id": ENTERTAINMENT, "frequency": "monthly",
+            "interval": 1, "amount": 12.0, "currency": "EUR", "due_day": 3,
+            "due_days": [3, 10, 17], "notes": "Single entries instead of a pass",
+            "is_archived": False, "start_period": f"{sy}-{sm:02d}", "end_period": None,
+            "created_at": f"{sy}-{sm:02d}-01T08:00:00+00:00",
+        },
+        {
+            "id": 30, "name": "Concert Tickets",
+            "category_id": ENTERTAINMENT, "frequency": "one_off",
+            "interval": 1, "amount": 65.0, "currency": "EUR", "due_day": None,
+            "notes": "Two shows, bought separately", "is_archived": False,
+            "start_period": f"{cy}-{cm:02d}", "end_period": None,
+            "created_at": f"{cy}-{cm:02d}-01T08:00:00+00:00",
+        },
+    ])
+
+    next_id = 7000
+
+    def instance(bill_id: int, period: str, slot: int, due: date, amount: float) -> dict:
+        nonlocal next_id
+        if due < today and (period < today.strftime("%Y-%m") or slot == 0):
+            status = "paid"
+        elif due < today:
+            status = "overdue"
+        else:
+            status = "upcoming"
+        paid = status == "paid"
+        paid_at = f"{(due - timedelta(days=1)).isoformat()}T09:00:00+00:00" if paid else None
+        next_id += 1
+        return {
+            "id": next_id, "bill_id": bill_id, "period": period, "slot": slot,
+            "due_date": due.isoformat(), "amount": amount, "status": status,
+            "paid_at": paid_at, "paid_amount": amount if paid else None, "notes": None,
+            "created_at": f"{period}-01T08:00:00+00:00",
+            "reminder_sent_upcoming": True, "reminder_sent_overdue": status == "overdue",
+        }
+
+    for offset in range(-3, 2):  # three past months, this one, next
+        y, m = period_at(offset)
+        for slot, day in enumerate([3, 10, 17]):
+            data["payment_instances"].append(
+                instance(29, f"{y}-{m:02d}", slot, date(y, m, day), 12.0)
+            )
+    for offset, day in [(0, 20), (1, 5)]:
+        y, m = period_at(offset)
+        data["payment_instances"].append(
+            instance(30, f"{y}-{m:02d}", 0, date(y, m, day), 65.0)
+        )
+    return data
+
+
 def has_data(session: requests.Session, token: str) -> bool:
     r = session.get(
         f"{BASE_URL}/bills",
@@ -246,6 +313,7 @@ def restore(session: requests.Session, token: str) -> None:
     data = json.loads(DATA_FILE.read_text())
     data = inject_current_month_cases(data)
     data = inject_history(data)
+    data = inject_multi_day_bills(data)
     payload = json.dumps(data)
     r = session.post(
         f"{BASE_URL}/export/restore",

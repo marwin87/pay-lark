@@ -242,3 +242,18 @@ Follow-ups noted: review CLAUDE.md.scaffold/AGENTS.md, run npm audit (2 moderate
 - Toast text contains the bill name, so e2e `getByText(billName)` must use `exact: true`.
 - Migration was verified with a one-off script against Postgres (4 cases), not a test in the repo.
 **Files/areas:** backend/alembic/versions/d8e9f0a1b2c3_*, backend/app/{models,schemas,routers/bills.py,services/{recurrence,backup,reminder_job,export_xlsx}.py}, frontend/src/{context/toast-context.tsx,components/ui/Toast.tsx,components/bills/,components/settings/,app/dashboard/{bills,payments}/}, frontend/messages/*.json, frontend/src/app/globals.css, demo/seed_data.json.
+
+## multi-day-bills (2026-10-09)
+**Outcome:** A bill can be paid on several days: monthly and annual bills take a list of days of the month (`due_days`) that repeats every cycle, and one-off bills take explicit dates in any months. Each day is its own payment tile. Requested by a tester who pays single gym entries instead of a monthly pass.
+**Key decisions:**
+- Payment identity is `(bill_id, period, slot)`, slot = position of the day in the sorted day list (migration `d5e6f7a8b9c0`). `due_day` stays and mirrors the first day, `due_days` is only stored for 2+ days, so single-day bills, ~35 tests and old backups are unchanged. Backup `schema_version` 8 adds `due_days` and `slot`; v2-v7 still restore.
+- Editing the day list remaps unpaid payments by slot position and hard-deletes unpaid payments of dropped slots (system-made, same as the `end_period` cleanup, so they never become tombstones that block a re-added slot). Paid history is never touched. A user-deleted tile stays a tombstone per slot.
+- Changing frequency, interval or start period hard-deletes unpaid, non-deleted payments from the current month on that the new cycle skips; past ones and tombstones stay.
+- One-off dates live as instances (no template column): the API takes `dates`, returns `dates` and `paid_dates`, and edits diff them (paid dates are locked in the UI).
+- A monthly bill's start month cannot change on edit (the server never recomputes `start_period` for monthly; it anchors the cycle and history), so the form shows it read-only instead of a field that silently does nothing.
+- UI reuses the one shared `Calendar` (`DaysOfMonthPicker`, `MultiDatePicker`, `CalendarPopup`); a first separate 1-31 grid was rejected for the missing weekdays.
+**Pitfalls/lessons:**
+- The test schema comes from `create_all`, so the migration is not covered by tests; it was verified once with a script on a fresh Postgres (upgrade, downgrade, upgrade).
+- The `generate_next_instance` race test mocks `db.query`; moving the existence check to `(period, slot)` pairs required updating that mock.
+- Monthly `due_month` on PATCH is ignored by design; e2e `11-edit-bill` and the end-period specs were the only ones touching the old date picker.
+**Files/areas:** backend/alembic/versions/d5e6f7a8b9c0_*, backend/app/{models/bill.py,schemas/bill.py,routers/{bills,export}.py,services/{recurrence,backup}.py}, backend/tests/{test_multi_day_bills,test_recurrence_service,test_restore}.py, frontend/src/{components/ui/{Calendar,CalendarPopup,DaysOfMonthPicker,MultiDatePicker}.tsx,components/bills/{BillTemplateForm,BillTemplateRow,MonthYearPicker}.tsx,lib/bills-api.ts}, frontend/messages/*.json, frontend/tests/e2e/{11-edit-bill,29-multi-day-bill}.spec.ts, demo/{seed.py,README.md}.

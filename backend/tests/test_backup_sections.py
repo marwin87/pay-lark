@@ -91,7 +91,7 @@ def test_export_default_is_full(client):
     _seed(client, tok)
     body = _export(client, tok)
     assert set(body) == _META | _ALL_KEYS
-    assert body["schema_version"] == 7
+    assert body["schema_version"] == 8
     assert body["preferences"] == {
         "language_preference": "de",
         "enabled_languages": ["en", "de"],

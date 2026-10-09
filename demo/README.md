@@ -15,7 +15,7 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Streaming (Old) | custom | **archived** — still referenced by an active bill |
 | Side Hustle | custom | active |
 
-**28 bill templates** covering all frequencies, plus these edge cases:
+**30 bill templates** covering all frequencies, plus these edge cases:
 
 | Name | Category | Frequency | Amount | Notes |
 |---|---|---|---|---|
@@ -33,6 +33,8 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Newspaper Subscription | Subscriptions | Monthly | €12.00 | with `end_period` 2026-12 (shows the last payment month on the tile) |
 | Laptop Installments | Other | Monthly | €89.99 | **fixed term** (`end_period` 2026-06) — all 6 instalments paid, no further payments generated |
 | Phone Installments | Other | Monthly | 129.00 PLN | **fixed term** (`end_period` 2026-12) — no payments generated after the last month |
+| Climbing Gym Entries | Entertainment | Monthly | €12.00 | **several payment days** (3rd, 10th, 17th): one payment tile per day, every month |
+| Concert Tickets | Entertainment | One-off | €65.00 | **several dates in different months**: one payment per date |
 | Yoga Studio Membership *(archived bill)* | Healthcare | Monthly | €60.00 | |
 | Cloud Storage 2TB *(archived bill)* | Subscriptions | Monthly | €9.99 | |
 | Car Lease *(archived bill)* | Transport | Monthly | €310.00 | |
@@ -40,13 +42,15 @@ All notifications are switched off for this account (email, Telegram, browser), 
 
 5 bills are archived in total, spread across 4 categories, so the Archive page (`/dashboard/bills/archived`) has enough entries to exercise its category filter and sort.
 
-**80 payment instances** in `seed_data.json` (164 after the seed script adds the generated ones below) covering all statuses:
+**80 payment instances** in `seed_data.json` (180 after the seed script adds the generated ones below) covering all statuses:
 - **paid** — historical records with `paid_at` timestamps, across all four combinations of full/partial amount and with/without a note
 - **overdue** — several bills with a missed payment
 - **upcoming** — future periods ready to be paid
 - Amounts that differ from the template (real-world invoice variance)
 
 **Plus multi-currency history generated at seed time** (`inject_history` in `seed.py`): the 11 months before today get paid instances in EUR, PLN, USD and CHF (plus GBP/EUR annual insurance in single months), with varying utility amounts, so the dashboard's 12-month trend and currency chips have data whichever day you run the script. It only fills gaps: static rows for the same bill and month are kept. The account's default currency is set to EUR and its time zone to Europe/Warsaw (seed dates such as "due today" are computed in that zone).
+
+**Plus the multi-day bills' payments generated at seed time** (`inject_multi_day_bills` in `seed.py`): Climbing Gym Entries gets three payments a month from three months back to next month, Concert Tickets gets one in this month and one in the next, dated relative to today.
 
 **Plus 9 instances generated for the current month at seed time** (`inject_current_month_cases` in `seed.py`), since the static rows above are dated in fixed 2026 months that won't generally line up with whatever "today" is when you run the script. Whichever month the Payments page opens to by default, it shows every case at a glance: upcoming (due today), overdue, paid full amount with/without a note, and paid partial amount with/without a note.
 

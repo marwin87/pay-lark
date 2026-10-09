@@ -11,6 +11,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
@@ -57,6 +58,9 @@ class BillTemplate(Base):
     due_day: Mapped[int | None] = mapped_column(
         Integer
     )  # day-of-month for monthly bills
+    # Several payment days per cycle (sorted, unique). NULL = just [due_day]; due_day
+    # always mirrors the first entry so single-day readers keep working.
+    due_days: Mapped[list[int] | None] = mapped_column(JSON)
     notes: Mapped[str | None] = mapped_column(Text)
     is_archived: Mapped[bool] = mapped_column(Boolean, default=False)
     # Recurrence anchor: YYYY-MM string set at creation from UTC month.
@@ -76,13 +80,43 @@ class BillTemplate(Base):
         back_populates="template", cascade="all, delete-orphan"
     )
 
+    @property
+    def days(self) -> list[int | None]:
+        """Payment days of one cycle; the list index is the instance slot.
+        [None] means "no day set" (due on the 1st), exactly as a lone due_day=None."""
+        if self.due_days:
+            return list[int | None](sorted(set(self.due_days)))
+        return [self.due_day]
+
+    # One-off bills keep their dates as instances. Only touched for one-off bills, so
+    # list_bills lazy-loads instances for those few and never for recurring ones.
+    @property
+    def dates(self) -> list[date]:
+        if self.frequency != BillFrequency.one_off:
+            return []
+        return sorted(i.due_date for i in self.instances if not i.is_deleted)
+
+    @property
+    def paid_dates(self) -> list[date]:
+        if self.frequency != BillFrequency.one_off:
+            return []
+        return sorted(
+            i.due_date
+            for i in self.instances
+            if not i.is_deleted and i.status == PaymentStatus.paid
+        )
+
 
 class PaymentInstance(Base):
-    """A single payment record for a specific period. Idempotent: (bill_id, period) is unique."""
+    """A single payment record. Idempotent: (bill_id, period, slot) is unique, where slot is
+    the position of the payment's day in the template's day list (0 for single-day bills).
+    """
 
     __tablename__ = "payment_instances"
     __table_args__ = (
-        UniqueConstraint("bill_id", "period", name="uq_payment_instance_bill_period"),
+        UniqueConstraint(
+            "bill_id", "period", "slot", name="uq_payment_instance_bill_period_slot"
+        ),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -90,6 +124,9 @@ class PaymentInstance(Base):
         ForeignKey("bill_templates.id", ondelete="RESTRICT"), nullable=False
     )
     period: Mapped[str] = mapped_column(String(7), nullable=False)  # "YYYY-MM"
+    slot: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     due_date: Mapped[date] = mapped_column(Date, nullable=False)
     amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     status: Mapped[PaymentStatus] = mapped_column(
