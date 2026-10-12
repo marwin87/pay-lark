@@ -3,10 +3,10 @@
         "close": "Sluiten"
     },
     "Auth": {
-        "loginSubtitle": "Log in om PayTracker te blijven gebruiken",
+        "loginSubtitle": "Log in om {brand} te blijven gebruiken",
         "welcomeHeading": "Welkom terug 👋",
         "registerSubtitle": "Maak je account aan",
-        "registerTagline": "Begin met het bijhouden van je rekeningen met PayTracker",
+        "registerTagline": "Begin met het bijhouden van je rekeningen met {brand}",
         "emailLabel": "E-mail",
         "emailPlaceholder": "Vul je e-mailadres in",
         "passwordLabel": "Wachtwoord",
@@ -63,7 +63,7 @@
         "accountGroup": "Account"
     },
     "Dashboard": {
-        "title": "Welkom bij Pay Tracker",
+        "title": "Welkom bij {brand}",
         "subtitle": "De maand in één oogopslag: wat is betaald, wat moet nog en wat is te laat.",
         "summary": {
             "paid": "Betaald",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Instellingen",
-        "subtitle": "PayTracker naar wens instellen.",
+        "subtitle": "{brand} naar wens instellen.",
         "tabs": {
             "account": "Account",
             "preferences": "Voorkeuren",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Gegevens back-uppen",
-            "description": "Een volledige kopie van alle Pay Tracker-gegevens downloaden als back-upbestand.",
+            "description": "Een volledige kopie van alle {brand}-gegevens downloaden als back-upbestand.",
             "button": "Back-up"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "App-informatie",
             "description": "Versie en handige links.",
-            "text": "Pay Tracker is een huishoudapp om rekeningen bij te houden. Hij is gemaakt voor een rustig huishoudbudget, zodat er geen rekening tussendoor glipt.",
+            "text": "{brand} is een huishoudapp om rekeningen bij te houden. Hij is gemaakt voor een rustig huishoudbudget, zodat er geen rekening tussendoor glipt.",
             "licensesTitle": "Licenties",
             "licensesText": "Deze app is gebouwd met de onderstaande open-sourcecomponenten en lettertypen. Elk daarvan wordt gebruikt onder zijn eigen licentie.",
             "version": "App-versie",
             "license": "Licentie",
             "licenseValue": "Gratis voor niet-commercieel gebruik, met naamsvermelding",
-            "copyright": "Pay Tracker mag worden gebruikt, aangepast en gedeeld voor persoonlijke en andere niet-commerciële doeleinden. De vermelding van het oorspronkelijke project behouden. Commercieel gebruik vereist schriftelijke toestemming van de auteur."
+            "copyright": "{brand} mag worden gebruikt, aangepast en gedeeld voor persoonlijke en andere niet-commerciële doeleinden. De vermelding van het oorspronkelijke project behouden. Commercieel gebruik vereist schriftelijke toestemming van de auteur."
         },
         "deleteAccount": {
             "title": "Account verwijderen",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Alle rekeningen zijn betaald — goed gedaan!",
             "total_paid": "Totaal betaald",
             "total_outstanding": "Totaal openstaand",
-            "footer": "Rekeningen worden beheerd in de Pay Tracker-app."
+            "footer": "Rekeningen worden beheerd in de {brand}-app."
         },
         "reset": {
-            "subject": "Pay Tracker-wachtwoord opnieuw instellen",
-            "body": "Voor dit Pay Tracker-account is een wachtwoordreset aangevraagd.\n\nVia de onderstaande link kan een nieuw wachtwoord worden ingesteld (geldig gedurende {expires_label}):\n{reset_url}\n\nAls dit niet is aangevraagd, kan deze e-mail worden genegeerd — het wachtwoord verandert dan niet.",
+            "subject": "{brand}-wachtwoord opnieuw instellen",
+            "body": "Voor dit {brand}-account is een wachtwoordreset aangevraagd.\n\nVia de onderstaande link kan een nieuw wachtwoord worden ingesteld (geldig gedurende {expires_label}):\n{reset_url}\n\nAls dit niet is aangevraagd, kan deze e-mail worden genegeerd — het wachtwoord verandert dan niet.",
             "expires": "{minutes} minuten",
             "noExpiry": "geen vervaltijd"
         },

@@ -13,6 +13,7 @@ from app.core import rate_limit
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import current_user
+from app.core.i18n import BRAND
 from app.core.tz import is_valid_tz, today_for
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
@@ -355,7 +356,7 @@ def send_telegram_test(user: User = Depends(current_user)):
     if url is None:
         raise HTTPException(status_code=400, detail="Telegram not configured")
     try:
-        notify_send(url, "Pay Tracker", "✅ Telegram notifications are working.")
+        notify_send(url, BRAND["name"], "✅ Telegram notifications are working.")
     except NotificationError:
         raise HTTPException(status_code=502, detail="Telegram delivery failed")
     return MessageResponse(message="sent")

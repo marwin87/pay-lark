@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { BRAND } from "@/lib/brand";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Pay Tracker",
-    short_name: "Pay Tracker",
+    name: BRAND.name,
+    short_name: BRAND.name,
     description: "Household bill tracking made simple",
     start_url: "/",
     display: "standalone",

@@ -6,6 +6,7 @@
  */
 import * as fs from 'fs';
 import { test, expect } from '@playwright/test';
+import brand from '../../messages/brand.json';
 import { loginNewUser, createBillViaApi, syncPaymentsViaApi } from './helpers';
 
 test('Excel Export > Whole year downloads a non-empty .xlsx for the selected year', async ({ page }) => {
@@ -24,7 +25,7 @@ test('Excel Export > Whole year downloads a non-empty .xlsx for the selected yea
   const download = await downloadPromise;
 
   // Assert: named for the selected year
-  expect(download.suggestedFilename()).toMatch(new RegExp(`^pay-tracker-.+-${new Date().getFullYear()}\\.xlsx$`));
+  expect(download.suggestedFilename()).toMatch(new RegExp(`^${brand.slug}-.+-${new Date().getFullYear()}\\.xlsx$`));
 
   // Assert: a real xlsx (zip container → "PK" magic bytes), not an empty or error body
   const filePath = await download.path();
@@ -50,6 +51,6 @@ test('Excel Export > Current month downloads a single-month .xlsx', async ({ pag
 
   const now = new Date();
   const mm = String(now.getMonth() + 1).padStart(2, '0');
-  expect(download.suggestedFilename()).toMatch(new RegExp(`^pay-tracker-.+-${now.getFullYear()}-${mm}\\.xlsx$`));
+  expect(download.suggestedFilename()).toMatch(new RegExp(`^${brand.slug}-.+-${now.getFullYear()}-${mm}\\.xlsx$`));
   expect(fs.readFileSync(await download.path()).subarray(0, 2).toString('latin1')).toBe('PK');
 });

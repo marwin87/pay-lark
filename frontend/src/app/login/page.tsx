@@ -13,6 +13,8 @@ import { SESSION_EXPIRED_KEY } from "@/lib/auth";
 import { validateEmail, validateRequired } from "@/lib/auth-validation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { BRAND } from "@/lib/brand";
+import BrandWordmark from "@/components/BrandWordmark";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -111,15 +113,14 @@ export default function LoginPage() {
         <div className="mb-8 flex flex-col items-center gap-3">
           <Image
             src="/pt-logo.png"
-            alt="Pay Tracker"
+            alt={BRAND.name}
             width={96}
             height={96}
             className="rounded-2xl shadow-md"
             priority
           />
           <p className="text-xl font-bold tracking-tight sm:text-2xl">
-            <span className="text-[#10231A] dark:text-slate-100">Pay</span>
-            <span className="text-[#079447] dark:text-emerald-500">Tracker</span>
+            <BrandWordmark />
           </p>
         </div>
 

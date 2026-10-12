@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from app.core.i18n import LOCALES
+from app.core.i18n import BRAND, LOCALES
 from tests.conftest import auth, category_id, register_and_login, today_utc
 
 _BILL = {
@@ -33,10 +33,10 @@ def test_pdf_year_and_month(client):
     r = client.get(f"/export/pdf?year={year}", headers=auth(tok))
     assert r.status_code == 200
     assert r.content.startswith(b"%PDF")
-    assert f"pay-tracker-en-{year}.pdf" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-en-{year}.pdf" in r.headers["content-disposition"]
     r = client.get(f"/export/pdf?year={year}&month=3", headers=auth(tok))
     assert r.content.startswith(b"%PDF")
-    assert f"pay-tracker-en-{year}-03.pdf" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-en-{year}-03.pdf" in r.headers["content-disposition"]
 
 
 def test_pdf_disabled_returns_403(client):

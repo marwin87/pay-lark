@@ -3,10 +3,10 @@
         "close": "Chiudi"
     },
     "Auth": {
-        "loginSubtitle": "Accedi per continuare a usare PayTracker",
+        "loginSubtitle": "Accedi per continuare a usare {brand}",
         "welcomeHeading": "Bentornato 👋",
         "registerSubtitle": "Crea il tuo account",
-        "registerTagline": "Inizia a monitorare le tue bollette con PayTracker",
+        "registerTagline": "Inizia a monitorare le tue bollette con {brand}",
         "emailLabel": "Email",
         "emailPlaceholder": "Inserisci la tua email",
         "passwordLabel": "Password",
@@ -63,7 +63,7 @@
         "accountGroup": "Account"
     },
     "Dashboard": {
-        "title": "Benvenuto in Pay Tracker",
+        "title": "Benvenuto in {brand}",
         "subtitle": "Il mese a colpo d’occhio: cosa è pagato, cosa scade e cosa è in ritardo.",
         "summary": {
             "paid": "Pagato",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Impostazioni",
-        "subtitle": "Personalizzare PayTracker.",
+        "subtitle": "Personalizzare {brand}.",
         "tabs": {
             "account": "Account",
             "preferences": "Preferenze",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Backup dei dati",
-            "description": "Scaricare una copia completa di tutti i dati di Pay Tracker come file di backup.",
+            "description": "Scaricare una copia completa di tutti i dati di {brand} come file di backup.",
             "button": "Backup"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "Informazioni sull'app",
             "description": "Versione e link utili.",
-            "text": "Pay Tracker è un'app domestica per tenere sotto controllo le bollette. Nasce per un budget familiare sereno, perché nessuna bolletta venga dimenticata.",
+            "text": "{brand} è un'app domestica per tenere sotto controllo le bollette. Nasce per un budget familiare sereno, perché nessuna bolletta venga dimenticata.",
             "licensesTitle": "Licenze",
             "licensesText": "Questa app usa i componenti open source e i font elencati di seguito. Ognuno è utilizzato secondo la propria licenza.",
             "version": "Versione dell'app",
             "license": "Licenza",
             "licenseValue": "Gratuita per uso non commerciale, con attribuzione",
-            "copyright": "Pay Tracker può essere usato, modificato e condiviso per scopi personali e altri scopi non commerciali. Mantenere il riconoscimento al progetto originale. L’uso commerciale richiede il permesso scritto dell’autore."
+            "copyright": "{brand} può essere usato, modificato e condiviso per scopi personali e altri scopi non commerciali. Mantenere il riconoscimento al progetto originale. L’uso commerciale richiede il permesso scritto dell’autore."
         },
         "deleteAccount": {
             "title": "Elimina account",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Tutte le fatture sono pagate — ottimo lavoro!",
             "total_paid": "Totale pagato",
             "total_outstanding": "Totale da pagare",
-            "footer": "Le fatture si gestiscono nell'app Pay Tracker."
+            "footer": "Le fatture si gestiscono nell'app {brand}."
         },
         "reset": {
-            "subject": "Reimposta la password di Pay Tracker",
-            "body": "È stato richiesto il ripristino della password di questo account Pay Tracker.\n\nIl link seguente permette di impostare una nuova password (valido per {expires_label}):\n{reset_url}\n\nSe la richiesta non è stata fatta, questa email può essere ignorata: la password non cambierà.",
+            "subject": "Reimposta la password di {brand}",
+            "body": "È stato richiesto il ripristino della password di questo account {brand}.\n\nIl link seguente permette di impostare una nuova password (valido per {expires_label}):\n{reset_url}\n\nSe la richiesta non è stata fatta, questa email può essere ignorata: la password non cambierà.",
             "expires": "{minutes} minuti",
             "noExpiry": "senza scadenza"
         },

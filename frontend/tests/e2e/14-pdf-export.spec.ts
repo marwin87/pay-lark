@@ -5,6 +5,7 @@
  */
 import * as fs from 'fs';
 import { test, expect } from '@playwright/test';
+import brand from '../../messages/brand.json';
 import { loginNewUser, createBillViaApi, syncPaymentsViaApi } from './helpers';
 
 test('PDF export > Whole year downloads a real .pdf', async ({ page }) => {
@@ -22,7 +23,7 @@ test('PDF export > Whole year downloads a real .pdf', async ({ page }) => {
   await page.getByRole('option', { name: new RegExp(`Whole year \\(${new Date().getFullYear()}\\)`) }).click();
   const download = await downloadPromise;
 
-  expect(download.suggestedFilename()).toMatch(new RegExp(`^pay-tracker-.+-${new Date().getFullYear()}\\.pdf$`));
+  expect(download.suggestedFilename()).toMatch(new RegExp(`^${brand.slug}-.+-${new Date().getFullYear()}\\.pdf$`));
   const bytes = fs.readFileSync(await download.path());
   expect(bytes.subarray(0, 4).toString('latin1')).toBe('%PDF');
 });

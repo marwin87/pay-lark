@@ -3,10 +3,10 @@
         "close": "Fechar"
     },
     "Auth": {
-        "loginSubtitle": "Inicie sessão para continuar a usar o PayTracker",
+        "loginSubtitle": "Inicie sessão para continuar a usar o {brand}",
         "welcomeHeading": "Bem-vindo de volta 👋",
         "registerSubtitle": "Crie a sua conta",
-        "registerTagline": "Comece a acompanhar as suas faturas com o PayTracker",
+        "registerTagline": "Comece a acompanhar as suas faturas com o {brand}",
         "emailLabel": "E-mail",
         "emailPlaceholder": "Introduza o seu e-mail",
         "passwordLabel": "Palavra-passe",
@@ -63,7 +63,7 @@
         "accountGroup": "Conta"
     },
     "Dashboard": {
-        "title": "Bem-vindo ao Pay Tracker",
+        "title": "Bem-vindo ao {brand}",
         "subtitle": "O mês num relance: o que está pago, o que vence e o que está em atraso.",
         "summary": {
             "paid": "Pagas",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Definições",
-        "subtitle": "Ajustar o PayTracker às necessidades.",
+        "subtitle": "Ajustar o {brand} às necessidades.",
         "tabs": {
             "account": "Conta",
             "preferences": "Preferências",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Cópia de segurança dos dados",
-            "description": "Transferir uma cópia completa de todos os dados do Pay Tracker como ficheiro de cópia de segurança.",
+            "description": "Transferir uma cópia completa de todos os dados do {brand} como ficheiro de cópia de segurança.",
             "button": "Cópia de segurança"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "Informações da aplicação",
             "description": "Versão e ligações úteis.",
-            "text": "O Pay Tracker é uma aplicação doméstica para acompanhar as faturas. Foi pensada para um orçamento familiar tranquilo, para que nenhuma fatura passe despercebida.",
+            "text": "O {brand} é uma aplicação doméstica para acompanhar as faturas. Foi pensada para um orçamento familiar tranquilo, para que nenhuma fatura passe despercebida.",
             "licensesTitle": "Licenças",
             "licensesText": "Esta aplicação é construída com os componentes de código aberto e os tipos de letra abaixo. Cada um é utilizado ao abrigo da sua própria licença.",
             "version": "Versão da aplicação",
             "license": "Licença",
             "licenseValue": "Gratuito para uso não comercial, com atribuição",
-            "copyright": "Pode usar, modificar e partilhar o Pay Tracker para fins pessoais e outros fins não comerciais. Mantenha o crédito ao projeto original. O uso comercial requer autorização escrita do autor."
+            "copyright": "Pode usar, modificar e partilhar o {brand} para fins pessoais e outros fins não comerciais. Mantenha o crédito ao projeto original. O uso comercial requer autorização escrita do autor."
         },
         "deleteAccount": {
             "title": "Eliminar conta",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Todas as faturas estão pagas — excelente trabalho!",
             "total_paid": "Total pago",
             "total_outstanding": "Total em dívida",
-            "footer": "As faturas gerem-se na aplicação Pay Tracker."
+            "footer": "As faturas gerem-se na aplicação {brand}."
         },
         "reset": {
-            "subject": "Repor a palavra-passe do Pay Tracker",
-            "body": "Foi pedida a reposição da palavra-passe desta conta Pay Tracker.\n\nA ligação abaixo permite definir uma nova palavra-passe (válida durante {expires_label}):\n{reset_url}\n\nSe o pedido não foi feito, este e-mail pode ser ignorado — a palavra-passe não será alterada.",
+            "subject": "Repor a palavra-passe do {brand}",
+            "body": "Foi pedida a reposição da palavra-passe desta conta {brand}.\n\nA ligação abaixo permite definir uma nova palavra-passe (válida durante {expires_label}):\n{reset_url}\n\nSe o pedido não foi feito, este e-mail pode ser ignorado — a palavra-passe não será alterada.",
             "expires": "{minutes} minutos",
             "noExpiry": "sem prazo de validade"
         },

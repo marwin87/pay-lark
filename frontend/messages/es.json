@@ -3,10 +3,10 @@
         "close": "Cerrar"
     },
     "Auth": {
-        "loginSubtitle": "Inicia sesión para seguir usando PayTracker",
+        "loginSubtitle": "Inicia sesión para seguir usando {brand}",
         "welcomeHeading": "Bienvenido de nuevo 👋",
         "registerSubtitle": "Crea tu cuenta",
-        "registerTagline": "Empieza a controlar tus facturas con PayTracker",
+        "registerTagline": "Empieza a controlar tus facturas con {brand}",
         "emailLabel": "Correo electrónico",
         "emailPlaceholder": "Introduce tu correo electrónico",
         "passwordLabel": "Contraseña",
@@ -63,7 +63,7 @@
         "accountGroup": "Cuenta"
     },
     "Dashboard": {
-        "title": "Bienvenido a Pay Tracker",
+        "title": "Bienvenido a {brand}",
         "subtitle": "El mes de un vistazo: qué está pagado, qué vence y qué está atrasado.",
         "summary": {
             "paid": "Pagado",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Ajustes",
-        "subtitle": "Haz que PayTracker sea tuyo.",
+        "subtitle": "Haz que {brand} sea tuyo.",
         "tabs": {
             "account": "Cuenta",
             "preferences": "Preferencias",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Copia de seguridad de datos",
-            "description": "Descargar una copia completa de todos los datos de Pay Tracker en un archivo de copia de seguridad.",
+            "description": "Descargar una copia completa de todos los datos de {brand} en un archivo de copia de seguridad.",
             "button": "Copia de seguridad"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "Información de la aplicación",
             "description": "Versión y enlaces útiles.",
-            "text": "Pay Tracker es una aplicación doméstica para controlar las facturas. Nació pensando en un presupuesto familiar tranquilo, para que ninguna factura se pase.",
+            "text": "{brand} es una aplicación doméstica para controlar las facturas. Nació pensando en un presupuesto familiar tranquilo, para que ninguna factura se pase.",
             "licensesTitle": "Licencias",
             "licensesText": "Esta aplicación usa los componentes de código abierto y las fuentes siguientes. Cada uno se utiliza bajo su propia licencia.",
             "version": "Versión de la aplicación",
             "license": "Licencia",
             "licenseValue": "Gratis para uso no comercial, con atribución",
-            "copyright": "Pay Tracker puede usarse, modificarse y compartirse para fines personales y otros fines no comerciales. Mantener el crédito al proyecto original. El uso comercial requiere permiso escrito del autor."
+            "copyright": "{brand} puede usarse, modificarse y compartirse para fines personales y otros fines no comerciales. Mantener el crédito al proyecto original. El uso comercial requiere permiso escrito del autor."
         },
         "deleteAccount": {
             "title": "Eliminar cuenta",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Todas las facturas están pagadas. ¡Buen trabajo!",
             "total_paid": "Total pagado",
             "total_outstanding": "Total pendiente",
-            "footer": "Las facturas se gestionan en la aplicación Pay Tracker."
+            "footer": "Las facturas se gestionan en la aplicación {brand}."
         },
         "reset": {
-            "subject": "Restablecer la contraseña de Pay Tracker",
-            "body": "Se ha solicitado restablecer la contraseña de esta cuenta de Pay Tracker.\n\nEl siguiente enlace permite establecer una nueva contraseña (válido durante {expires_label}):\n{reset_url}\n\nSi no se solicitó, este correo puede ignorarse: la contraseña no cambiará.",
+            "subject": "Restablecer la contraseña de {brand}",
+            "body": "Se ha solicitado restablecer la contraseña de esta cuenta de {brand}.\n\nEl siguiente enlace permite establecer una nueva contraseña (válido durante {expires_label}):\n{reset_url}\n\nSi no se solicitó, este correo puede ignorarse: la contraseña no cambiará.",
             "expires": "{minutes} minutos",
             "noExpiry": "sin caducidad"
         },

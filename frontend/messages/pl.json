@@ -3,10 +3,10 @@
         "close": "Zamknij"
     },
     "Auth": {
-        "loginSubtitle": "Zaloguj się, aby kontynuować korzystanie z PayTracker",
+        "loginSubtitle": "Zaloguj się, aby kontynuować korzystanie z {brand}",
         "welcomeHeading": "Witaj ponownie 👋",
         "registerSubtitle": "Utwórz konto",
-        "registerTagline": "Zacznij śledzić swoje rachunki z PayTracker",
+        "registerTagline": "Zacznij śledzić swoje rachunki z {brand}",
         "emailLabel": "E-mail",
         "emailPlaceholder": "Wpisz email",
         "passwordLabel": "Hasło",
@@ -63,7 +63,7 @@
         "accountGroup": "Konto"
     },
     "Dashboard": {
-        "title": "Witaj w Pay Tracker",
+        "title": "Witaj w {brand}",
         "subtitle": "Miesiąc w skrócie: co zapłacone, co do zapłaty i co po terminie.",
         "summary": {
             "paid": "Zapłacone",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Ustawienia",
-        "subtitle": "Dostosuj PayTracker do siebie.",
+        "subtitle": "Dostosuj {brand} do siebie.",
         "tabs": {
             "account": "Konto",
             "preferences": "Preferencje",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Kopia zapasowa",
-            "description": "Pobierz pełną kopię wszystkich danych Pay Tracker jako plik kopii zapasowej.",
+            "description": "Pobierz pełną kopię wszystkich danych {brand} jako plik kopii zapasowej.",
             "button": "Kopia zapasowa"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "Informacje o aplikacji",
             "description": "Wersja i przydatne linki.",
-            "text": "Pay Tracker to domowa aplikacja do pilnowania rachunków. Powstała z myślą o spokojnym domowym budżecie, żeby żaden rachunek nie umknął.",
+            "text": "{brand} to domowa aplikacja do pilnowania rachunków. Powstała z myślą o spokojnym domowym budżecie, żeby żaden rachunek nie umknął.",
             "licensesTitle": "Licencje",
             "licensesText": "Aplikacja korzysta z poniższych komponentów open source i fontów. Każdy z nich jest używany na warunkach własnej licencji.",
             "version": "Wersja aplikacji",
             "license": "Licencja",
             "licenseValue": "Bezpłatna do użytku niekomercyjnego, z podaniem autora",
-            "copyright": "Możesz używać, modyfikować i udostępniać Pay Tracker do celów osobistych i innych niekomercyjnych. Zachowaj proszę informację o autorze oryginalnego projektu. Użycie komercyjne wymaga pisemnej zgody autora."
+            "copyright": "Możesz używać, modyfikować i udostępniać {brand} do celów osobistych i innych niekomercyjnych. Zachowaj proszę informację o autorze oryginalnego projektu. Użycie komercyjne wymaga pisemnej zgody autora."
         },
         "deleteAccount": {
             "title": "Usuń konto",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Wszystkie rachunki są opłacone — świetna robota!",
             "total_paid": "Łącznie zapłacono",
             "total_outstanding": "Łącznie do zapłaty",
-            "footer": "Zarządzaj rachunkami w aplikacji Pay Tracker."
+            "footer": "Zarządzaj rachunkami w aplikacji {brand}."
         },
         "reset": {
-            "subject": "Zresetuj hasło Pay Tracker",
-            "body": "Zostało złożone żądanie zresetowania hasła do konta Pay Tracker.\n\nPoniższy link pozwala ustawić nowe hasło (ważny przez {expires_label}):\n{reset_url}\n\nJeśli reset hasła nie był zamawiany, wiadomość można zignorować — hasło pozostanie bez zmian.",
+            "subject": "Zresetuj hasło {brand}",
+            "body": "Zostało złożone żądanie zresetowania hasła do konta {brand}.\n\nPoniższy link pozwala ustawić nowe hasło (ważny przez {expires_label}):\n{reset_url}\n\nJeśli reset hasła nie był zamawiany, wiadomość można zignorować — hasło pozostanie bez zmian.",
             "expires": "{minutes} minut",
             "noExpiry": "bezterminowo"
         },

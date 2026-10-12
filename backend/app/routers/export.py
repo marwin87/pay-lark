@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.deps import current_user
-from app.core.i18n import resolve_locale
+from app.core.i18n import BRAND, resolve_locale
 from app.core.tz import today_for
 from app.models.bill import BillTemplate, PaymentInstance
 from app.models.restore_snapshot import RestoreSnapshot
@@ -49,7 +49,7 @@ def export_xlsx(
     buf = build_xlsx(db, me, today, year, month, lang)
 
     suffix = f"{year}-{month:02d}" if month else str(year)
-    filename = f"pay-tracker-{lang}-{suffix}.xlsx"
+    filename = f"{BRAND['slug']}-{lang}-{suffix}.xlsx"
     return StreamingResponse(
         buf,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -73,7 +73,7 @@ def export_pdf(
     content = build_pdf(db, me, today, year, month, lang)
 
     suffix = f"{year}-{month:02d}" if month else str(year)
-    filename = f"pay-tracker-{lang}-{suffix}.pdf"
+    filename = f"{BRAND['slug']}-{lang}-{suffix}.pdf"
     return Response(
         content=content,
         media_type="application/pdf",
@@ -103,7 +103,7 @@ def export_json(
     if token and me.telegram_chat_id:
         payload["telegram"] = {"bot_token": token, "chat_id": me.telegram_chat_id}
     headers = {
-        "Content-Disposition": f'attachment; filename="pay-tracker-backup-{today_for(me)}.bak"'
+        "Content-Disposition": f'attachment; filename="{BRAND["slug"]}-backup-{today_for(me)}.bak"'
     }
     if "telegram" in sections and me.telegram_bot_token_unreadable:
         # Stored but undecryptable (JWT_SECRET changed): the backup can't carry it.

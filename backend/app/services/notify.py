@@ -9,6 +9,7 @@ import apprise
 from cryptography.fernet import Fernet, InvalidToken
 
 from app.core.config import settings
+from app.core.i18n import BRAND
 
 
 class NotificationError(Exception):
@@ -73,7 +74,7 @@ def telegram_url(user: _TelegramUser) -> str | None:
 
 def footer_text() -> str:
     """Single source for the app footer line (notifications and exports)."""
-    return f"© {datetime.now().year} Pay Tracker · {settings.app_version}"
+    return f"© {datetime.now().year} {BRAND["name"]} · {settings.app_version}"
 
 
 def send(url: str, title: str, body: str, *, html: bool = False) -> None:

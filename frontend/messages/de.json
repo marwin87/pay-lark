@@ -3,10 +3,10 @@
         "close": "Schließen"
     },
     "Auth": {
-        "loginSubtitle": "Melden Sie sich an, um PayTracker weiter zu nutzen",
+        "loginSubtitle": "Melden Sie sich an, um {brand} weiter zu nutzen",
         "welcomeHeading": "Willkommen zurück 👋",
         "registerSubtitle": "Konto erstellen",
-        "registerTagline": "Behalten Sie Ihre Rechnungen mit PayTracker im Blick",
+        "registerTagline": "Behalten Sie Ihre Rechnungen mit {brand} im Blick",
         "emailLabel": "E-Mail",
         "emailPlaceholder": "E-Mail eingeben",
         "passwordLabel": "Passwort",
@@ -63,7 +63,7 @@
         "accountGroup": "Konto"
     },
     "Dashboard": {
-        "title": "Willkommen bei Pay Tracker",
+        "title": "Willkommen bei {brand}",
         "subtitle": "Der Monat auf einen Blick: was bezahlt ist, was fällig ist und was überfällig ist.",
         "summary": {
             "paid": "Bezahlt",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Einstellungen",
-        "subtitle": "PayTracker nach Bedarf anpassen.",
+        "subtitle": "{brand} nach Bedarf anpassen.",
         "tabs": {
             "account": "Konto",
             "preferences": "Einstellungen",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Daten sichern",
-            "description": "Eine vollständige Kopie aller Pay Tracker-Daten als Sicherungsdatei herunterladen.",
+            "description": "Eine vollständige Kopie aller {brand}-Daten als Sicherungsdatei herunterladen.",
             "button": "Sichern"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "App-Informationen",
             "description": "Version und nützliche Links.",
-            "text": "Pay Tracker ist eine Haushalts-App, um den Überblick über Rechnungen zu behalten. Sie entstand für ein entspanntes Haushaltsbudget, damit keine Rechnung untergeht.",
+            "text": "{brand} ist eine Haushalts-App, um den Überblick über Rechnungen zu behalten. Sie entstand für ein entspanntes Haushaltsbudget, damit keine Rechnung untergeht.",
             "licensesTitle": "Lizenzen",
             "licensesText": "Diese App nutzt die folgenden Open-Source-Komponenten und Schriften. Jede wird unter ihrer eigenen Lizenz verwendet.",
             "version": "App-Version",
             "license": "Lizenz",
             "licenseValue": "Kostenlos für nicht-kommerzielle Nutzung, mit Namensnennung",
-            "copyright": "Pay Tracker darf für private und andere nicht-kommerzielle Zwecke genutzt, geändert und weitergegeben werden. Die Nennung des ursprünglichen Projekts bitte beibehalten. Kommerzielle Nutzung erfordert die schriftliche Erlaubnis des Autors."
+            "copyright": "{brand} darf für private und andere nicht-kommerzielle Zwecke genutzt, geändert und weitergegeben werden. Die Nennung des ursprünglichen Projekts bitte beibehalten. Kommerzielle Nutzung erfordert die schriftliche Erlaubnis des Autors."
         },
         "deleteAccount": {
             "title": "Konto löschen",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Alle Rechnungen sind bezahlt — gut gemacht!",
             "total_paid": "Gesamt bezahlt",
             "total_outstanding": "Gesamt ausstehend",
-            "footer": "Die Rechnungen lassen sich in der Pay Tracker App verwalten."
+            "footer": "Die Rechnungen lassen sich in der {brand} App verwalten."
         },
         "reset": {
-            "subject": "Pay Tracker Passwort zurücksetzen",
-            "body": "Für das Pay Tracker-Konto wurde eine Passwortzurücksetzung angefordert.\n\nÜber den folgenden Link lässt sich ein neues Passwort festlegen (gültig für {expires_label}):\n{reset_url}\n\nFalls diese Anforderung nicht gestellt wurde, kann diese E-Mail ignoriert werden — das Passwort bleibt unverändert.",
+            "subject": "{brand} Passwort zurücksetzen",
+            "body": "Für das {brand}-Konto wurde eine Passwortzurücksetzung angefordert.\n\nÜber den folgenden Link lässt sich ein neues Passwort festlegen (gültig für {expires_label}):\n{reset_url}\n\nFalls diese Anforderung nicht gestellt wurde, kann diese E-Mail ignoriert werden — das Passwort bleibt unverändert.",
             "expires": "{minutes} Minuten",
             "noExpiry": "unbegrenzt"
         },

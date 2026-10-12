@@ -17,6 +17,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageToggle from "@/components/LanguageToggle";
 import { MENU_ROW_CLASS } from "@/components/menuRow";
 import { ToastProvider } from "@/context/toast-context";
+import { BRAND } from "@/lib/brand";
+import BrandWordmark from "@/components/BrandWordmark";
 
 // Full class strings so Tailwind can see them; picked per user by hashing the email.
 const AVATAR_PALETTES = [
@@ -247,10 +249,9 @@ export default function DashboardLayout({
             href="/dashboard"
             className="flex items-center gap-2 px-4 py-4 transition-opacity hover:opacity-80"
           >
-            <Image src="/pt-logo.png" alt="Pay Tracker" width={32} height={32} className="rounded-xl" />
+            <Image src="/pt-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
             <span className="brand-wordmark text-lg font-bold tracking-tight">
-              <span className="text-[#10231A] dark:text-slate-100">Pay</span>
-              <span className="text-[#079447] dark:text-emerald-500">Tracker</span>
+              <BrandWordmark />
             </span>
           </Link>
 
@@ -324,10 +325,9 @@ export default function DashboardLayout({
             href="/dashboard"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <Image src="/pt-logo.png" alt="Pay Tracker" width={32} height={32} className="rounded-xl" />
+            <Image src="/pt-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
             <span className="brand-wordmark text-lg font-bold tracking-tight">
-              <span className="text-[#10231A] dark:text-slate-100">Pay</span>
-              <span className="text-[#079447] dark:text-emerald-500">Tracker</span>
+              <BrandWordmark />
             </span>
           </Link>
 

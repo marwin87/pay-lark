@@ -6,7 +6,7 @@ from datetime import date, timedelta
 
 import openpyxl
 
-from app.core.i18n import LOCALES
+from app.core.i18n import BRAND, LOCALES
 from app.models.bill import PaymentInstance
 from tests.conftest import (
     auth,
@@ -154,7 +154,7 @@ def test_xlsx_lang_translates_headers_and_sheet_names(client):
     current_year = today_utc().year
     r = client.get(f"/export/xlsx?year={current_year}&lang=pl", headers=auth(tok))
     assert r.status_code == 200
-    assert f"pay-tracker-pl-{current_year}.xlsx" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-pl-{current_year}.xlsx" in r.headers["content-disposition"]
 
     wb = openpyxl.load_workbook(io.BytesIO(r.content))
     assert "sty" in wb.sheetnames[0]
@@ -174,7 +174,7 @@ def test_xlsx_defaults_to_english_for_unknown_lang(client):
     current_year = today_utc().year
     r = client.get(f"/export/xlsx?year={current_year}&lang=xx", headers=auth(tok))
     assert r.status_code == 200
-    assert f"pay-tracker-en-{current_year}.xlsx" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-en-{current_year}.xlsx" in r.headers["content-disposition"]
 
 
 def test_xlsx_shows_per_payment_amount_for_unpaid(client):
@@ -271,7 +271,7 @@ def test_xlsx_month_param_exports_single_month(client):
 
     r = client.get(f"/export/xlsx?year={year}&month=3", headers=auth(tok))
     assert r.status_code == 200
-    assert f"pay-tracker-en-{year}-03.xlsx" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-en-{year}-03.xlsx" in r.headers["content-disposition"]
 
     wb = openpyxl.load_workbook(io.BytesIO(r.content))
     assert wb.sheetnames == [f"Mar {year}"]
@@ -287,7 +287,7 @@ def test_xlsx_without_month_exports_all_twelve_sheets(client):
 
     r = client.get(f"/export/xlsx?year={year}", headers=auth(tok))
     assert r.status_code == 200
-    assert f"pay-tracker-en-{year}.xlsx" in r.headers["content-disposition"]
+    assert f"{BRAND['slug']}-en-{year}.xlsx" in r.headers["content-disposition"]
     assert len(openpyxl.load_workbook(io.BytesIO(r.content)).sheetnames) == 12
     assert _data_rows(r.content) == 12
 
@@ -311,7 +311,7 @@ def test_xlsx_supports_every_frontend_locale(client):
     for lang in locales:
         r = client.get(f"/export/xlsx?year={year}&lang={lang}", headers=auth(tok))
         assert r.status_code == 200
-        assert f"pay-tracker-{lang}-{year}.xlsx" in r.headers["content-disposition"]
+        assert f"{BRAND['slug']}-{lang}-{year}.xlsx" in r.headers["content-disposition"]
         ws = openpyxl.load_workbook(io.BytesIO(r.content)).worksheets[0]
         headers[lang] = tuple(c.value for c in ws[1])
     # en is the fallback, so every other locale must differ from it.

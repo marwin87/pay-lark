@@ -3,10 +3,10 @@
         "close": "Fermer"
     },
     "Auth": {
-        "loginSubtitle": "Connectez-vous pour continuer à utiliser PayTracker",
+        "loginSubtitle": "Connectez-vous pour continuer à utiliser {brand}",
         "welcomeHeading": "Content de vous revoir 👋",
         "registerSubtitle": "Créez votre compte",
-        "registerTagline": "Commencez à suivre vos factures avec PayTracker",
+        "registerTagline": "Commencez à suivre vos factures avec {brand}",
         "emailLabel": "Email",
         "emailPlaceholder": "Saisissez votre email",
         "passwordLabel": "Mot de passe",
@@ -63,7 +63,7 @@
         "accountGroup": "Compte"
     },
     "Dashboard": {
-        "title": "Bienvenue sur Pay Tracker",
+        "title": "Bienvenue sur {brand}",
         "subtitle": "Le mois en un coup d’œil : ce qui est payé, ce qui est dû et ce qui est en retard.",
         "summary": {
             "paid": "Payé",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Paramètres",
-        "subtitle": "Faites de PayTracker le vôtre.",
+        "subtitle": "Faites de {brand} le vôtre.",
         "tabs": {
             "account": "Compte",
             "preferences": "Préférences",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Sauvegarde des données",
-            "description": "Télécharger une copie complète de toutes les données Pay Tracker sous forme de fichier de sauvegarde.",
+            "description": "Télécharger une copie complète de toutes les données {brand} sous forme de fichier de sauvegarde.",
             "button": "Sauvegarder"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "Informations sur l'application",
             "description": "Version et liens utiles.",
-            "text": "Pay Tracker est une application domestique pour suivre les factures. Elle a été pensée pour un budget du foyer serein, afin qu'aucune facture ne passe à la trappe.",
+            "text": "{brand} est une application domestique pour suivre les factures. Elle a été pensée pour un budget du foyer serein, afin qu'aucune facture ne passe à la trappe.",
             "licensesTitle": "Licences",
             "licensesText": "Cette application utilise les composants open source et les polices ci-dessous. Chacun est utilisé selon sa propre licence.",
             "version": "Version de l'application",
             "license": "Licence",
             "licenseValue": "Gratuit pour un usage non commercial, avec attribution",
-            "copyright": "Pay Tracker peut être utilisé, modifié et partagé à des fins personnelles et non commerciales. La mention du projet d’origine est à conserver. Un usage commercial nécessite l’autorisation écrite de l’auteur."
+            "copyright": "{brand} peut être utilisé, modifié et partagé à des fins personnelles et non commerciales. La mention du projet d’origine est à conserver. Un usage commercial nécessite l’autorisation écrite de l’auteur."
         },
         "deleteAccount": {
             "title": "Supprimer le compte",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "Toutes les factures sont payées — bravo !",
             "total_paid": "Total payé",
             "total_outstanding": "Total restant dû",
-            "footer": "Les factures se gèrent dans l'application Pay Tracker."
+            "footer": "Les factures se gèrent dans l'application {brand}."
         },
         "reset": {
-            "subject": "Réinitialiser le mot de passe Pay Tracker",
-            "body": "La réinitialisation du mot de passe de ce compte Pay Tracker a été demandée.\n\nLe lien ci-dessous permet de définir un nouveau mot de passe (valable {expires_label}) :\n{reset_url}\n\nSi cette demande n'a pas été faite, cet e-mail peut être ignoré : le mot de passe ne changera pas.",
+            "subject": "Réinitialiser le mot de passe {brand}",
+            "body": "La réinitialisation du mot de passe de ce compte {brand} a été demandée.\n\nLe lien ci-dessous permet de définir un nouveau mot de passe (valable {expires_label}) :\n{reset_url}\n\nSi cette demande n'a pas été faite, cet e-mail peut être ignoré : le mot de passe ne changera pas.",
             "expires": "{minutes} minutes",
             "noExpiry": "sans limite de durée"
         },

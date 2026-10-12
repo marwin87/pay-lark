@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
+from app.core.i18n import BRAND
 from app.services.email import (
     send_monthly_summary_email,
     send_password_reset_email,
@@ -211,9 +212,9 @@ _RESET_BASE = dict(
 @pytest.mark.parametrize(
     "language,expected_subject",
     [
-        ("en", "Reset Pay Tracker password"),
-        ("pl", "Zresetuj hasło Pay Tracker"),
-        ("de", "Pay Tracker Passwort zurücksetzen"),
+        ("en", f"Reset {BRAND['name']} password"),
+        ("pl", f"Zresetuj hasło {BRAND['name']}"),
+        ("de", f"{BRAND['name']} Passwort zurücksetzen"),
     ],
 )
 def test_reset_email_subject_per_language(sent, language, expected_subject):
@@ -233,4 +234,4 @@ def test_reset_email_body_contains_reset_url(sent):
 def test_reset_email_unknown_language_falls_back_to_english(sent):
     send_password_reset_email(**{**_RESET_BASE, "language": "xx"})
 
-    assert _subject(sent) == "Reset Pay Tracker password"
+    assert _subject(sent) == f"Reset {BRAND['name']} password"

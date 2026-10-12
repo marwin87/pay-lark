@@ -11,6 +11,7 @@ logging.getLogger("app").setLevel(logging.INFO)
 
 from app.core.config import settings
 from app.core.database import SessionLocal
+from app.core.i18n import BRAND
 from app.core.deps import csrf_token_valid
 from app.routers import auth, bills, categories, export
 from app.services.reminder_job import send_catchup_reminders, send_daily_reminders
@@ -51,7 +52,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Pay Tracker API",
+    title=f"{BRAND['name']} API",
     version="0.1.0",
     lifespan=lifespan,
     docs_url="/docs" if settings.docs_enabled else None,

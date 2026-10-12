@@ -18,10 +18,14 @@ LOCALES: tuple[str, ...] = tuple(
 )
 DEFAULT_LOCALE = "en"
 
+# Single source of truth for the app name: messages/brand.json (also read by the frontend).
+BRAND: dict[str, str] = json.loads((I18N_DIR / "brand.json").read_text("utf-8"))
+
 
 @lru_cache
 def _messages(lang: str) -> dict:
-    return json.loads((I18N_DIR / f"{lang}.json").read_text("utf-8"))
+    raw = (I18N_DIR / f"{lang}.json").read_text("utf-8")
+    return json.loads(raw.replace("{brand}", BRAND["name"]))
 
 
 def _lookup(lang: str, key: str) -> str | None:

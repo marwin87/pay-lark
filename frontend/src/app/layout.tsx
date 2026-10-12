@@ -6,6 +6,7 @@ import ThemeSync from "@/components/ThemeSync";
 import PwaRegister from "@/components/pwa-register";
 import AppFooter from "@/components/AppFooter";
 import "./globals.css";
+import { BRAND } from "@/lib/brand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pay Tracker",
+  title: BRAND.name,
   description: "Household bill tracking made simple",
 };
 

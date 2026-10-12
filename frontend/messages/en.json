@@ -3,10 +3,10 @@
         "close": "Close"
     },
     "Auth": {
-        "loginSubtitle": "Sign in to keep using PayTracker",
+        "loginSubtitle": "Sign in to keep using {brand}",
         "welcomeHeading": "Welcome back 👋",
         "registerSubtitle": "Create your account",
-        "registerTagline": "Start tracking your bills with PayTracker",
+        "registerTagline": "Start tracking your bills with {brand}",
         "emailLabel": "Email",
         "emailPlaceholder": "Enter your email",
         "passwordLabel": "Password",
@@ -63,7 +63,7 @@
         "accountGroup": "Account"
     },
     "Dashboard": {
-        "title": "Welcome to Pay Tracker",
+        "title": "Welcome to {brand}",
         "subtitle": "The month at a glance: what is paid, what is due and what is late.",
         "summary": {
             "paid": "Paid",
@@ -372,7 +372,7 @@
     },
     "SettingsPage": {
         "pageTitle": "Settings",
-        "subtitle": "Make PayTracker fit its use.",
+        "subtitle": "Make {brand} fit its use.",
         "tabs": {
             "account": "Account",
             "preferences": "Preferences",
@@ -524,7 +524,7 @@
         },
         "backup": {
             "title": "Backup Data",
-            "description": "Download a complete copy of all Pay Tracker data as a backup file.",
+            "description": "Download a complete copy of all {brand} data as a backup file.",
             "button": "Backup"
         },
         "restore": {
@@ -535,13 +535,13 @@
         "about": {
             "title": "App information",
             "description": "Version and useful links.",
-            "text": "Pay Tracker is a household app for keeping track of bills. It was made with a calm household budget in mind, so that no bill slips through.",
+            "text": "{brand} is a household app for keeping track of bills. It was made with a calm household budget in mind, so that no bill slips through.",
             "licensesTitle": "Licences",
             "licensesText": "This app is built with the open-source components and fonts below. Each one is used under its own license.",
             "version": "App version",
             "license": "License",
             "licenseValue": "Free for non-commercial use, with attribution",
-            "copyright": "You may use, modify and share Pay Tracker for personal and other non-commercial purposes. Please keep the credit to the original project. Commercial use needs written permission from the author."
+            "copyright": "You may use, modify and share {brand} for personal and other non-commercial purposes. Please keep the credit to the original project. Commercial use needs written permission from the author."
         },
         "deleteAccount": {
             "title": "Delete Account",
@@ -658,11 +658,11 @@
             "nothing_unpaid": "All bills are paid — great job!",
             "total_paid": "Total paid",
             "total_outstanding": "Total outstanding",
-            "footer": "Bills are managed in the Pay Tracker app."
+            "footer": "Bills are managed in the {brand} app."
         },
         "reset": {
-            "subject": "Reset Pay Tracker password",
-            "body": "A password reset was requested for this Pay Tracker account.\n\nThe link below sets a new password (valid for {expires_label}):\n{reset_url}\n\nIf this was not requested, the email can be ignored — the password will not change.",
+            "subject": "Reset {brand} password",
+            "body": "A password reset was requested for this {brand} account.\n\nThe link below sets a new password (valid for {expires_label}):\n{reset_url}\n\nIf this was not requested, the email can be ignored — the password will not change.",
             "expires": "{minutes} minutes",
             "noExpiry": "no expiry"
         },
