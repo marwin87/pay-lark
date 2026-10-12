@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Mail, LockKeyhole, ArrowRight, Loader2 } from "lucide-react";
-import { apiFetch, ApiError, type TokenResponse } from "@/lib/api";
+import { apiFetch, ApiError } from "@/lib/api";
 import { useAuth } from "@/context/auth-context";
 import { passwordTooLong, validateEmail } from "@/lib/auth-validation";
 import { browserTimeZone } from "@/lib/today";
@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      await apiFetch<TokenResponse>("/auth/register", {
+      await apiFetch("/auth/register", {
         method: "POST",
         // The browser's zone becomes the account's time zone (editable in Settings)
         body: JSON.stringify({ email, password, timezone: browserTimeZone() }),

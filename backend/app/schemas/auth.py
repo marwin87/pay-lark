@@ -117,11 +117,6 @@ class LoginRequest(BaseModel):
     password: Password
 
 
-class TokenResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-
-
 class UserProfileOut(BaseModel):
     model_config = {"from_attributes": True}
 

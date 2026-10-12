@@ -143,7 +143,7 @@ def test_edit_paid_payment_future_date_and_other_user(client_db):
     r = client.patch(
         f"/bills/payments/{instance_id}", json={"notes": "x"}, headers=auth(other)
     )
-    assert r.status_code == 403
+    assert r.status_code == 404
 
 
 def _amounts(client: TestClient, token: str, bill_id: int) -> dict:

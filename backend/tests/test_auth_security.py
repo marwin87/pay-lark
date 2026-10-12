@@ -43,7 +43,7 @@ def test_login_after_logout_issues_a_valid_new_token(client):
         "/auth/login", json={"email": "relogin@test.com", "password": _PASSWORD}
     )
     assert login_r.status_code == 200
-    new_token = login_r.json()["access_token"]
+    new_token = login_r.cookies["access_token"]
 
     r = client.get("/auth/me", headers=auth(new_token))
     assert r.status_code == 200
@@ -195,3 +195,17 @@ def test_login_unknown_and_wrong_password_look_identical(client):
         "/auth/login", json={"email": "nobody@test.com", "password": _WRONG_PASSWORD}
     )
     assert (wrong.status_code, wrong.json()) == (unknown.status_code, unknown.json())
+
+
+def test_login_and_register_keep_the_token_out_of_the_body(client):
+    for r in (
+        client.post(
+            "/auth/register", json={"email": "nobody@test.com", "password": _PASSWORD}
+        ),
+        client.post(
+            "/auth/login", json={"email": "nobody@test.com", "password": _PASSWORD}
+        ),
+    ):
+        assert r.status_code in (200, 201)
+        assert "access_token" not in r.text
+        assert r.cookies.get("access_token")

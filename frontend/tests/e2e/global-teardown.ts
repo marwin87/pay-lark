@@ -25,7 +25,16 @@ export default async function globalTeardown(): Promise<void> {
         console.warn(`[teardown] Could not log in as ${email}: HTTP ${login.status}`);
         continue;
       }
-      const { access_token } = (await login.json()) as { access_token: string };
+      // The JWT is cookie-only now (not in the body); take it from Set-Cookie.
+      const access_token = login.headers
+        .getSetCookie()
+        .find((c) => c.startsWith('access_token='))
+        ?.split(';')[0]
+        .slice('access_token='.length);
+      if (!access_token) {
+        console.warn(`[teardown] No access_token cookie for ${email}`);
+        continue;
+      }
       const res = await fetch(`${API}/auth/users/me`, {
         method: 'DELETE',
         headers: { ...json, Authorization: `Bearer ${access_token}` },

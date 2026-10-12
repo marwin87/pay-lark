@@ -1,10 +1,5 @@
 import { getCsrfToken } from "@/lib/auth";
 
-export interface TokenResponse {
-  access_token: string;
-  token_type: string;
-}
-
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8010";
 
 export class SessionExpiredError extends Error {

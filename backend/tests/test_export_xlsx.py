@@ -389,3 +389,27 @@ def test_xlsx_has_a_row_per_payment_day(client):
 
     assert r.status_code == 200
     assert _data_rows(r.content) == 36
+
+
+def test_xlsx_user_text_starting_with_equals_is_not_a_formula(client):
+    """Bill name/notes are user input; a leading '=' must stay plain text."""
+    tok = register_and_login(client, "xlsx_formula@test.com")
+    cat_id = category_id(client, tok)
+    r = client.post(
+        "/bills",
+        json={
+            **_BILL_A,
+            "name": "=1+1",
+            "notes": '=HYPERLINK("http://evil")',
+            "category_id": cat_id,
+            "due_month": 1,
+        },
+        headers=auth(tok),
+    )
+    assert r.status_code == 201
+
+    r = client.get(f"/export/xlsx?year={today_utc().year}&month=1", headers=auth(tok))
+    ws = openpyxl.load_workbook(io.BytesIO(r.content)).worksheets[0]
+    cells = [c for row in ws.iter_rows(min_row=2) for c in row if c.value is not None]
+    assert any(c.value == "=1+1" for c in cells)
+    assert all(c.data_type != "f" for c in cells)

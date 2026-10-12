@@ -311,7 +311,7 @@ def test_paid_instance_amount_keeps_historical_snapshot(client_db):
     assert float(payment["amount"]) == pytest.approx(100.00)
 
 
-def test_patch_restore_cross_user_returns_403(client_db):
+def test_patch_restore_cross_user_returns_404(client_db):
     """Cross-user PATCH with restore flag is blocked."""
     client, db = client_db
     tok_a = register_and_login(client, "a2@test.com")
@@ -323,7 +323,7 @@ def test_patch_restore_cross_user_returns_403(client_db):
         json={"recreate_deleted_future": True},
         headers=auth(tok_b),
     )
-    assert r.status_code == 403
+    assert r.status_code == 404
 
 
 def test_patch_restore_keeps_a_paid_payment_paid(client_db):

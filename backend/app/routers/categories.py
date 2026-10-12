@@ -17,7 +17,7 @@ def _owned_category(db: Session, category_id: int, user_id: int) -> Category:
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     if category.user_id != user_id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Category not found")
     return category
 
 

@@ -136,7 +136,7 @@ def register_and_login(
     """Register a user and return their Bearer token."""
     r = client.post("/auth/register", json={"email": email, "password": password})
     assert r.status_code == 201, r.text
-    return r.json()["access_token"]
+    return r.cookies["access_token"]
 
 
 def enable_notifications(client: TestClient, token: str) -> None:

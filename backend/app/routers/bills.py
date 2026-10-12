@@ -39,7 +39,7 @@ def _check_category_ownership(db: Session, category_id: int, user_id: int) -> No
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     if category.user_id != user_id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Category not found")
 
 
 def _day_columns(days: list[int] | None) -> dict:
@@ -130,7 +130,7 @@ def _live_instance(db: Session, instance_id: int, user_id: int) -> PaymentInstan
     if not instance or instance.is_deleted:
         raise HTTPException(status_code=404, detail="Payment instance not found")
     if instance.template.user_id != user_id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Payment instance not found")
     return instance
 
 
@@ -412,7 +412,7 @@ def delete_payment(
 
     template = instance.template
     if template.user_id != me.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Payment instance not found")
 
     instance.is_deleted = True
 
@@ -476,7 +476,7 @@ def update_bill(
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill.user_id != me.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Bill not found")
 
     from app.models.bill import BillFrequency as BF
 
@@ -593,7 +593,7 @@ def archive_bill(
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill.user_id != me.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Bill not found")
     bill.is_archived = True
     # Hide what is still unpaid from this month on; paid and past payments stay as history.
     current_period = today_for(me).strftime("%Y-%m")
@@ -618,7 +618,7 @@ def unarchive_bill(
     if not bill:
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill.user_id != me.id:
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=404, detail="Bill not found")
     bill.is_archived = False
     current_period = today_for(me).strftime("%Y-%m")
     # A last-payment month already in the past would leave the restored bill idle.

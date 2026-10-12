@@ -48,7 +48,7 @@ def login(session: requests.Session) -> str:
     if r.status_code != 200:
         print(f"  Login failed ({r.status_code}): {r.text}")
         sys.exit(1)
-    token = r.json()["access_token"]
+    token = r.cookies["access_token"]  # the JWT is cookie-only
     print("  Logged in, token received")
     return token
 

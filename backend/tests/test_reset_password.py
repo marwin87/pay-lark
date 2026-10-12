@@ -224,3 +224,18 @@ def test_forgot_password_smtp_failure_still_returns_200(
 
     assert resp.status_code == 200
     assert "reset link" in resp.json()["message"].lower()
+
+
+def test_reset_link_carries_token_in_fragment_not_query(client_db):
+    client, _ = client_db
+    register_and_login(client, "frag@example.com")
+
+    with (
+        patch("app.routers.auth.settings.smtp_host", "smtp.example.com"),
+        patch("app.routers.auth.send_password_reset_email") as send,
+    ):
+        client.post("/auth/forgot-password", json={"email": "frag@example.com"})
+
+    url = send.call_args.kwargs["reset_url"]
+    assert "/reset-password#token=" in url
+    assert "?" not in url

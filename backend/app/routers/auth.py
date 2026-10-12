@@ -38,7 +38,6 @@ from app.schemas.auth import (
     ServerTimeOut,
     ShareMonthRequest,
     SmtpStatusResponse,
-    TokenResponse,
     UserProfileOut,
     UserProfileUpdate,
 )
@@ -110,7 +109,7 @@ def _clear_auth_cookies(response: Response) -> None:
 
 
 @router.post(
-    "/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED
+    "/register", response_model=MessageResponse, status_code=status.HTTP_201_CREATED
 )
 def register(
     body: RegisterRequest,
@@ -137,10 +136,10 @@ def register(
     db.refresh(user)
     token = create_access_token(str(user.id), user.token_version)
     _set_auth_cookie(response, token)
-    return TokenResponse(access_token=token)
+    return MessageResponse(message="ok")  # the JWT travels only in the HttpOnly cookie
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=MessageResponse)
 def login(
     body: LoginRequest,
     request: Request,
@@ -165,7 +164,7 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid credentials")
     token = create_access_token(str(user.id), user.token_version)
     _set_auth_cookie(response, token)
-    return TokenResponse(access_token=token)
+    return MessageResponse(message="ok")  # the JWT travels only in the HttpOnly cookie
 
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
@@ -402,7 +401,7 @@ def forgot_password(
     db.commit()
 
     if settings.smtp_host:
-        reset_url = f"{settings.app_base_url}/reset-password?token={raw_token}"
+        reset_url = f"{settings.app_base_url}/reset-password#token={raw_token}"
         try:
             send_password_reset_email(
                 smtp_host=settings.smtp_host,
@@ -421,7 +420,7 @@ def forgot_password(
                 expires_minutes=settings.password_reset_token_expire_minutes,
             )
         except Exception:
-            _logger.exception("Failed to send password reset email to %s", user.email)
+            _logger.exception("Failed to send password reset email to user %s", user.id)
 
     return _FORGOT_PASSWORD_RESPONSE
 

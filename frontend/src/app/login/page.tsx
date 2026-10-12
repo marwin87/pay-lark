@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Mail, LockKeyhole, ArrowRight, Loader2 } from "lucide-react";
-import { apiFetch, ApiError, type TokenResponse } from "@/lib/api";
+import { apiFetch, ApiError } from "@/lib/api";
 import { useAuth } from "@/context/auth-context";
 import { useNotifications } from "@/hooks/useNotifications";
 import { SESSION_EXPIRED_KEY } from "@/lib/auth";
@@ -78,7 +78,7 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      await apiFetch<TokenResponse>("/auth/login", {
+      await apiFetch("/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });

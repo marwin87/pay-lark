@@ -114,7 +114,7 @@ def test_archive_category_hides_it_by_default_but_keeps_bill_reference(client):
     assert r.status_code == 204
 
 
-def test_category_update_other_user_returns_403(client):
+def test_category_update_other_user_returns_404(client):
     tok_a = register_and_login(client, "cat_a@test.com")
     tok_b = register_and_login(client, "cat_b@test.com")
 
@@ -124,10 +124,10 @@ def test_category_update_other_user_returns_403(client):
     r = client.patch(
         f"/categories/{category_a['id']}", json={"name": "Hacked"}, headers=auth(tok_b)
     )
-    assert r.status_code == 403
+    assert r.status_code == 404
 
 
-def test_category_archive_other_user_returns_403(client):
+def test_category_archive_other_user_returns_404(client):
     tok_a = register_and_login(client, "cat_arch_a@test.com")
     tok_b = register_and_login(client, "cat_arch_b@test.com")
 
@@ -135,7 +135,7 @@ def test_category_archive_other_user_returns_403(client):
     category_a = r.json()[0]
 
     r = client.post(f"/categories/{category_a['id']}/archive", headers=auth(tok_b))
-    assert r.status_code == 403
+    assert r.status_code == 404
 
 
 def test_category_not_found_returns_404(client):
@@ -144,7 +144,7 @@ def test_category_not_found_returns_404(client):
     assert r.status_code == 404
 
 
-def test_bill_with_other_users_category_id_returns_403(client):
+def test_bill_with_other_users_category_id_returns_404(client):
     tok_a = register_and_login(client, "bcat_a@test.com")
     tok_b = register_and_login(client, "bcat_b@test.com")
 
@@ -162,7 +162,7 @@ def test_bill_with_other_users_category_id_returns_403(client):
         },
         headers=auth(tok_b),
     )
-    assert r.status_code == 403
+    assert r.status_code == 404
 
 
 def test_category_name_length_is_validated(client):
@@ -236,7 +236,7 @@ def test_delete_category_used_by_bill_returns_409(client):
     )
 
 
-def test_category_delete_other_user_returns_403(client):
+def test_category_delete_other_user_returns_404(client):
     tok_a = register_and_login(client, "cat_del_a@test.com")
     tok_b = register_and_login(client, "cat_del_b@test.com")
     category_a = client.get("/categories", headers=auth(tok_a)).json()[0]
@@ -245,5 +245,5 @@ def test_category_delete_other_user_returns_403(client):
         client.delete(
             f"/categories/{category_a['id']}", headers=auth(tok_b)
         ).status_code
-        == 403
+        == 404
     )

@@ -17,7 +17,7 @@ import BrandWordmark from "@/components/BrandWordmark";
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token") ?? "";
+  const queryToken = searchParams.get("token") ?? "";
   const t = useTranslations("Auth");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +46,11 @@ function ResetPasswordForm() {
       setError(t("passwordsDoNotMatch"));
       return;
     }
+
+    // The link carries the token in the #fragment (never sent to servers or logged);
+    // the ?token= query is kept for links emailed before the change.
+    const token =
+      new URLSearchParams(window.location.hash.slice(1)).get("token") ?? queryToken;
 
     setLoading(true);
     try {

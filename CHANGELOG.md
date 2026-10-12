@@ -1,6 +1,6 @@
 # Changelog
 
-Notable changes to Pay Tracker, release by release.
+Notable changes, release by release.
 
 ## v1.4.0 (Not released yet)
 

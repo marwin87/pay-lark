@@ -17,7 +17,7 @@ def _signup(client, email, **extra):
         "/auth/register", json={"email": email, "password": _PASSWORD, **extra}
     )
     assert r.status_code == 201, r.text
-    return r.json()["access_token"]
+    return r.cookies["access_token"]
 
 
 def _tz(client, token) -> str:

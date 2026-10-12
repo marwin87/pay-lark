@@ -204,6 +204,13 @@ def build_xlsx(
                     max_len + 2, _MAX_COL_WIDTH
                 )
 
+            # openpyxl turns any "=..." string into a formula; user text (bill name,
+            # notes) must stay text. The export writes no real formulas.
+            for sheet_row in ws.iter_rows(min_row=2):
+                for cell in sheet_row:
+                    if cell.data_type == "f":
+                        cell.data_type = "s"
+
             for row_idx, row in enumerate(rows, start=2):
                 if status_col_idx is not None:
                     fill_color, font_color = _STATUS_STYLES.get(

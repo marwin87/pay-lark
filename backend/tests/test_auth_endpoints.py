@@ -731,7 +731,7 @@ def test_login_email_case_insensitive(client):
         "/auth/login", json={"email": "mIXED@test.COM", "password": _PASSWORD}
     )
     assert r.status_code == 200
-    token = r.json()["access_token"]
+    token = r.cookies["access_token"]
     assert client.get("/auth/me", headers=auth(token)).json()["email"] == (
         "mixed@test.com"
     )
