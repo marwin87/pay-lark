@@ -105,7 +105,7 @@ export default function DashboardPage() {
       )}
       {data && !currency && (
         // No payments in any currency for this window: keep the month nav so you can go back
-        <section className={CARD_CLASS} {...swipe}>
+        <section className={`${CARD_CLASS} max-sm:grid max-sm:grid-cols-2 max-sm:gap-2`} {...swipe}>
           <MonthNav month={month} currentMonth={currentMonth} minMonth={minMonth} maxMonth={maxMonth} monthLabel={monthLabel} onChange={setMonth} />
           <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">{t("summary.emptyMonth")}</p>
           {month >= currentMonth && (

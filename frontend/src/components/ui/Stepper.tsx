@@ -26,7 +26,7 @@ export default function Stepper({
   children: ReactNode;
 }) {
   return (
-    <div className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-1.5 sm:w-auto sm:justify-start sm:gap-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 dark:border-slate-700 dark:bg-slate-900/40 dark:sm:bg-transparent">
+    <div className="flex w-full items-center justify-between max-sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-1.5 sm:w-auto sm:justify-start sm:gap-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 dark:border-slate-700 dark:bg-slate-900/40 dark:sm:bg-transparent">
       <button type="button" onClick={onPrev} disabled={prevDisabled} aria-label={prevLabel} title={prevLabel} className={ARROW_BTN}>
         <ChevronLeft size={20} />
       </button>

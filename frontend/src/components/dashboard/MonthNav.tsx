@@ -24,7 +24,7 @@ export default function MonthNav({ month, currentMonth, minMonth, maxMonth, mont
   const [sheetOpen, setSheetOpen] = useState(false);
   const atCurrent = month === currentMonth;
   return (
-    <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+    <div className="max-sm:contents sm:flex sm:flex-wrap sm:items-center sm:gap-2">
       <Stepper
         onPrev={() => onChange(shiftMonth(month, -1))}
         onNext={() => onChange(shiftMonth(month, 1))}
@@ -35,15 +35,14 @@ export default function MonthNav({ month, currentMonth, minMonth, maxMonth, mont
       >
         <StepperTitle id="month-summary-title" title={monthLabel} subtitle={monthRelative(month, currentMonth, locale)} onOpen={() => setSheetOpen(true)} />
       </Stepper>
-      {!atCurrent && (
-        <button
-          type="button"
-          onClick={() => onChange(currentMonth)}
-          className="rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-sm font-medium text-green-800 transition-colors hover:bg-green-100 dark:border-green-800 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50"
-        >
-          {t("today")}
-        </button>
-      )}
+      {/* Mobile: always laid out (hidden at current month) so the card never changes height */}
+      <button
+        type="button"
+        onClick={() => onChange(currentMonth)}
+        className={`${atCurrent ? "invisible sm:hidden" : ""} max-sm:h-9 max-sm:justify-self-start rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-sm font-medium text-green-800 transition-colors hover:bg-green-100 dark:border-green-800 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50`}
+      >
+        {t("today")}
+      </button>
       {sheetOpen && (
         <MonthSheet
           year={Number(month.slice(0, 4))}

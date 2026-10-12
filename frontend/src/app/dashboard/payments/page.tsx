@@ -144,7 +144,7 @@ function PaymentsPageInner() {
   const { minYear, maxYear } = browseYears(currentYear);
   const currentMonth = todayStr.slice(0, 7);
 
-  const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
+  const [selectedMonth, setSelectedMonthRaw] = useState<string>(currentMonth);
   const {
     dialogTarget,
     setDialogTarget,
@@ -194,10 +194,23 @@ function PaymentsPageInner() {
     });
   }
 
+  // A month visited before shows instantly from the cache; the effect below still refreshes it.
+  function setSelectedMonth(month: string) {
+    const cached = getCached<PaymentInstanceOut[]>(`payments:${month}`);
+    if (cached) {
+      setInstances(cached);
+      setLoadedMonth(month);
+    }
+    setSelectedMonthRaw(month);
+  }
+
   // Derived: true whenever selectedMonth hasn't finished loading yet.
   // Becomes true immediately when selectedMonth changes (same render), so no
   // synchronous setState inside useEffect is needed.
   const loading = loadedMonth !== selectedMonth;
+
+  // Previous month's rows stay on screen (dimmed) while the new month loads, so nothing collapses or jumps.
+  const staleClass = loading ? "pointer-events-none opacity-50" : "";
 
   const isReadOnly = selectedMonth < currentMonth;
 
@@ -615,7 +628,7 @@ function PaymentsPageInner() {
         )}
 
         {/* Search, filter & sort */}
-        {!loading && !loadError && (
+        {!loadError && (
           <div className="mt-4 flex flex-col gap-3">
             <FiltersHeader
               activeCount={(searchQuery ? 1 : 0) + (statusFilter.size > 0 ? 1 : 0) + (categoryFilter.size > 0 ? 1 : 0) + (dayFilter ? 1 : 0)}
@@ -679,7 +692,7 @@ function PaymentsPageInner() {
             {t("calendarTitle")}
           </button>
           {calendarOpen && (
-            <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+            <div className={`mt-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-opacity dark:border-slate-700 dark:bg-slate-800 ${staleClass}`}>
               <PaymentsCalendar
                 year={parseInt(selectedMonth.split("-")[0], 10)}
                 month={parseInt(selectedMonth.split("-")[1], 10)}
@@ -695,8 +708,8 @@ function PaymentsPageInner() {
 
       {/* Selected month header */}
       <div className="mb-4 pb-2">
-        {!loading && !loadError && (
-          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        {!loadError && !(loading && instances.length === 0) && (
+          <div className={`flex flex-wrap items-center justify-between gap-x-3 gap-y-2 transition-opacity ${staleClass}`}>
             {filteredInstances.length === 0 ? (
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 {instances.length === 0 ? t("noPayments") : t("noFilterResults")}
@@ -725,7 +738,7 @@ function PaymentsPageInner() {
       </div>
 
       {/* Day filter banner: sticky so it stays visible once the calendar has scrolled away */}
-      {dayFilter && !loading && !loadError && (
+      {dayFilter && !loadError && (
         <div className="sticky top-[57px] z-[5] mb-4 flex items-center gap-2 rounded-xl border border-slate-300 bg-slate-100 px-3 py-2 text-slate-700 shadow-sm md:top-0 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200">
           <CalendarDays size={20} className="shrink-0" />
           <div className="min-w-0 flex-1">
@@ -758,7 +771,7 @@ function PaymentsPageInner() {
       )}
 
       {/* Loading skeleton */}
-      {loading && (
+      {loading && instances.length === 0 && (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
             <div
@@ -770,8 +783,8 @@ function PaymentsPageInner() {
       )}
 
       {/* Payment list */}
-      {!loading && !loadError && filteredInstances.length > 0 && (
-        <div className="flex flex-col gap-4">
+      {!loadError && filteredInstances.length > 0 && (
+        <div className={`flex flex-col gap-4 transition-opacity ${staleClass}`}>
           {sortedCategories.map((cat) => {
             const key = String(cat.id);
             const group = filteredInstances.filter((inst) => inst.category.id === cat.id);

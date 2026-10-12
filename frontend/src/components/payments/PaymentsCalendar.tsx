@@ -57,11 +57,11 @@ export default function PaymentsCalendar({
       selected={selectedDay}
       selectedStyle="ring"
       onSelect={onSelectDay}
-      getDay={(iso) => {
+      getDay={(iso, weekend) => {
         const dayInstances = byDay.get(iso) ?? [];
         const status = dayStatus(dayInstances, iso, todayStr);
         if (!status) {
-          return { disabled: true, className: "cursor-default border border-slate-200 bg-white text-slate-400 dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-500" };
+          return { disabled: true, className: `cursor-default border text-slate-400 dark:text-slate-500 ${weekend ? "border-transparent bg-slate-100 dark:border-transparent dark:bg-slate-700/40" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/40"}` };
         }
         return {
           className: `${STATUS_TILE[status]} cursor-pointer text-xs font-medium hover:-translate-y-0.5 hover:shadow-sm`,
