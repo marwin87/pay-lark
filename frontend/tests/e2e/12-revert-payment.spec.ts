@@ -28,7 +28,7 @@ test('reverting a paid payment makes it payable again and survives reload', asyn
   await page.getByLabel('Revert payment').click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Revert', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Revert payment', exact: true }).click();
   await expect(dialog).not.toBeVisible();
 
   // Assert: unpaid again in the UI

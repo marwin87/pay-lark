@@ -30,7 +30,7 @@ test('deleted payment row disappears from the payments list', async ({ page }) =
 
   // Assert: the payment row is gone (exact: true avoids matching parent containers
   // whose combined text content includes billName + other text like frequency)
-  await expect(page.getByText(billName, { exact: true })).not.toBeVisible();
+  await expect(page.getByRole('main').getByText(billName, { exact: true })).not.toBeVisible();
 
   // Assert: "Nothing to pay this month" empty state appears (first() because the text
   // shows both above the list and in the empty-state block)

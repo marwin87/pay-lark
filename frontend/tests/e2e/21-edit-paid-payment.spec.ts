@@ -22,7 +22,7 @@ test('editing a paid payment keeps it paid, saves new amount and note, survives 
   await page.getByRole('button', { name: 'Mark as Paid' }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Amount paid').fill('100');
-  await dialog.getByLabel('Notes (optional)').fill('first note');
+  await dialog.getByLabel('Notes').fill('first note');
   await dialog.getByRole('button', { name: 'Mark as Paid' }).click();
   await expect(page.getByText('first note')).toBeVisible();
 
@@ -30,10 +30,10 @@ test('editing a paid payment keeps it paid, saves new amount and note, survives 
   await page.getByLabel('Edit payment').click();
   await expect(dialog).toBeVisible();
   await expect(dialog.getByLabel('Amount paid')).toHaveValue('100.00');
-  await expect(dialog.getByLabel('Notes (optional)')).toHaveValue('first note');
+  await expect(dialog.getByLabel('Notes')).toHaveValue('first note');
   await dialog.getByLabel('Amount paid').fill('87.50');
-  await dialog.getByLabel('Notes (optional)').fill('second note');
-  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await dialog.getByLabel('Notes').fill('second note');
+  await dialog.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(dialog).not.toBeVisible();
 
   // Assert: still paid, with the new values
@@ -47,8 +47,8 @@ test('editing a paid payment keeps it paid, saves new amount and note, survives 
   await expect(page.getByText('second note')).toBeVisible();
 
   await page.getByLabel('Edit payment').click();
-  await dialog.getByLabel('Notes (optional)').fill('');
-  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await dialog.getByLabel('Notes').fill('');
+  await dialog.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(dialog).not.toBeVisible();
   await page.reload();
   await expect(page.getByText(/Paid on/)).toBeVisible();
@@ -70,8 +70,8 @@ test('editing an unpaid payment sets its own amount and note, then paying defaul
   const dialog = page.getByRole('dialog');
   await expect(dialog.getByLabel('Amount due')).toHaveValue('');
   await dialog.getByLabel('Amount due').fill('143.20');
-  await dialog.getByLabel('Notes (optional)').fill('invoice 7');
-  await dialog.getByRole('button', { name: 'Save', exact: true }).click();
+  await dialog.getByLabel('Notes').fill('invoice 7');
+  await dialog.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(dialog).not.toBeVisible();
 
   // Assert: shown as still unpaid, with the new amount and note — and it survives reload
@@ -85,7 +85,7 @@ test('editing an unpaid payment sets its own amount and note, then paying defaul
   // Step: paying prefills the overridden amount and the note
   await page.getByRole('button', { name: 'Mark as Paid' }).click();
   await expect(dialog.getByLabel('Amount paid')).toHaveValue('143.20');
-  await expect(dialog.getByLabel('Notes (optional)')).toHaveValue('invoice 7');
+  await expect(dialog.getByLabel('Notes')).toHaveValue('invoice 7');
   await dialog.getByRole('button', { name: 'Mark as Paid' }).click();
   await expect(page.getByText(/Paid on/)).toContainText('143.20');
 });
