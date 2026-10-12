@@ -10,44 +10,49 @@ const REPO_URL = "https://github.com/marwin87/pay-tracker";
 const LINK_CLASS = "font-medium text-green-700 underline-offset-2 hover:underline dark:text-emerald-400";
 
 // Direct runtime dependencies and shipped fonts; update when adding or removing one (PDF fonts: backend/app/assets/fonts/LICENSES.txt).
-const LICENSES: { group: string; items: [name: string, license: string][] }[] = [
+// Each entry links to its source and credits the copyright holder, as the licenses (MIT, BSD, Apache, OFL, LGPL...) require.
+type LicenseItem = { name: string; license: string; url: string; holder: string };
+
+const LICENSES: { group: string; items: LicenseItem[] }[] = [
   {
     group: "Frontend",
     items: [
-      ["Next.js", "MIT"],
-      ["React, React DOM", "MIT"],
-      ["next-intl", "MIT"],
-      ["lucide-react", "ISC"],
-      ["Tailwind CSS", "MIT"],
+      { name: "Next.js", license: "MIT", url: "https://github.com/vercel/next.js", holder: "Vercel, Inc." },
+      { name: "React, React DOM", license: "MIT", url: "https://github.com/facebook/react", holder: "Meta Platforms, Inc. and affiliates" },
+      { name: "next-intl", license: "MIT", url: "https://github.com/amannn/next-intl", holder: "Jan Amann" },
+      { name: "lucide-react", license: "ISC", url: "https://github.com/lucide-icons/lucide", holder: "Lucide Contributors; portions Cole Bemis (Feather)" },
+      { name: "Tailwind CSS", license: "MIT", url: "https://github.com/tailwindlabs/tailwindcss", holder: "Tailwind Labs, Inc." },
     ],
   },
   {
     group: "Backend",
     items: [
-      ["FastAPI", "MIT"],
-      ["Starlette, Uvicorn", "BSD-3-Clause"],
-      ["SQLAlchemy, Alembic", "MIT"],
-      ["Pydantic", "MIT"],
-      ["pandas", "BSD-3-Clause"],
-      ["openpyxl", "MIT"],
-      ["fpdf2", "LGPL-3.0"],
-      ["psycopg2", "LGPL-3.0"],
-      ["bcrypt", "Apache-2.0"],
-      ["python-jose", "MIT"],
-      ["python-multipart", "Apache-2.0"],
-      ["APScheduler", "MIT"],
-      ["Apprise", "BSD-2-Clause"],
-      ["tzdata", "Apache-2.0"],
-      ["PostgreSQL", "PostgreSQL License"],
+      { name: "FastAPI", license: "MIT", url: "https://github.com/fastapi/fastapi", holder: "Sebastián Ramírez" },
+      { name: "Starlette", license: "BSD-3-Clause", url: "https://github.com/Kludex/starlette", holder: "Encode OSS Ltd." },
+      { name: "Uvicorn", license: "BSD-3-Clause", url: "https://github.com/Kludex/uvicorn", holder: "Encode OSS Ltd." },
+      { name: "SQLAlchemy", license: "MIT", url: "https://github.com/sqlalchemy/sqlalchemy", holder: "SQLAlchemy authors and contributors" },
+      { name: "Alembic", license: "MIT", url: "https://github.com/sqlalchemy/alembic", holder: "Mike Bayer and contributors" },
+      { name: "Pydantic", license: "MIT", url: "https://github.com/pydantic/pydantic", holder: "Pydantic Services Inc. and contributors" },
+      { name: "pandas", license: "BSD-3-Clause", url: "https://github.com/pandas-dev/pandas", holder: "AQR Capital Management, Lambda Foundry, PyData Development Team and contributors" },
+      { name: "openpyxl", license: "MIT", url: "https://openpyxl.readthedocs.io", holder: "openpyxl contributors" },
+      { name: "fpdf2", license: "LGPL-3.0", url: "https://github.com/py-pdf/fpdf2", holder: "Olivier Plathey, Mariano Reingart and contributors" },
+      { name: "psycopg2", license: "LGPL-3.0", url: "https://github.com/psycopg/psycopg2", holder: "Federico Di Gregorio and contributors" },
+      { name: "bcrypt", license: "Apache-2.0", url: "https://github.com/pyca/bcrypt", holder: "The Python Cryptographic Authority developers" },
+      { name: "python-jose", license: "MIT", url: "https://github.com/mpdavis/python-jose", holder: "Michael Davis" },
+      { name: "python-multipart", license: "Apache-2.0", url: "https://github.com/Kludex/python-multipart", holder: "Andrew Dunham, Marcelo Trylesinski" },
+      { name: "APScheduler", license: "MIT", url: "https://github.com/agronholm/apscheduler", holder: "Alex Grönholm" },
+      { name: "Apprise", license: "BSD-2-Clause", url: "https://github.com/caronc/apprise", holder: "Chris Caron" },
+      { name: "tzdata", license: "Apache-2.0", url: "https://github.com/python/tzdata", holder: "Paul Ganssle" },
+      { name: "PostgreSQL", license: "PostgreSQL License", url: "https://www.postgresql.org", holder: "PostgreSQL Global Development Group, Regents of the University of California" },
     ],
   },
   {
     group: "Fonts",
     items: [
-      ["DejaVu Sans", "Bitstream Vera License"],
-      ["Noto Sans SC", "SIL OFL 1.1"],
-      ["Geist, Geist Mono", "SIL OFL 1.1"],
-      ["Cinzel", "SIL OFL 1.1"],
+      { name: "DejaVu Sans", license: "Bitstream Vera License", url: "https://dejavu-fonts.github.io", holder: "Bitstream, Inc.; Tavmjong Bah (Arev)" },
+      { name: "Noto Sans SC", license: "SIL OFL 1.1", url: "https://github.com/notofonts/noto-cjk", holder: "Adobe; Noto is a trademark of Google LLC" },
+      { name: "Geist, Geist Mono", license: "SIL OFL 1.1", url: "https://github.com/vercel/geist-font", holder: "Vercel, in collaboration with basement.studio" },
+      { name: "Cinzel", license: "SIL OFL 1.1", url: "https://github.com/NDISCOVER/Cinzel", holder: "The Cinzel Project Authors" },
     ],
   },
 ];
@@ -106,7 +111,7 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
   );
 }
 
-function GroupRows({ group, items }: { group: string; items: [string, string][] }) {
+function GroupRows({ group, items }: { group: string; items: LicenseItem[] }) {
   return (
     <>
       <tr>
@@ -117,10 +122,15 @@ function GroupRows({ group, items }: { group: string; items: [string, string][] 
           {group}
         </th>
       </tr>
-      {items.map(([name, license]) => (
+      {items.map(({ name, license, url, holder }) => (
         <tr key={name} className="border-b border-slate-200 last:border-0 dark:border-slate-700">
-          <td className="px-2.5 py-1.5 font-medium text-slate-800 dark:text-slate-100">{name}</td>
-          <td className="whitespace-nowrap px-2.5 py-1.5 text-slate-600 dark:text-slate-300">{license}</td>
+          <td className="px-2.5 py-1.5">
+            <a href={url} target="_blank" rel="noopener noreferrer" className={`${LINK_CLASS} text-slate-800 dark:text-slate-100`}>
+              {name}
+            </a>
+            <span className="block text-xs text-slate-500 dark:text-slate-400">© {holder}</span>
+          </td>
+          <td className="whitespace-nowrap px-2.5 py-1.5 align-top text-slate-600 dark:text-slate-300">{license}</td>
         </tr>
       ))}
     </>

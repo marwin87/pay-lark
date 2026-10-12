@@ -537,7 +537,7 @@
             "description": "Version und nützliche Links.",
             "text": "{brand} ist eine Haushalts-App, um den Überblick über Rechnungen zu behalten. Sie entstand für ein entspanntes Haushaltsbudget, damit keine Rechnung untergeht.",
             "licensesTitle": "Lizenzen",
-            "licensesText": "Diese App nutzt die folgenden Open-Source-Komponenten und Schriften. Jede wird unter ihrer eigenen Lizenz verwendet.",
+            "licensesText": "Diese App nutzt die folgenden Open-Source-Komponenten und Schriften. Jede wird unter ihrer eigenen Lizenz verwendet. Die Namen verlinken auf die Quelle; die Urheberrechtsinhaber werden wie von den Lizenzen verlangt genannt.",
             "version": "App-Version",
             "license": "Lizenz",
             "licenseValue": "Kostenlos für nicht-kommerzielle Nutzung, mit Namensnennung",

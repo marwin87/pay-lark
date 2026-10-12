@@ -537,7 +537,7 @@
             "description": "Wersja i przydatne linki.",
             "text": "{brand} to domowa aplikacja do pilnowania rachunków. Powstała z myślą o spokojnym domowym budżecie, żeby żaden rachunek nie umknął.",
             "licensesTitle": "Licencje",
-            "licensesText": "Aplikacja korzysta z poniższych komponentów open source i fontów. Każdy z nich jest używany na warunkach własnej licencji.",
+            "licensesText": "Aplikacja korzysta z poniższych komponentów open source i fontów. Każdy z nich jest używany na warunkach własnej licencji. Nazwy prowadzą do źródła, a właściciele praw autorskich są wskazani zgodnie z wymaganiami licencji.",
             "version": "Wersja aplikacji",
             "license": "Licencja",
             "licenseValue": "Bezpłatna do użytku niekomercyjnego, z podaniem autora",

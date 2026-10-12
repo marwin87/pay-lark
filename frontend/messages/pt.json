@@ -537,7 +537,7 @@
             "description": "Versão e ligações úteis.",
             "text": "O {brand} é uma aplicação doméstica para acompanhar as faturas. Foi pensada para um orçamento familiar tranquilo, para que nenhuma fatura passe despercebida.",
             "licensesTitle": "Licenças",
-            "licensesText": "Esta aplicação é construída com os componentes de código aberto e os tipos de letra abaixo. Cada um é utilizado ao abrigo da sua própria licença.",
+            "licensesText": "Esta aplicação é construída com os componentes de código aberto e os tipos de letra abaixo. Cada um é utilizado ao abrigo da sua própria licença. Os nomes ligam à fonte; os titulares dos direitos de autor são mencionados conforme exigem as licenças.",
             "version": "Versão da aplicação",
             "license": "Licença",
             "licenseValue": "Gratuito para uso não comercial, com atribuição",

@@ -537,7 +537,7 @@
             "description": "Versión y enlaces útiles.",
             "text": "{brand} es una aplicación doméstica para controlar las facturas. Nació pensando en un presupuesto familiar tranquilo, para que ninguna factura se pase.",
             "licensesTitle": "Licencias",
-            "licensesText": "Esta aplicación usa los componentes de código abierto y las fuentes siguientes. Cada uno se utiliza bajo su propia licencia.",
+            "licensesText": "Esta aplicación usa los componentes de código abierto y las fuentes siguientes. Cada uno se utiliza bajo su propia licencia. Los nombres enlazan con la fuente; los titulares de los derechos de autor se mencionan como exigen las licencias.",
             "version": "Versión de la aplicación",
             "license": "Licencia",
             "licenseValue": "Gratis para uso no comercial, con atribución",

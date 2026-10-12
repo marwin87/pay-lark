@@ -537,7 +537,7 @@
             "description": "Version et liens utiles.",
             "text": "{brand} est une application domestique pour suivre les factures. Elle a été pensée pour un budget du foyer serein, afin qu'aucune facture ne passe à la trappe.",
             "licensesTitle": "Licences",
-            "licensesText": "Cette application utilise les composants open source et les polices ci-dessous. Chacun est utilisé selon sa propre licence.",
+            "licensesText": "Cette application utilise les composants open source et les polices ci-dessous. Chacun est utilisé selon sa propre licence. Les noms renvoient à la source ; les titulaires des droits d'auteur sont cités comme l'exigent les licences.",
             "version": "Version de l'application",
             "license": "Licence",
             "licenseValue": "Gratuit pour un usage non commercial, avec attribution",
