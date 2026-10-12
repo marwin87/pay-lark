@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Chiudi"
+    },
     "Auth": {
         "loginSubtitle": "Accedi per continuare a usare PayTracker",
         "welcomeHeading": "Bentornato 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Questa voce di pagamento una tantum verrà rimossa. Questa azione non può essere annullata.",
         "deleteFutureLabel": "Elimina anche tutte le voci future non pagate per questa bolletta",
         "cancel": "Annulla",
-        "confirm": "Elimina",
+        "confirm": "Elimina pagamento",
         "deleting": "Eliminazione…",
         "deleteFailed": "Impossibile eliminare il pagamento."
     },
@@ -276,16 +279,16 @@
         "revertFailed": "Impossibile annullare il pagamento."
     },
     "MarkPaidDialog": {
-        "title": "Segna come pagato: {billName}",
-        "editTitle": "Modifica pagamento: {billName}",
+        "title": "Segna come pagato",
+        "editTitle": "Modifica pagamento",
         "amountInvalid": "Inserisci un importo valido.",
         "dueAmountLabel": "Importo dovuto",
         "amountHint": "Vale solo per questo pagamento. Lascia vuoto per usare l'importo della fattura.",
         "dueDateLabel": "Data di scadenza",
-        "save": "Salva",
+        "save": "Salva modifiche",
         "dateLabel": "Data di pagamento",
         "amountLabel": "Importo pagato",
-        "notesLabel": "Note (facoltative)",
+        "notesLabel": "Note",
         "cancel": "Annulla",
         "confirm": "Segna come pagato",
         "confirming": "Salvataggio…",
@@ -691,14 +694,14 @@
         "failed": "Impossibile inviare l'e-mail."
     },
     "PauseConfirmDialog": {
-        "title": "Mettere in pausa “{billName}”?",
+        "title": "Mettere in pausa la bolletta?",
         "description": "Questa bolletta non genererà più nuovi pagamenti né promemoria e i suoi prossimi pagamenti non saldati scompariranno da Pagamenti. Lo storico pagato resta. La ripresa è possibile in qualsiasi momento.",
         "cancel": "Annulla",
         "pause": "Metti in pausa",
         "pausing": "Messa in pausa…"
     },
     "ResumeConfirmDialog": {
-        "title": "Riprendere “{billName}”?",
+        "title": "Riprendere la bolletta?",
         "description": "Questa bolletta torna nell'elenco e i suoi prossimi pagamenti riappaiono. I mesi trascorsi durante la pausa restano vuoti. Un ultimo mese di pagamento già trascorso viene cancellato.",
         "cancel": "Annulla",
         "resume": "Riprendi",

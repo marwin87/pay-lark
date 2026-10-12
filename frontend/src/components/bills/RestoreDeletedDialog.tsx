@@ -2,7 +2,9 @@
 
 import { RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { createPortal } from "react-dom";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
+import DialogSubject from "@/components/ui/DialogSubject";
 
 interface Props {
   billName: string;
@@ -13,24 +15,17 @@ interface Props {
 
 export default function RestoreDeletedDialog({ billName, onRestore, onSkip, restoring = false }: Props) {
   const t = useTranslations("RestoreDeletedDialog");
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="restore-deleted-dialog-title"
-        onKeyDown={(e) => e.key === "Escape" && !restoring && onSkip()}
-        className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-      >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-          <RotateCcw size={22} />
-        </div>
-        <h2
+  return (
+    <DialogShell labelledBy="restore-deleted-dialog-title" onClose={onSkip} busy={restoring}>
+        <DialogHeader
           id="restore-deleted-dialog-title"
-          className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-        >
-          {t("title")}
-        </h2>
+          badgeClass="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+          icon={<RotateCcw size={18} />}
+          title={t("title")}
+          subtitle={<DialogSubject name={billName} />}
+          onClose={onSkip}
+          busy={restoring}
+        />
         <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">
           {t("description", { name: billName })}
         </p>
@@ -51,8 +46,6 @@ export default function RestoreDeletedDialog({ billName, onRestore, onSkip, rest
             {restoring ? t("restoring") : t("restore")}
           </button>
         </div>
-      </div>
-    </div>,
-    document.body
+      </DialogShell>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "@/context/locale-context";
@@ -10,6 +9,9 @@ import { markPaid, updatePayment, type PaymentInstanceOut } from "@/lib/payments
 import { formatAmount } from "@/lib/summary";
 import { todayIn } from "@/lib/today";
 import DatePicker from "@/components/ui/DatePicker";
+import DialogHeader from "@/components/ui/DialogHeader";
+import PaymentSubject from "./PaymentSubject";
+import DialogShell from "@/components/ui/DialogShell";
 
 interface Props {
   instance: PaymentInstanceOut;
@@ -104,30 +106,23 @@ export default function MarkPaidDialog({
     }
   }
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="mark-paid-dialog-title"
-        onKeyDown={(e) => e.key === "Escape" && !isSubmitting && onClose()}
-        className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-      >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-          <CheckCircle size={22} />
-        </div>
-
-        <h2
+  return (
+    <DialogShell labelledBy="mark-paid-dialog-title" onClose={onClose} busy={isSubmitting}>
+        <DialogHeader
           id="mark-paid-dialog-title"
-          className="mb-4 text-lg font-semibold text-slate-800 dark:text-slate-100"
-        >
-          {t(isEdit ? "editTitle" : "title", { billName: instance.bill_name })}
-        </h2>
+          badgeClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+          icon={<CheckCircle size={18} />}
+          title={t(isEdit ? "editTitle" : "title")}
+          subtitle={<PaymentSubject instance={instance} />}
+          onClose={onClose}
+          busy={isSubmitting}
+        />
 
         {!editingUnpaid && (
           <div className="mb-3">
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
               {t("dateLabel")}
+              <span className="text-red-500"> *</span>
             </label>
             <DatePicker value={paidDate} onChange={setPaidDate} max={todayIn(timeZone)} />
           </div>
@@ -137,6 +132,7 @@ export default function MarkPaidDialog({
           <div className="mb-3">
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
               {t("dueDateLabel")}
+              <span className="text-red-500"> *</span>
             </label>
             <DatePicker value={dueDate} onChange={setDueDate} min={`${instance.period}-01`} max={`${instance.period}-31`} />
           </div>
@@ -211,8 +207,6 @@ export default function MarkPaidDialog({
             {isSubmitting ? t("confirming") : t(isEdit ? "save" : "confirm")}
           </button>
         </div>
-      </div>
-    </div>,
-    document.body
+      </DialogShell>
   );
 }

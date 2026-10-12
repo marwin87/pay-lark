@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { shareMonthByEmail } from "@/lib/user-api";
 import { Input } from "@/components/ui/Input";
 import { Checkbox } from "@/components/ui/Checkbox";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
 
 interface Props {
   month: string; // YYYY-MM
@@ -51,24 +52,16 @@ export default function ShareMonthDialog({ month, monthLabel, savedEmails, onClo
     }
   }
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="share-month-dialog-title"
-        onKeyDown={(e) => e.key === "Escape" && !sending && onClose()}
-        className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-      >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
-          <Mail size={22} />
-        </div>
-        <h2
+  return (
+    <DialogShell labelledBy="share-month-dialog-title" onClose={onClose} busy={sending}>
+        <DialogHeader
           id="share-month-dialog-title"
-          className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-        >
-          {t("title")}
-        </h2>
+          badgeClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+          icon={<Mail size={18} />}
+          title={t("title")}
+          onClose={onClose}
+          busy={sending}
+        />
         <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
           {t("description", { month: monthLabel })}
         </p>
@@ -137,8 +130,6 @@ export default function ShareMonthDialog({ month, monthLabel, savedEmails, onClo
             </button>
           </div>
         </form>
-      </div>
-    </div>,
-    document.body,
+      </DialogShell>
   );
 }

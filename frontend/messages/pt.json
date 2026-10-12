@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Fechar"
+    },
     "Auth": {
         "loginSubtitle": "Inicie sessão para continuar a usar o PayTracker",
         "welcomeHeading": "Bem-vindo de volta 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Este registo de pagamento pontual será removido. Esta ação não pode ser anulada.",
         "deleteFutureLabel": "Eliminar também todos os registos futuros por pagar desta fatura",
         "cancel": "Cancelar",
-        "confirm": "Eliminar",
+        "confirm": "Excluir pagamento",
         "deleting": "A eliminar…",
         "deleteFailed": "Falha ao eliminar o pagamento."
     },
@@ -271,21 +274,21 @@
         "title": "Reverter este pagamento?",
         "description": "Este pagamento voltará a ser marcado como não pago.",
         "cancel": "Cancelar",
-        "confirm": "Reverter",
+        "confirm": "Reverter pagamento",
         "reverting": "A reverter…",
         "revertFailed": "Falha ao reverter o pagamento."
     },
     "MarkPaidDialog": {
-        "title": "Marcar como pago: {billName}",
-        "editTitle": "Editar pagamento: {billName}",
+        "title": "Marcar como pago",
+        "editTitle": "Editar pagamento",
         "amountInvalid": "Introduza um valor válido.",
         "dueAmountLabel": "Valor a pagar",
         "amountHint": "Aplica-se apenas a este pagamento. Deixe vazio para usar o valor da fatura.",
         "dueDateLabel": "Data de vencimento",
-        "save": "Guardar",
+        "save": "Salvar alterações",
         "dateLabel": "Data de pagamento",
         "amountLabel": "Valor pago",
-        "notesLabel": "Notas (opcional)",
+        "notesLabel": "Notas",
         "cancel": "Cancelar",
         "confirm": "Marcar como pago",
         "confirming": "A marcar…",
@@ -691,17 +694,17 @@
         "failed": "Não foi possível enviar o e-mail."
     },
     "PauseConfirmDialog": {
-        "title": "Pausar “{billName}”?",
+        "title": "Pausar conta?",
         "description": "Esta conta deixará de gerar novos pagamentos e lembretes, e os próximos pagamentos por pagar desaparecem de Pagamentos. O histórico pago fica guardado. Pode retomá-la a qualquer momento.",
         "cancel": "Cancelar",
-        "pause": "Pausar",
+        "pause": "Pausar conta",
         "pausing": "A pausar…"
     },
     "ResumeConfirmDialog": {
-        "title": "Retomar “{billName}”?",
+        "title": "Retomar conta?",
         "description": "Esta conta volta à lista e os próximos pagamentos reaparecem. Os meses que passaram enquanto estava em pausa ficam vazios. Um último mês de pagamento já passado é limpo.",
         "cancel": "Cancelar",
-        "resume": "Retomar",
+        "resume": "Retomar conta",
         "resuming": "A retomar…"
     },
     "Help": {

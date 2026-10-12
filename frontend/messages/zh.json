@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "关闭"
+    },
     "Auth": {
         "loginSubtitle": "登录以继续使用 PayTracker",
         "welcomeHeading": "欢迎回来 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "此一次性付款记录将被删除。此操作无法撤销。",
         "deleteFutureLabel": "同时删除此账单所有未来的未付款记录",
         "cancel": "取消",
-        "confirm": "删除",
+        "confirm": "删除付款",
         "deleting": "正在删除…",
         "deleteFailed": "删除付款记录失败。"
     },
@@ -271,21 +274,21 @@
         "title": "撤销此付款？",
         "description": "此付款将重新标记为未付款。",
         "cancel": "取消",
-        "confirm": "撤销",
+        "confirm": "撤销付款",
         "reverting": "正在撤销…",
         "revertFailed": "撤销付款失败。"
     },
     "MarkPaidDialog": {
-        "title": "标记为已付款：{billName}",
-        "editTitle": "编辑付款：{billName}",
+        "title": "标记为已付款",
+        "editTitle": "编辑付款",
         "amountInvalid": "请输入有效金额。",
         "dueAmountLabel": "应付金额",
         "amountHint": "仅适用于本次付款。留空则使用账单金额。",
         "dueDateLabel": "到期日期",
-        "save": "保存",
+        "save": "保存更改",
         "dateLabel": "付款日期",
         "amountLabel": "付款金额",
-        "notesLabel": "备注（可选）",
+        "notesLabel": "备注",
         "cancel": "取消",
         "confirm": "标记为已付款",
         "confirming": "正在保存…",
@@ -691,17 +694,17 @@
         "failed": "无法发送邮件。"
     },
     "PauseConfirmDialog": {
-        "title": "暂停“{billName}”？",
+        "title": "暂停账单？",
         "description": "此账单将不再生成新的付款和提醒，其未付的即将到期付款会从“付款”中消失。已付历史会保留。可以随时恢复。",
         "cancel": "取消",
-        "pause": "暂停",
+        "pause": "暂停账单",
         "pausing": "正在暂停…"
     },
     "ResumeConfirmDialog": {
-        "title": "恢复“{billName}”？",
+        "title": "恢复账单？",
         "description": "此账单将回到列表，其即将到期的付款会重新出现。暂停期间已过去的月份保持为空。已过去的最后付款月份将被清除。",
         "cancel": "取消",
-        "resume": "恢复",
+        "resume": "恢复账单",
         "resuming": "正在恢复…"
     },
     "Help": {

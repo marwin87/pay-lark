@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Close"
+    },
     "Auth": {
         "loginSubtitle": "Sign in to keep using PayTracker",
         "welcomeHeading": "Welcome back 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "This one-off payment entry will be removed. This cannot be undone.",
         "deleteFutureLabel": "Also delete all future unpaid entries for this bill",
         "cancel": "Cancel",
-        "confirm": "Delete",
+        "confirm": "Delete payment",
         "deleting": "Deleting…",
         "deleteFailed": "Failed to delete payment."
     },
@@ -271,21 +274,21 @@
         "title": "Revert this payment?",
         "description": "This payment will be marked as unpaid again.",
         "cancel": "Cancel",
-        "confirm": "Revert",
+        "confirm": "Revert payment",
         "reverting": "Reverting…",
         "revertFailed": "Failed to revert payment."
     },
     "MarkPaidDialog": {
-        "title": "Mark as Paid: {billName}",
-        "editTitle": "Edit payment: {billName}",
+        "title": "Mark as Paid",
+        "editTitle": "Edit payment",
         "amountInvalid": "Enter a valid amount.",
         "dueAmountLabel": "Amount due",
         "amountHint": "Applies to this payment only. Leave empty to use the bill's amount.",
         "dueDateLabel": "Due date",
-        "save": "Save",
+        "save": "Save changes",
         "dateLabel": "Date paid",
         "amountLabel": "Amount paid",
-        "notesLabel": "Notes (optional)",
+        "notesLabel": "Notes",
         "cancel": "Cancel",
         "confirm": "Mark as Paid",
         "confirming": "Marking…",
@@ -691,17 +694,17 @@
         "failed": "Could not send the email."
     },
     "PauseConfirmDialog": {
-        "title": "Pause “{billName}”?",
+        "title": "Pause bill?",
         "description": "No new payments or reminders will be created for this bill, and its unpaid upcoming payments disappear from Payments. Paid history stays. Resuming is possible at any time.",
         "cancel": "Cancel",
-        "pause": "Pause",
+        "pause": "Pause bill",
         "pausing": "Pausing…"
     },
     "ResumeConfirmDialog": {
-        "title": "Resume “{billName}”?",
+        "title": "Resume bill?",
         "description": "This bill returns to the list and its upcoming payments come back. Months that passed while paused stay empty. A last payment month that has already passed is cleared.",
         "cancel": "Cancel",
-        "resume": "Resume",
+        "resume": "Resume bill",
         "resuming": "Resuming…"
     },
     "Help": {

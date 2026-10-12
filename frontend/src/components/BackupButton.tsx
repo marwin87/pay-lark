@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { createPortal } from "react-dom";
 import { HardDriveDownload, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { BACKUP_SECTIONS, BackupSection, downloadBackup } from "@/lib/export-api";
 import { Checkbox } from "@/components/ui/Checkbox";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
 
 type State = "idle" | "confirming" | "downloading" | "warning" | "error";
 
@@ -72,28 +73,15 @@ export default function BackupButton({ label }: { label?: string } = {}) {
         state === "downloading" ||
         state === "warning" ||
         state === "error") &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm"
-            onClick={() => setState("idle")}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="backup-dialog-title"
-              onKeyDown={(e) => e.key === "Escape" && setState("idle")}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                <HardDriveDownload size={22} />
-              </div>
-              <h2
+        (<DialogShell labelledBy="backup-dialog-title" onClose={() => setState("idle")} busy={state === "downloading"}>
+              <DialogHeader
                 id="backup-dialog-title"
-                className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-              >
-                {t("dialogTitle")}
-              </h2>
+                badgeClass="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                icon={<HardDriveDownload size={18} />}
+                title={t("dialogTitle")}
+                onClose={() => setState("idle")}
+                busy={state === "downloading"}
+              />
               <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
                 {t("dialogDescription")}
               </p>
@@ -171,9 +159,7 @@ export default function BackupButton({ label }: { label?: string } = {}) {
                   {t("error")}
                 </p>
               )}
-            </div>
-          </div>,
-          document.body
+            </DialogShell>
         )}
     </>
   );

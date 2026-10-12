@@ -88,6 +88,10 @@ export function categoryStrokeClass(color: string): string {
   return CATEGORY_COLOR_STROKE[color as CategoryColor] ?? CATEGORY_COLOR_STROKE[FALLBACK_COLOR];
 }
 
+export function categorySwatchClass(color: string): string {
+  return CATEGORY_COLOR_SWATCH[color as CategoryColor] ?? CATEGORY_COLOR_SWATCH[FALLBACK_COLOR];
+}
+
 export function categoryBorderClass(color: string): string {
   return CATEGORY_COLOR_BORDER[color as CategoryColor] ?? CATEGORY_COLOR_BORDER[FALLBACK_COLOR];
 }

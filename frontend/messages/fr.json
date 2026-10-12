@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Fermer"
+    },
     "Auth": {
         "loginSubtitle": "Connectez-vous pour continuer à utiliser PayTracker",
         "welcomeHeading": "Content de vous revoir 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Cette entrée de paiement ponctuelle sera supprimée. Cette action est irréversible.",
         "deleteFutureLabel": "Supprimer également toutes les entrées futures impayées pour cette facture",
         "cancel": "Annuler",
-        "confirm": "Supprimer",
+        "confirm": "Supprimer le paiement",
         "deleting": "Suppression…",
         "deleteFailed": "Échec de la suppression du paiement."
     },
@@ -276,8 +279,8 @@
         "revertFailed": "Échec de l'annulation du paiement."
     },
     "MarkPaidDialog": {
-        "title": "Marquer comme payé : {billName}",
-        "editTitle": "Modifier le paiement : {billName}",
+        "title": "Marquer comme payé",
+        "editTitle": "Modifier le paiement",
         "amountInvalid": "Saisissez un montant valide.",
         "dueAmountLabel": "Montant dû",
         "amountHint": "Ne concerne que ce paiement. Laissez vide pour utiliser le montant de la facture.",
@@ -285,7 +288,7 @@
         "save": "Enregistrer",
         "dateLabel": "Date de paiement",
         "amountLabel": "Montant payé",
-        "notesLabel": "Notes (facultatif)",
+        "notesLabel": "Notes",
         "cancel": "Annuler",
         "confirm": "Marquer comme payé",
         "confirming": "Enregistrement…",
@@ -691,14 +694,14 @@
         "failed": "Impossible d'envoyer l'e-mail."
     },
     "PauseConfirmDialog": {
-        "title": "Mettre « {billName} » en pause ?",
+        "title": "Mettre la facture en pause ?",
         "description": "Cette facture ne générera plus de nouveaux paiements ni de rappels, et ses prochains paiements non réglés disparaîtront de Paiements. L'historique payé est conservé. La reprise est possible à tout moment.",
         "cancel": "Annuler",
         "pause": "Mettre en pause",
         "pausing": "Mise en pause…"
     },
     "ResumeConfirmDialog": {
-        "title": "Reprendre « {billName} » ?",
+        "title": "Reprendre la facture ?",
         "description": "Cette facture revient dans la liste et ses prochains paiements réapparaissent. Les mois écoulés pendant la pause restent vides. Un dernier mois de paiement déjà passé est effacé.",
         "cancel": "Annuler",
         "resume": "Reprendre",

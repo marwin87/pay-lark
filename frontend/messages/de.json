@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Schließen"
+    },
     "Auth": {
         "loginSubtitle": "Melden Sie sich an, um PayTracker weiter zu nutzen",
         "welcomeHeading": "Willkommen zurück 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Dieser einmalige Zahlungseintrag wird entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
         "deleteFutureLabel": "Auch alle zukünftigen unbezahlten Einträge dieser Rechnung löschen",
         "cancel": "Abbrechen",
-        "confirm": "Löschen",
+        "confirm": "Zahlung löschen",
         "deleting": "Löschen…",
         "deleteFailed": "Zahlung konnte nicht gelöscht werden."
     },
@@ -271,21 +274,21 @@
         "title": "Zahlung rückgängig machen?",
         "description": "Diese Zahlung wird wieder als unbezahlt markiert.",
         "cancel": "Abbrechen",
-        "confirm": "Rückgängig machen",
+        "confirm": "Zahlung zurücksetzen",
         "reverting": "Wird rückgängig gemacht…",
         "revertFailed": "Zahlung konnte nicht rückgängig gemacht werden."
     },
     "MarkPaidDialog": {
-        "title": "Als bezahlt markieren: {billName}",
-        "editTitle": "Zahlung bearbeiten: {billName}",
+        "title": "Als bezahlt markieren",
+        "editTitle": "Zahlung bearbeiten",
         "amountInvalid": "Bitte einen gültigen Betrag eingeben.",
         "dueAmountLabel": "Fälliger Betrag",
         "amountHint": "Gilt nur für diese Zahlung. Leer lassen, um den Betrag der Rechnung zu verwenden.",
         "dueDateLabel": "Fälligkeitsdatum",
-        "save": "Speichern",
+        "save": "Änderungen speichern",
         "dateLabel": "Zahlungsdatum",
         "amountLabel": "Bezahlter Betrag",
-        "notesLabel": "Notizen (optional)",
+        "notesLabel": "Notizen",
         "cancel": "Abbrechen",
         "confirm": "Als bezahlt markieren",
         "confirming": "Speichern…",
@@ -691,17 +694,17 @@
         "failed": "E-Mail konnte nicht gesendet werden."
     },
     "PauseConfirmDialog": {
-        "title": "„{billName}” pausieren?",
+        "title": "Rechnung pausieren?",
         "description": "Für diese Rechnung gibt es keine neuen Zahlungen und Erinnerungen mehr, und ihre unbezahlten kommenden Zahlungen verschwinden aus Zahlungen. Bezahlte Zahlungen bleiben erhalten. Eine Fortsetzung ist jederzeit möglich.",
         "cancel": "Abbrechen",
-        "pause": "Pausieren",
+        "pause": "Rechnung pausieren",
         "pausing": "Pausiere…"
     },
     "ResumeConfirmDialog": {
-        "title": "„{billName}” fortsetzen?",
+        "title": "Rechnung fortsetzen?",
         "description": "Diese Rechnung kehrt in die Liste zurück und ihre kommenden Zahlungen erscheinen wieder. Monate, die während der Pause vergangen sind, bleiben leer. Ein bereits vergangener letzter Zahlungsmonat wird entfernt.",
         "cancel": "Abbrechen",
-        "resume": "Fortsetzen",
+        "resume": "Rechnung fortsetzen",
         "resuming": "Setze fort…"
     },
     "Help": {

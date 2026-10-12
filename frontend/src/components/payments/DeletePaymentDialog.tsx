@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useFrequencyLabel } from "@/lib/frequency";
 import { deletePayment, type PaymentInstanceOut } from "@/lib/payments-api";
 import { Checkbox } from "@/components/ui/Checkbox";
+import DialogHeader from "@/components/ui/DialogHeader";
+import PaymentSubject from "./PaymentSubject";
+import DialogShell from "@/components/ui/DialogShell";
 
 interface Props {
   instance: PaymentInstanceOut;
@@ -22,7 +23,6 @@ export default function DeletePaymentDialog({
   onDeleted,
 }: Props) {
   const t = useTranslations("DeletePaymentDialog");
-  const frequencyLabel = useFrequencyLabel();
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteFuture, setDeleteFuture] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,32 +53,17 @@ export default function DeletePaymentDialog({
     }
   }
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="delete-payment-dialog-title"
-        onKeyDown={(e) => e.key === "Escape" && !isDeleting && onClose()}
-        className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-      >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-          <Trash2 size={22} />
-        </div>
-
-        <h2
+  return (
+    <DialogShell labelledBy="delete-payment-dialog-title" onClose={onClose} busy={isDeleting}>
+        <DialogHeader
           id="delete-payment-dialog-title"
-          className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-        >
-          {t("title")}
-        </h2>
-
-        <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-          {instance.bill_name}
-          <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-400">
-            {frequencyLabel(instance.frequency, instance.interval)}
-          </span>
-        </p>
+          badgeClass="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+          icon={<Trash2 size={18} />}
+          title={t("title")}
+          subtitle={<PaymentSubject instance={instance} />}
+          onClose={onClose}
+          busy={isDeleting}
+        />
 
         <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
           {isRecurring
@@ -108,6 +93,7 @@ export default function DeletePaymentDialog({
         <div className="flex gap-3">
           <button
             onClick={onClose}
+            autoFocus
             disabled={isDeleting}
             className="flex-1 rounded-lg border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
           >
@@ -121,8 +107,6 @@ export default function DeletePaymentDialog({
             {isDeleting ? t("deleting") : t("confirm")}
           </button>
         </div>
-      </div>
-    </div>,
-    document.body
+      </DialogShell>
   );
 }

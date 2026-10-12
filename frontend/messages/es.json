@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Cerrar"
+    },
     "Auth": {
         "loginSubtitle": "Inicia sesión para seguir usando PayTracker",
         "welcomeHeading": "Bienvenido de nuevo 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Esta entrada de pago puntual se eliminará. Esta acción no se puede deshacer.",
         "deleteFutureLabel": "Eliminar también todas las entradas futuras no pagadas de esta factura",
         "cancel": "Cancelar",
-        "confirm": "Eliminar",
+        "confirm": "Eliminar pago",
         "deleting": "Eliminando…",
         "deleteFailed": "No se pudo eliminar el pago."
     },
@@ -271,21 +274,21 @@
         "title": "¿Revertir este pago?",
         "description": "Este pago se marcará como no pagado nuevamente.",
         "cancel": "Cancelar",
-        "confirm": "Revertir",
+        "confirm": "Revertir pago",
         "reverting": "Revirtiendo…",
         "revertFailed": "No se pudo revertir el pago."
     },
     "MarkPaidDialog": {
-        "title": "Marcar como pagado: {billName}",
-        "editTitle": "Editar pago: {billName}",
+        "title": "Marcar como pagado",
+        "editTitle": "Editar pago",
         "amountInvalid": "Introduce un importe válido.",
         "dueAmountLabel": "Importe a pagar",
         "amountHint": "Solo afecta a este pago. Déjalo vacío para usar el importe de la factura.",
         "dueDateLabel": "Fecha de vencimiento",
-        "save": "Guardar",
+        "save": "Guardar cambios",
         "dateLabel": "Fecha de pago",
         "amountLabel": "Importe pagado",
-        "notesLabel": "Notas (opcional)",
+        "notesLabel": "Notas",
         "cancel": "Cancelar",
         "confirm": "Marcar como pagado",
         "confirming": "Marcando…",
@@ -691,17 +694,17 @@
         "failed": "No se pudo enviar el correo."
     },
     "PauseConfirmDialog": {
-        "title": "¿Pausar “{billName}”?",
+        "title": "¿Pausar factura?",
         "description": "Esta factura dejará de generar nuevos pagos y recordatorios, y sus próximos pagos sin pagar desaparecerán de Pagos. El historial pagado se conserva. Se puede reanudar en cualquier momento.",
         "cancel": "Cancelar",
-        "pause": "Pausar",
+        "pause": "Pausar factura",
         "pausing": "Pausando…"
     },
     "ResumeConfirmDialog": {
-        "title": "¿Reanudar “{billName}”?",
+        "title": "¿Reanudar factura?",
         "description": "Esta factura vuelve a la lista y sus próximos pagos reaparecen. Los meses que pasaron mientras estaba en pausa quedan vacíos. Un último mes de pago que ya pasó se borra.",
         "cancel": "Cancelar",
-        "resume": "Reanudar",
+        "resume": "Reanudar factura",
         "resuming": "Reanudando…"
     },
     "Help": {

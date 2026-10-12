@@ -1,8 +1,9 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
-import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
 
 export function UnsavedChangesDialog({
   onLeave,
@@ -13,24 +14,15 @@ export function UnsavedChangesDialog({
   onStay: () => void;
   t: ReturnType<typeof useTranslations>;
 }) {
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="unsaved-changes-dialog-title"
-        onKeyDown={(e) => e.key === "Escape" && onStay()}
-        className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-      >
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
-          <AlertTriangle size={22} />
-        </div>
-        <h2
+  return (
+    <DialogShell labelledBy="unsaved-changes-dialog-title" onClose={onStay}>
+        <DialogHeader
           id="unsaved-changes-dialog-title"
-          className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-        >
-          {t("unsavedTitle")}
-        </h2>
+          badgeClass="bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+          icon={<AlertTriangle size={18} />}
+          title={t("unsavedTitle")}
+          onClose={onStay}
+        />
         <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">
           {t("unsavedDescription")}
         </p>
@@ -49,8 +41,6 @@ export function UnsavedChangesDialog({
             {t("unsavedLeave")}
           </button>
         </div>
-      </div>
-    </div>,
-    document.body,
+      </DialogShell>
   );
 }

@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Zamknij"
+    },
     "Auth": {
         "loginSubtitle": "Zaloguj się, aby kontynuować korzystanie z PayTracker",
         "welcomeHeading": "Witaj ponownie 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Ten jednorazowy wpis płatności zostanie usunięty. Tej operacji nie można cofnąć.",
         "deleteFutureLabel": "Usuń również wszystkie przyszłe nieopłacone wpisy tego rachunku",
         "cancel": "Anuluj",
-        "confirm": "Usuń",
+        "confirm": "Usuń płatność",
         "deleting": "Usuwanie…",
         "deleteFailed": "Nie udało się usunąć płatności."
     },
@@ -271,21 +274,21 @@
         "title": "Cofnąć tę płatność?",
         "description": "Ta płatność zostanie ponownie oznaczona jako nieopłacona.",
         "cancel": "Anuluj",
-        "confirm": "Cofnij",
+        "confirm": "Cofnij płatność",
         "reverting": "Cofanie…",
         "revertFailed": "Nie udało się cofnąć płatności."
     },
     "MarkPaidDialog": {
-        "title": "Oznacz jako opłacone: {billName}",
-        "editTitle": "Edytuj płatność: {billName}",
+        "title": "Oznacz jako opłacone",
+        "editTitle": "Edytuj płatność",
         "amountInvalid": "Podaj prawidłową kwotę.",
         "dueAmountLabel": "Kwota do zapłaty",
         "amountHint": "Dotyczy tylko tej płatności. Zostaw puste, aby użyć kwoty z rachunku.",
         "dueDateLabel": "Termin płatności",
-        "save": "Zapisz",
+        "save": "Zapisz zmiany",
         "dateLabel": "Data zapłaty",
         "amountLabel": "Zapłacona kwota",
-        "notesLabel": "Notatki (opcjonalnie)",
+        "notesLabel": "Notatki",
         "cancel": "Anuluj",
         "confirm": "Oznacz jako opłacone",
         "confirming": "Zapisywanie…",
@@ -691,17 +694,17 @@
         "failed": "Nie udało się wysłać e-maila."
     },
     "PauseConfirmDialog": {
-        "title": "Wstrzymać „{billName}”?",
+        "title": "Wstrzymać rachunek?",
         "description": "Rachunek przestanie generować nowe płatności i przypomnienia, a jego nieopłacone nadchodzące płatności znikną z listy Płatności. Opłacona historia zostaje. Wznowienie jest możliwe w każdej chwili.",
         "cancel": "Anuluj",
-        "pause": "Wstrzymaj",
+        "pause": "Wstrzymaj rachunek",
         "pausing": "Wstrzymywanie…"
     },
     "ResumeConfirmDialog": {
-        "title": "Wznowić „{billName}”?",
+        "title": "Wznowić rachunek?",
         "description": "Rachunek wróci na listę, a jego nadchodzące płatności się pojawią. Miesiące, które minęły w czasie wstrzymania, zostają puste. Ostatnia płatność, która już minęła, zostanie wyczyszczona.",
         "cancel": "Anuluj",
-        "resume": "Wznów",
+        "resume": "Wznów rachunek",
         "resuming": "Wznawianie…"
     },
     "Help": {

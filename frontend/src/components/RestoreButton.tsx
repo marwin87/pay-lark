@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { HardDriveUpload, Loader2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { getExportSummary, restoreFromBackup } from "@/lib/export-api";
 import { flashToastAfterReload } from "@/context/toast-context";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
 
 type State = "idle" | "confirming" | "restoring" | "error";
 
@@ -155,27 +156,15 @@ export default function RestoreButton({ label }: { label?: string } = {}) {
       </button>
 
       {(state === "confirming" || state === "restoring" || state === "error") &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm"
-            onClick={handleCancel}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="restore-dialog-title"
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-                <HardDriveUpload size={22} />
-              </div>
-              <h2
+        (<DialogShell labelledBy="restore-dialog-title" onClose={handleCancel} busy={state === "restoring"}>
+              <DialogHeader
                 id="restore-dialog-title"
-                className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-              >
-                {t("dialogTitle")}
-              </h2>
+                badgeClass="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                icon={<HardDriveUpload size={18} />}
+                title={t("dialogTitle")}
+                onClose={handleCancel}
+                busy={state === "restoring"}
+              />
               {backupCounts && (
                 <div className="mb-4 space-y-1 rounded-lg bg-slate-50 p-3 text-sm dark:bg-slate-900/40">
                   {backupCounts.bills !== undefined && (
@@ -247,9 +236,7 @@ export default function RestoreButton({ label }: { label?: string } = {}) {
                   {errorMsg || t("error")}
                 </p>
               )}
-            </div>
-          </div>,
-          document.body
+            </DialogShell>
         )}
     </>
   );

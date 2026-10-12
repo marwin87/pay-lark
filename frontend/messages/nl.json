@@ -1,4 +1,7 @@
 {
+    "Dialog": {
+        "close": "Sluiten"
+    },
     "Auth": {
         "loginSubtitle": "Log in om PayTracker te blijven gebruiken",
         "welcomeHeading": "Welkom terug 👋",
@@ -263,7 +266,7 @@
         "descriptionOneOff": "Deze eenmalige betaling wordt verwijderd. Dit kan niet ongedaan worden gemaakt.",
         "deleteFutureLabel": "Verwijder ook alle toekomstige onbetaalde betalingen voor deze rekening",
         "cancel": "Annuleren",
-        "confirm": "Verwijderen",
+        "confirm": "Betaling verwijderen",
         "deleting": "Bezig met verwijderen…",
         "deleteFailed": "Betaling verwijderen mislukt."
     },
@@ -271,21 +274,21 @@
         "title": "Deze betaling terugdraaien?",
         "description": "Deze betaling wordt weer als onbetaald gemarkeerd.",
         "cancel": "Annuleren",
-        "confirm": "Terugdraaien",
+        "confirm": "Betaling terugdraaien",
         "reverting": "Bezig met terugdraaien…",
         "revertFailed": "Betaling terugdraaien mislukt."
     },
     "MarkPaidDialog": {
-        "title": "Markeer als betaald: {billName}",
-        "editTitle": "Betaling bewerken: {billName}",
+        "title": "Markeer als betaald",
+        "editTitle": "Betaling bewerken",
         "amountInvalid": "Vul een geldig bedrag in.",
         "dueAmountLabel": "Te betalen bedrag",
         "amountHint": "Geldt alleen voor deze betaling. Laat leeg om het bedrag van de rekening te gebruiken.",
         "dueDateLabel": "Vervaldatum",
-        "save": "Opslaan",
+        "save": "Wijzigingen opslaan",
         "dateLabel": "Betaaldatum",
         "amountLabel": "Betaald bedrag",
-        "notesLabel": "Notities (optioneel)",
+        "notesLabel": "Notities",
         "cancel": "Annuleren",
         "confirm": "Markeer als betaald",
         "confirming": "Bezig met markeren…",
@@ -691,17 +694,17 @@
         "failed": "De e-mail kon niet worden verzonden."
     },
     "PauseConfirmDialog": {
-        "title": "“{billName}” pauzeren?",
+        "title": "Rekening pauzeren?",
         "description": "Voor deze rekening komen er geen nieuwe betalingen en herinneringen meer en de openstaande komende betalingen verdwijnen uit Betalingen. Betaalde geschiedenis blijft behouden. Hervatten kan op elk moment.",
         "cancel": "Annuleren",
-        "pause": "Pauzeren",
+        "pause": "Rekening pauzeren",
         "pausing": "Bezig met pauzeren…"
     },
     "ResumeConfirmDialog": {
-        "title": "“{billName}” hervatten?",
+        "title": "Rekening hervatten?",
         "description": "Deze rekening komt terug in de lijst en de komende betalingen verschijnen weer. Maanden die voorbijgingen tijdens de pauze blijven leeg. Een laatste betaalmaand die al voorbij is, wordt gewist.",
         "cancel": "Annuleren",
-        "resume": "Hervatten",
+        "resume": "Rekening hervatten",
         "resuming": "Bezig met hervatten…"
     },
     "Help": {

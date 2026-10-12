@@ -43,7 +43,7 @@ flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 
 ```
 flex-1 rounded-lg border border-transparent bg-{color}-600 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-{color}-700 disabled:opacity-50
 ```
-`{color}`: `red` for destructive, `amber` for caution/revert (600→500 hover, not 700, it's already a strong color), `emerald` for positive confirm/mark-paid/restore, `green` (700→800 hover) specifically for `BackupButton.tsx` to match its existing hue. **No `dark:` variant needed on the fill itself** — a solid, saturated color reads fine as white-on-color regardless of page theme (confirmed by login's own `Button.tsx` `solid` variant, which has none either). This is the one place in this file where skipping `dark:` is correct, not an oversight — don't generalize it to outline buttons, which still need the full `dark:` treatment below.
+`{color}`: `red` for destructive, `amber` for caution/revert (600→700 hover), `emerald` for positive confirm/mark-paid/restore, `green` (700→800 hover) specifically for `BackupButton.tsx` to match its existing hue. **No `dark:` variant needed on the fill itself** — a solid, saturated color reads fine as white-on-color regardless of page theme (confirmed by login's own `Button.tsx` `solid` variant, which has none either). This is the one place in this file where skipping `dark:` is correct, not an oversight — don't generalize it to outline buttons, which still need the full `dark:` treatment below.
 
 **Loading/disabled state:** swap the label, don't add a separate spinner-only state, unless the action is a genuinely slow async op (file download/upload), in which case use `Loader2` from `lucide-react` at `size={14}` with `animate-spin`, `gap-2`, inside a `flex items-center justify-center` button (see `BackupButton.tsx`/`RestoreButton.tsx` confirm buttons). Always pair with `disabled:opacity-50` and `disabled={pending}`.
 
@@ -52,30 +52,24 @@ flex-1 rounded-lg border border-transparent bg-{color}-600 py-2.5 text-sm font-m
 Every popup follows this exact shell (`ArchiveConfirmDialog.tsx`, `DeleteAccountDialog.tsx`, `RestoreButton.tsx`'s inline dialog):
 
 ```tsx
-createPortal(
-  <div className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="{name}-dialog-title"
-      onKeyDown={(e) => e.key === "Escape" && onCancel()}
-      className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-    >
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-{color}-100 text-{color}-600 dark:bg-{color}-900/30 dark:text-{color}-400">
-        <Icon size={22} />
-      </div>
-      <h2 id="{name}-dialog-title" className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100">…</h2>
-      <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">…</p>
-      {/* optional inline error: */}
-      <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">…</p>
-      <div className="flex gap-3">{/* Cancel (autoFocus) + Confirm, both flex-1 */}</div>
-    </div>
-  </div>,
-  document.body
-)
+<DialogShell labelledBy="{name}-dialog-title" onClose={onCancel} busy={pending}>   {/* ui/DialogShell.tsx: portal, backdrop + Esc close, bottom sheet below sm */}
+  <DialogHeader   {/* ui/DialogHeader.tsx: icon badge beside the action title, ✕ close */}
+    id="{name}-dialog-title"
+    badgeClass="bg-{color}-100 text-{color}-600 dark:bg-{color}-900/30 dark:text-{color}-400"
+    icon={<Icon size={18} />}
+    title="…"
+    subtitle={<PaymentSubject instance={instance} />}   {/* or <DialogSubject name=… /> — never put the name in the title */}
+    onClose={onCancel}
+    busy={pending}
+  />
+  <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">…</p>
+  {/* optional inline error: */}
+  <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">…</p>
+  <div className="flex gap-3">{/* Cancel (autoFocus) + Confirm labelled with the verb + object ("Delete payment"), both flex-1 */}</div>
+</DialogShell>
 ```
 
-Non-negotiables: `createPortal(..., document.body)` (never inline — see memory rule), `role="dialog"`/`aria-modal`/`aria-labelledby`, Escape closes via `onCancel`, first button (Cancel) gets `autoFocus`.
+Non-negotiables: always go through `DialogShell` (portal to `document.body`, `role="dialog"`/`aria-modal`/`aria-labelledby`, Escape + backdrop click + ✕ close it unless `busy`), first button (Cancel) gets `autoFocus` (skip when the dialog has a text field to focus). `amber` confirm is `bg-amber-600 hover:bg-amber-700`.
 
 **Component gotcha:** the icon+title+description block at the top of a dialog (and of a `Tile`, see below) is *not* just decoration — it's inside interactive/labelled elements whose accessible name is the concatenation of all its text. If you add a trigger button with the same label text nearby, e2e role-based locators (`getByRole('button', { name: ... })`) will match both and need `{ exact: true }`. Keep dialog/tile title text short and distinct from trigger button labels where you can, and use `exact: true` in tests regardless.
 

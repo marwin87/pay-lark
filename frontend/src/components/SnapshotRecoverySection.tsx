@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { History, Loader2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { getLastSnapshot, restoreFromSnapshot } from "@/lib/export-api";
+import DialogHeader from "@/components/ui/DialogHeader";
+import DialogShell from "@/components/ui/DialogShell";
 
 type State = "idle" | "confirming" | "restoring" | "error";
 
@@ -62,27 +63,15 @@ export default function SnapshotRecoverySection() {
       </div>
 
       {(state === "confirming" || state === "restoring" || state === "error") &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-50 flex [align-items:safe_center] justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm"
-            onClick={() => state !== "restoring" && setState("idle")}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="snapshot-restore-dialog-title"
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:bg-slate-800 dark:border-slate-700"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-                <History size={22} />
-              </div>
-              <h2
+        (<DialogShell labelledBy="snapshot-restore-dialog-title" onClose={() => setState("idle")} busy={state === "restoring"}>
+              <DialogHeader
                 id="snapshot-restore-dialog-title"
-                className="mb-1 text-lg font-semibold text-slate-800 dark:text-slate-100"
-              >
-                {t("dialogTitle")}
-              </h2>
+                badgeClass="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                icon={<History size={18} />}
+                title={t("dialogTitle")}
+                onClose={() => setState("idle")}
+                busy={state === "restoring"}
+              />
               <p className="mb-6 text-sm text-slate-500 dark:text-slate-400">
                 {t("dialogDescription")}
               </p>
@@ -115,9 +104,7 @@ export default function SnapshotRecoverySection() {
                   {t("error")}
                 </p>
               )}
-            </div>
-          </div>,
-          document.body
+            </DialogShell>
         )}
     </>
   );
