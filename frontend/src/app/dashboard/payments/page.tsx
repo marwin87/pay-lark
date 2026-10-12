@@ -4,7 +4,7 @@ import { btnPrimaryClass } from "@/components/ui/formButtonClasses";
 import { getCached, setCached } from "@/lib/page-cache";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronsUpDown, FileSpreadsheet, FileText, Loader2, Share2, X } from "lucide-react";
+import { CalendarDays, ChevronRight, ChevronsUpDown, FileSpreadsheet, FileText, Loader2, Share2, X } from "lucide-react";
 import { Fragment } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
@@ -30,6 +30,7 @@ import PaymentsCalendar from "@/components/payments/PaymentsCalendar";
 import MarkPaidDialog from "@/components/payments/MarkPaidDialog";
 import PageHeader from "@/components/PageHeader";
 import OnboardingChecklist from "@/components/help/OnboardingChecklist";
+import Stepper, { StepperTitle, monthRelative } from "@/components/ui/Stepper";
 import MonthSheet from "@/components/payments/MonthSheet";
 import ShareMonthDialog from "@/components/payments/ShareMonthDialog";
 import DeletePaymentDialog from "@/components/payments/DeletePaymentDialog";
@@ -513,35 +514,16 @@ function PaymentsPageInner() {
       <div className="mb-6" {...swipeMonth}>
         <div className="sm:rounded-xl sm:border sm:border-slate-200 sm:bg-white sm:px-4 sm:pt-3 sm:shadow-sm dark:sm:border-slate-700 dark:sm:bg-slate-800">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <div className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white p-1 sm:w-auto sm:justify-start sm:gap-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 dark:border-slate-700 dark:bg-slate-800 dark:sm:bg-transparent">
-              <button
-                onClick={() => stepMonth(-1)}
-                aria-label={t("previousMonth")}
-                disabled={atMinMonth}
-                className="flex h-12 w-12 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50 disabled:opacity-30 sm:h-9 sm:w-9 dark:text-slate-400 dark:hover:bg-slate-700/50"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <h2 className="flex-1 text-center text-base font-semibold text-slate-800 sm:min-w-[11rem] sm:flex-none sm:text-xl dark:text-slate-100">
-                <button
-                  onClick={() => setMonthSheetOpen(true)}
-                  aria-haspopup="dialog"
-                  className="flex h-12 w-full items-center justify-center gap-1.5 sm:hidden"
-                >
-                  {monthTitle}
-                  <ChevronDown size={16} className="text-slate-400 dark:text-slate-500" />
-                </button>
-                <span className="hidden sm:inline">{monthTitle}</span>
-              </h2>
-              <button
-                onClick={() => stepMonth(1)}
-                aria-label={t("nextMonth")}
-                disabled={atMaxMonth}
-                className="flex h-12 w-12 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50 disabled:opacity-30 sm:h-9 sm:w-9 dark:text-slate-400 dark:hover:bg-slate-700/50"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
+            <Stepper
+              onPrev={() => stepMonth(-1)}
+              onNext={() => stepMonth(1)}
+              prevDisabled={atMinMonth}
+              nextDisabled={atMaxMonth}
+              prevLabel={t("previousMonth")}
+              nextLabel={t("nextMonth")}
+            >
+              <StepperTitle title={monthTitle} subtitle={monthRelative(selectedMonth, currentMonth, locale)} onOpen={() => setMonthSheetOpen(true)} />
+            </Stepper>
             <div className="flex min-w-0 flex-1 items-center gap-3">
               {selectedMonth !== currentMonth && (
                 <button

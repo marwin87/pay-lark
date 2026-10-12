@@ -4,9 +4,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-const YEAR_BTN =
-  "flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 disabled:opacity-30 dark:text-slate-400 dark:hover:bg-slate-700/50";
+import { NAV_BTN } from "@/components/ui/Stepper";
 
 interface Props {
   year: number;
@@ -38,12 +36,12 @@ export default function MonthSheet({ year, selectedMonth, currentMonth, minYear,
       >
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200 dark:bg-slate-600" />
         <div className="mb-3 flex items-center justify-between">
-          <button autoFocus className={YEAR_BTN} aria-label={t("previousYear")} disabled={viewYear <= minYear} onClick={() => setViewYear(viewYear - 1)}>
-            <ChevronLeft size={18} />
+          <button autoFocus className={NAV_BTN} aria-label={t("previousYear")} disabled={viewYear <= minYear} onClick={() => setViewYear(viewYear - 1)}>
+            <ChevronLeft size={20} />
           </button>
           <span className="text-base font-semibold tabular-nums text-slate-800 dark:text-slate-100">{viewYear}</span>
-          <button className={YEAR_BTN} aria-label={t("nextYear")} disabled={viewYear >= maxYear} onClick={() => setViewYear(viewYear + 1)}>
-            <ChevronRight size={18} />
+          <button className={NAV_BTN} aria-label={t("nextYear")} disabled={viewYear >= maxYear} onClick={() => setViewYear(viewYear + 1)}>
+            <ChevronRight size={20} />
           </button>
         </div>
         <div className="grid grid-cols-4 gap-1.5">

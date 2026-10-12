@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
 import { formatMoney, shiftMonth, trendPeriods } from "@/lib/summary";
 import { fetchTrend, type TrendPoint } from "@/lib/payments-api";
 import { CARD_CLASS } from "./MonthSummaryCard";
-import { NAV_BTN } from "./MonthNav";
+import Stepper, { StepperTitle } from "@/components/ui/Stepper";
 import { useSwipe } from "@/hooks/useSwipe";
 
 const W = 640;
@@ -117,14 +116,17 @@ export default function TrendChart({ points: initialPoints, currency, month, min
         </span>
       </div>
 
-      <div className="mb-3 flex items-center gap-2">
-        <button type="button" className={NAV_BTN} aria-label={tYear("previousYear")} title={tYear("previousYear")} disabled={end <= prevEnd} onClick={() => moveTo(prevEnd)}>
-          <ChevronLeft size={22} />
-        </button>
-        <span className="min-w-36 text-center text-sm font-semibold capitalize text-slate-800 dark:text-slate-100">{range}</span>
-        <button type="button" className={NAV_BTN} aria-label={tYear("nextYear")} title={tYear("nextYear")} disabled={end >= nextEnd} onClick={() => moveTo(nextEnd)}>
-          <ChevronRight size={22} />
-        </button>
+      <div className="mb-3">
+        <Stepper
+          onPrev={() => moveTo(prevEnd)}
+          onNext={() => moveTo(nextEnd)}
+          prevDisabled={end <= prevEnd}
+          nextDisabled={end >= nextEnd}
+          prevLabel={tYear("previousYear")}
+          nextLabel={tYear("nextYear")}
+        >
+          <StepperTitle title={range} />
+        </Stepper>
       </div>
 
       {!points ? (

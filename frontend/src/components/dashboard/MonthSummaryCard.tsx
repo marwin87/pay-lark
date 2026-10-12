@@ -32,9 +32,9 @@ export default function MonthSummaryCard({ summary, currency, title }: Props) {
 
   return (
     <section className={CARD_CLASS} aria-labelledby="month-summary-title">
-      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between">
         {title}
-        <span className="text-xs text-slate-400 dark:text-slate-500">
+        <span className="self-end text-xs text-slate-400 dark:text-slate-500 sm:self-auto">
           {t("counts", { paid: summary.paidCount, total: count })}
         </span>
       </div>

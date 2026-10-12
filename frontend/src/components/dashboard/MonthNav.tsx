@@ -1,11 +1,10 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { shiftMonth } from "@/lib/summary";
-
-export const NAV_BTN =
-  "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-green-500 hover:bg-green-50 hover:text-green-800 disabled:pointer-events-none disabled:opacity-30 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-green-600 dark:hover:bg-green-900/30 dark:hover:text-green-300";
+import MonthSheet from "@/components/payments/MonthSheet";
+import Stepper, { StepperTitle, monthRelative } from "@/components/ui/Stepper";
 
 interface Props {
   month: string;
@@ -18,21 +17,24 @@ interface Props {
   onChange: (month: string) => void;
 }
 
-/** The month card's title with prev/next arrows built in. */
+/** The month card's title with prev/next arrows built in; on mobile the title opens the month picker. */
 export default function MonthNav({ month, currentMonth, minMonth, maxMonth, monthLabel, onChange }: Props) {
   const t = useTranslations("Dashboard.nav");
+  const locale = useLocale();
+  const [sheetOpen, setSheetOpen] = useState(false);
   const atCurrent = month === currentMonth;
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <button type="button" className={NAV_BTN} aria-label={t("prev")} title={t("prev")} disabled={month <= minMonth} onClick={() => onChange(shiftMonth(month, -1))}>
-        <ChevronLeft size={22} />
-      </button>
-      <h2 id="month-summary-title" className="min-w-36 text-center text-lg font-semibold capitalize text-slate-800 dark:text-slate-100 sm:text-xl">
-        {monthLabel}
-      </h2>
-      <button type="button" className={NAV_BTN} aria-label={t("next")} title={t("next")} disabled={month >= maxMonth} onClick={() => onChange(shiftMonth(month, 1))}>
-        <ChevronRight size={22} />
-      </button>
+    <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+      <Stepper
+        onPrev={() => onChange(shiftMonth(month, -1))}
+        onNext={() => onChange(shiftMonth(month, 1))}
+        prevDisabled={month <= minMonth}
+        nextDisabled={month >= maxMonth}
+        prevLabel={t("prev")}
+        nextLabel={t("next")}
+      >
+        <StepperTitle id="month-summary-title" title={monthLabel} subtitle={monthRelative(month, currentMonth, locale)} onOpen={() => setSheetOpen(true)} />
+      </Stepper>
       {!atCurrent && (
         <button
           type="button"
@@ -41,6 +43,21 @@ export default function MonthNav({ month, currentMonth, minMonth, maxMonth, mont
         >
           {t("today")}
         </button>
+      )}
+      {sheetOpen && (
+        <MonthSheet
+          year={Number(month.slice(0, 4))}
+          selectedMonth={month}
+          currentMonth={currentMonth}
+          minYear={Number(minMonth.slice(0, 4))}
+          maxYear={Number(maxMonth.slice(0, 4))}
+          locale={locale}
+          onPick={(key) => {
+            onChange(key);
+            setSheetOpen(false);
+          }}
+          onClose={() => setSheetOpen(false)}
+        />
       )}
     </div>
   );
