@@ -41,6 +41,7 @@ import SearchInput from "@/components/SearchInput";
 import FiltersHeader from "@/components/FiltersHeader";
 import { useCollapsedCategories, COLLAPSED_CATEGORIES_KEYS } from "@/hooks/useCollapsedCategories";
 import { useSortOption } from "@/hooks/useSortOption";
+import { useSessionSet, useSessionString, VIEW_STATE_KEYS } from "@/hooks/useSessionState";
 import { useSwipe } from "@/hooks/useSwipe";
 import { toastName, useToast } from "@/context/toast-context";
 
@@ -301,9 +302,9 @@ function PaymentsPageInner() {
   const atMaxMonth = selYear >= maxYear && selMonthIdx === 11;
   const monthTitle = `${monthName(selYear, selMonthIdx, locale)} ${selYear}`;
 
-  const [statusFilter, setStatusFilter] = useState<Set<string>>(new Set());
-  const [categoryFilter, setCategoryFilter] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useSessionSet(VIEW_STATE_KEYS.paymentsStatus);
+  const [categoryFilter, setCategoryFilter] = useSessionSet(VIEW_STATE_KEYS.paymentsCategories);
+  const [searchQuery, setSearchQuery] = useSessionString(VIEW_STATE_KEYS.paymentsSearch);
 
 
   // A day picked in a previous month has nothing to do with the month now
@@ -340,7 +341,7 @@ function PaymentsPageInner() {
     useCollapsedCategories(COLLAPSED_CATEGORIES_KEYS.payments, activeCategoryKeys);
 
   const [sortOption, setSortOption] = useSortOption<PaymentSortOption>(
-    "payments-sort",
+    VIEW_STATE_KEYS.paymentsSort,
     "category-az",
     PAYMENT_SORT_OPTIONS,
   );

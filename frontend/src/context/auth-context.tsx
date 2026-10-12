@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { SESSION_EXPIRED_KEY, clearAuthPresence } from "@/lib/auth";
 import { apiFetch, setSessionExpiredHandler } from "@/lib/api";
 import { fetchMe } from "@/lib/user-api";
-import { COLLAPSED_CATEGORIES_KEYS } from "@/hooks/useCollapsedCategories";
+import { clearViewState } from "@/hooks/useSessionState";
 import {
   subscribeAuthChange,
   notifyAuthChange,
@@ -66,16 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // to /login after a fresh, valid re-login.
   const login = useCallback(() => {
     loggingOutRef.current = false;
-    // Category expanders default to open on every fresh sign-in — clear any
-    // collapse state left over from a previous session (this browser's last
-    // user, or this same user before they logged out).
-    for (const key of Object.values(COLLAPSED_CATEGORIES_KEYS)) {
-      try {
-        localStorage.removeItem(key);
-      } catch {
-        // ignore storage errors (e.g. private browsing quota)
-      }
-    }
+    // Search, filters, sort and category expanders start from their defaults on
+    // every fresh sign-in (this browser's last user, or this same user earlier).
+    clearViewState();
     notifyAuthChange();
     router.refresh();
   }, [router]);
@@ -88,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     setOverdueBadge(0);
     clearPageCache();
+    clearViewState();
     notifyAuthChange();
     router.refresh();
     router.push("/login");
@@ -104,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       clearAuthPresence();
       setOverdueBadge(0);
       clearPageCache();
+      clearViewState();
       notifyAuthChange();
       router.refresh();
       router.push("/login");

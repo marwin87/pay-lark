@@ -37,6 +37,7 @@ import FiltersHeader from "@/components/FiltersHeader";
 import { toastName, useToast } from "@/context/toast-context";
 import { useCollapsedCategories, COLLAPSED_CATEGORIES_KEYS } from "@/hooks/useCollapsedCategories";
 import { useSortOption } from "@/hooks/useSortOption";
+import { useSessionBoolean, useSessionSet, useSessionString, VIEW_STATE_KEYS } from "@/hooks/useSessionState";
 
 const CATEGORY_SORT_OPTIONS: CategorySortOrder[] = ["az", "za"];
 
@@ -54,12 +55,12 @@ export default function BillsPage() {
   const [pausing, setPausing] = useState(false);
   const [resumeTarget, setResumeTarget] = useState<BillTemplateOut | null>(null);
   const [resuming, setResuming] = useState(false);
-  const [showPaused, setShowPaused] = useState(false);
+  const [showPaused, setShowPaused] = useSessionBoolean(VIEW_STATE_KEYS.billsShowPaused);
   const [deletedFutureMap, setDeletedFutureMap] = useState<Record<number, boolean>>({});
   const [restoreTarget, setRestoreTarget] = useState<{ id: number; name: string; data: BillTemplateUpdate } | null>(null);
   const [restoring, setRestoring] = useState(false);
-  const [categoryFilter, setCategoryFilter] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useSessionSet(VIEW_STATE_KEYS.billsCategories);
+  const [searchQuery, setSearchQuery] = useSessionString(VIEW_STATE_KEYS.billsSearch);
   const [defaultCurrency, setDefaultCurrency] = useState<string | null>(null);
   const showToast = useToast();
   const [highlightId, setHighlightId] = useState<number | null>(null);
@@ -89,7 +90,7 @@ export default function BillsPage() {
     useCollapsedCategories(COLLAPSED_CATEGORIES_KEYS.bills, activeCategoryKeys);
 
   const [sortOption, setSortOption] = useSortOption<CategorySortOrder>(
-    "bills-sort",
+    VIEW_STATE_KEYS.billsSort,
     "az",
     CATEGORY_SORT_OPTIONS,
   );
@@ -276,7 +277,7 @@ export default function BillsPage() {
             </button>
             {pausedCount > 0 && (
               <button
-                onClick={() => setShowPaused((v) => !v)}
+                onClick={() => setShowPaused(!showPaused)}
                 aria-pressed={showPaused}
                 className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium shadow-sm transition-all sm:px-4 ${
                   showPaused
