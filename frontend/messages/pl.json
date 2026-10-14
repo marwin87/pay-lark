@@ -122,6 +122,7 @@
         "emptyHelp": "Rachunek to każda opłata: powtarzająca się co miesiąc, co rok albo jednorazowa. Dodaj go raz, a pojawi się w zakładce „Do zapłaty”.",
         "billPaused": "Wstrzymano „{name}”",
         "billResumed": "Wznowiono „{name}”",
+        "billActivated": "„{name}” uruchomiony — płatności wygenerowane",
         "showPaused": "Pokaż wstrzymane",
         "paused": "Wstrzymany",
         "resumeError": "Nie udało się wznowić rachunku.",
@@ -167,6 +168,8 @@
         "saveFailed": "Zapis nie powiódł się."
     },
     "BillTemplateRow": {
+        "draft": "Szkic",
+        "generatePayments": "Generuj płatności",
         "dueOn": "Płatne",
         "lastPayment": "Ostatnia płatność: {month}",
         "close": "Zamknij",

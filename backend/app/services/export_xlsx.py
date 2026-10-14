@@ -86,6 +86,7 @@ def _ensure_year_instances(db: Session, user_id: int, year: int) -> None:
         .filter(
             BillTemplate.user_id == user_id,
             BillTemplate.is_archived.is_(False),
+            BillTemplate.is_activated.is_(True),
             BillTemplate.frequency != BillFrequency.one_off,
         )
         .all()

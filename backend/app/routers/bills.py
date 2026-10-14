@@ -224,21 +224,47 @@ def create_bill(
     data.update(_day_columns(body.due_days))
     if body.dates:
         data["due_day"] = None
-    bill = BillTemplate(**data, user_id=me.id, start_period=start_period)
+    if body.dates:
+        data["draft_dates"] = [d.isoformat() for d in body.dates]
+    # A draft: payments appear only once the user activates the bill.
+    bill = BillTemplate(
+        **data, user_id=me.id, start_period=start_period, is_activated=False
+    )
     db.add(bill)
     db.commit()
     db.refresh(bill)
+    return bill
 
-    current_period = now.strftime("%Y-%m")
-    if body.frequency in RECURRING and start_period < current_period:
+
+@router.post("/{bill_id}/activate", response_model=BillTemplateOut)
+def activate_bill(
+    bill_id: int,
+    db: Session = Depends(get_db),
+    me: User = Depends(current_user),
+):
+    from app.models.bill import BillFrequency as BF
+
+    bill = db.get(BillTemplate, bill_id)
+    if not bill or bill.user_id != me.id:
+        raise HTTPException(status_code=404, detail="Bill not found")
+    if bill.is_activated:
+        raise HTTPException(status_code=409, detail="Bill is already activated")
+    if bill.is_archived:
+        raise HTTPException(status_code=409, detail="Resume the bill first")
+
+    current_period = now_for(me).strftime("%Y-%m")
+    start_period = bill.start_period or current_period  # drafts always have one
+    dates = bill.dates  # reads draft_dates while still a draft
+    bill.is_activated = True
+    bill.draft_dates = None
+    db.flush()
+    if bill.frequency == BF.monthly and start_period < current_period:
         backfill_template_instances(db, bill, start_period, current_period)
-    elif body.dates:
-        # Explicit dates (any months): one payment each, created right away.
-        db.add_all(_one_off_instances(bill, body.dates, {}))
-        db.commit()
-    elif body.frequency == BF.one_off:
-        # A one-off bill never repeats, so it gets exactly one instance,
-        # created right away instead of waiting on the recurring backfill.
+    elif dates:
+        # Explicit dates (any months): one payment each.
+        db.add_all(_one_off_instances(bill, dates, {}))
+    elif bill.frequency == BF.one_off:
+        # A one-off bill never repeats: exactly one instance.
         db.add(
             PaymentInstance(
                 bill_id=bill.id,
@@ -248,8 +274,8 @@ def create_bill(
                 status=PaymentStatus.upcoming,
             )
         )
-        db.commit()
-
+    db.commit()
+    db.refresh(bill)
     return bill
 
 
@@ -498,6 +524,33 @@ def update_bill(
         setattr(bill, field, value)
     if dates is not None and bill.frequency != BF.one_off:
         raise HTTPException(status_code=422, detail="dates are only for one_off bills")
+
+    if not bill.is_activated:
+        # Draft: no payments exist, so only the stored template changes.
+        if due_month is not None and not dates:
+            now = now_for(me)
+            if bill.frequency == BF.annual and due_month < now.month:
+                year = now.year + 1
+            else:
+                year = now.year
+            bill.start_period = f"{year:04d}-{due_month:02d}"
+        if dates is not None:
+            bill.draft_dates = [d.isoformat() for d in dates]
+            if dates:
+                bill.start_period = min(dates).strftime("%Y-%m")
+        if (
+            bill.end_period
+            and bill.start_period
+            and bill.end_period < bill.start_period
+        ):
+            raise HTTPException(status_code=422, detail="end_period is before start")
+        try:
+            check_interval(bill.frequency, bill.interval)
+        except ValueError as e:
+            raise HTTPException(status_code=422, detail=str(e))
+        db.commit()
+        db.refresh(bill)
+        return bill
 
     # Recalculate start_period when due_month changes for annual/one_off
     effective_frequency = updates.get("frequency", bill.frequency)

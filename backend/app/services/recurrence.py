@@ -149,6 +149,7 @@ def _seed_period(db: Session, period: str, user_id: int) -> None:
         .filter(
             BillTemplate.user_id == user_id,
             BillTemplate.is_archived.is_(False),
+            BillTemplate.is_activated.is_(True),
             BillTemplate.frequency != BillFrequency.one_off,
         )
         .all()

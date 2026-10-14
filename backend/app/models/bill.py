@@ -68,6 +68,13 @@ class BillTemplate(Base):
     start_period: Mapped[str | None] = mapped_column(String(7))
     # Last period (YYYY-MM, inclusive) to generate instances for; NULL = open-ended.
     end_period: Mapped[str | None] = mapped_column(String(7))
+    # New bills are drafts: no payments exist until the user activates them. The
+    # server default only covers rows that predate the column (they were live).
+    is_activated: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="1"
+    )
+    # One-off dates (ISO strings) of a draft; instances take over on activation.
+    draft_dates: Mapped[list[str] | None] = mapped_column(JSON)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(
         UTCDateTime, default=lambda: datetime.now(timezone.utc)
@@ -93,6 +100,8 @@ class BillTemplate(Base):
     def dates(self) -> list[date]:
         if self.frequency != BillFrequency.one_off:
             return []
+        if not self.is_activated:
+            return sorted(date.fromisoformat(d) for d in self.draft_dates or [])
         return sorted(i.due_date for i in self.instances if not i.is_deleted)
 
     @property

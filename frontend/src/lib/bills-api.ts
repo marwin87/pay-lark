@@ -22,6 +22,8 @@ export interface BillTemplateOut {
   end_period: string | null;
   notes: string | null;
   is_archived: boolean;
+  /** false = draft: no payments exist until activateBill. */
+  is_activated: boolean;
   created_at: string;
 }
 
@@ -65,6 +67,10 @@ export function updateBill(
     method: "PATCH",
     body: JSON.stringify(data),
   });
+}
+
+export function activateBill(id: number): Promise<BillTemplateOut> {
+  return apiFetch<BillTemplateOut>(`/bills/${id}/activate`, { method: "POST" });
 }
 
 export function archiveBill(id: number): Promise<void> {

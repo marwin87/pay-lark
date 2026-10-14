@@ -122,6 +122,7 @@
         "emptyHelp": "Une facture, c’est tout paiement : chaque mois, chaque année ou une seule fois. À ajouter une fois, elle apparaît dans « À payer ».",
         "billPaused": "« {name} » mise en pause",
         "billResumed": "« {name} » reprise",
+        "billActivated": "« {name} » activé : paiements générés",
         "showPaused": "Afficher en pause",
         "paused": "En pause",
         "resumeError": "Impossible de reprendre la facture.",
@@ -167,6 +168,8 @@
         "saveFailed": "Échec de l'enregistrement."
     },
     "BillTemplateRow": {
+        "draft": "Brouillon",
+        "generatePayments": "Générer les paiements",
         "dueOn": "Échéance le",
         "lastPayment": "Dernier paiement : {month}",
         "close": "Fermer",

@@ -4,9 +4,11 @@ import {
   Pencil,
   Pause,
   Play,
+  Rocket,
   ChevronUp,
   NotebookPen,
 } from "lucide-react";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
 import BillTemplateForm from "./BillTemplateForm";
@@ -23,6 +25,7 @@ interface Props {
   onSave: (data: BillTemplateUpdate) => Promise<void>;
   onPause: () => void;
   onResume: () => void;
+  onActivate: () => Promise<void>;
 }
 
 export function formatDueLabel(template: BillTemplateOut, locale: string): string | null {
@@ -75,12 +78,26 @@ export default function BillTemplateRow({
   onSave,
   onPause,
   onResume,
+  onActivate,
 }: Props) {
   const t = useTranslations("BillTemplateRow");
   const tPage = useTranslations("BillsPage");
   const frequencyLabel = useFrequencyLabel();
   const locale = useLocale();
   const { decimalSeparator } = useAppLocale();
+
+  const isDraft = !template.is_activated;
+  const [activating, setActivating] = useState(false);
+
+  async function handleActivate() {
+    if (activating) return;
+    setActivating(true);
+    try {
+      await onActivate();
+    } finally {
+      setActivating(false);
+    }
+  }
 
   const dueLabel = formatDueLabel(template, locale);
 
@@ -90,12 +107,19 @@ export default function BillTemplateRow({
   return (
     <div
       id={`bill-${template.id}`}
-      className={`bill-row group rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow duration-500 dark:bg-slate-800 dark:border-slate-700 border-l-4 ${leftBorder} ${
+      className={`bill-row group relative rounded-xl border ${
+        isDraft ? "overflow-hidden border-dashed border-slate-400 dark:border-slate-500" : "border-slate-200"
+      } bg-white shadow-sm transition-shadow duration-500 dark:bg-slate-800 dark:border-slate-700 border-l-4 ${leftBorder} ${
         highlighted ? "bill-row-highlight ring-2 ring-green-200 dark:ring-green-800" : ""
       } ${template.is_archived ? "opacity-70" : ""}`}
     >
+      {isDraft && (
+        <span className="pointer-events-none absolute -left-9 top-4 w-32 -rotate-45 bg-amber-500 py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow">
+          {t("draft")}
+        </span>
+      )}
       {/* Collapsed row */}
-      <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center">
+      <div className={`flex flex-col gap-3 py-3 pr-4 sm:flex-row sm:items-center ${isDraft ? "pl-14" : "pl-4"}`}>
         {/* Two-line content */}
         <div className="flex flex-1 flex-col min-w-0 gap-0.5">
           {/* Line 1: name */}
@@ -150,6 +174,17 @@ export default function BillTemplateRow({
               {isExpanded ? <ChevronUp className="h-5 w-5 sm:h-[15px] sm:w-[15px]" /> : <Pencil className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />}
               <span>{isExpanded ? t("close") : t("edit")}</span>
             </button>
+            {isDraft && !template.is_archived && (
+              <button
+                onClick={handleActivate}
+                disabled={activating}
+                aria-label={t("generatePayments")}
+                className="flex items-center gap-1.5 rounded-xl border border-transparent bg-emerald-600 px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 disabled:opacity-50"
+              >
+                <Rocket className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span>{t("generatePayments")}</span>
+              </button>
+            )}
             {template.is_archived ? (
               <button
                 onClick={onResume}
@@ -178,6 +213,7 @@ export default function BillTemplateRow({
         <div className="rounded-b-xl border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-5">
           <BillTemplateForm
             startPeriod={template.start_period}
+            isDraft={isDraft}
             paidDates={template.paid_dates}
             initial={{
               name: template.name,

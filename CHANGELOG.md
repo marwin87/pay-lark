@@ -2,6 +2,12 @@
 
 Notable changes, release by release.
 
+## v1.5.0 (Not released yet)
+
+### Features
+
+- New bills start as drafts you can edit freely, and “Generate payments” turns them on when you're ready
+
 ## v1.4.0 — 14-10-2026
 
 ### Features

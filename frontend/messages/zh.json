@@ -122,6 +122,7 @@
         "emptyHelp": "账单就是需要支付的一切：每月、每年或仅一次。添加一次，它就会出现在“待付款”中。",
         "billPaused": "已暂停“{name}”",
         "billResumed": "已恢复“{name}”",
+        "billActivated": "“{name}”已启用——付款已生成",
         "showPaused": "显示已暂停",
         "paused": "已暂停",
         "resumeError": "恢复账单失败。",
@@ -167,6 +168,8 @@
         "saveFailed": "保存失败。"
     },
     "BillTemplateRow": {
+        "draft": "草稿",
+        "generatePayments": "生成付款",
         "dueOn": "到期日：",
         "lastPayment": "最后一次付款：{month}",
         "close": "关闭",

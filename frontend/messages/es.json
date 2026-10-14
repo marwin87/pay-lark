@@ -122,6 +122,7 @@
         "emptyHelp": "Una factura es todo lo que pagas: cada mes, cada año o una sola vez. Añádela una vez y aparecerá en «Por pagar».",
         "billPaused": "«{name}» en pausa",
         "billResumed": "«{name}» reanudada",
+        "billActivated": "«{name}» activado: pagos generados",
         "showPaused": "Mostrar en pausa",
         "paused": "En pausa",
         "resumeError": "No se pudo reanudar la factura.",
@@ -167,6 +168,8 @@
         "saveFailed": "Error al guardar."
     },
     "BillTemplateRow": {
+        "draft": "Borrador",
+        "generatePayments": "Generar pagos",
         "dueOn": "Vence el",
         "lastPayment": "Último pago: {month}",
         "close": "Cerrar",

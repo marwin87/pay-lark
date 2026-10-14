@@ -22,6 +22,7 @@ const RECURRING_FREQUENCIES: BillFrequency[] = ["monthly"];
 interface Props {
   initial?: Partial<BillTemplateCreate>;
   startPeriod?: string | null; // saved start (YYYY-MM) when editing
+  isDraft?: boolean; // not activated yet: the start month is still editable
   paidDates?: string[]; // one-off dates already paid: they stay (history)
   defaultCurrency?: string | null;
   onSave: (data: BillTemplateCreate) => Promise<void>;
@@ -50,7 +51,7 @@ const inputClass =
 
 const labelClass = "block text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5";
 
-export default function BillTemplateForm({ initial, startPeriod, paidDates, defaultCurrency, onSave, onCancel }: Props) {
+export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDates, defaultCurrency, onSave, onCancel }: Props) {
   const t = useTranslations("BillTemplateForm");
   const tFreq = useTranslations("Frequencies");
   const locale = useLocale();
@@ -92,10 +93,10 @@ export default function BillTemplateForm({ initial, startPeriod, paidDates, defa
   // Recurring bills anchor to the current year + chosen month on create (mirrors the backend).
   const currentPeriod = todayStr.slice(0, 7);
   const effectiveStart =
-    startPeriod ?? `${todayYear}-${String(parseInt(dueMonth, 10) || todayMonth).padStart(2, "0")}`;
+    (isDraft ? null : startPeriod) ?? `${todayYear}-${String(parseInt(dueMonth, 10) || todayMonth).padStart(2, "0")}`;
   const minEnd = effectiveStart > currentPeriod ? effectiveStart : currentPeriod;
   // The server keeps an existing monthly bill's start (it anchors the cycle and its history)
-  const startLocked = !!startPeriod && frequency === "monthly";
+  const startLocked = !!startPeriod && frequency === "monthly" && !isDraft;
   const startMonth = startLocked ? Number(startPeriod.slice(5, 7)) : parseInt(dueMonth, 10) || todayMonth;
   const maxInterval = frequency === "annual" ? 5 : 12;
   const effectiveInterval = frequency === "one_off" ? 1 : Math.min(interval, maxInterval);

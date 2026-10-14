@@ -202,6 +202,8 @@ def _build_backup_arrays(
                 "is_archived": t.is_archived,
                 "start_period": t.start_period,
                 "end_period": t.end_period,
+                "is_activated": t.is_activated,
+                "draft_dates": t.draft_dates,
                 "created_at": t.created_at.isoformat(),
             }
             for t in templates
@@ -326,6 +328,8 @@ def _apply_backup(db: Session, user_id: int, backup: BackupPayload) -> tuple[int
                 is_archived=bt.is_archived,
                 start_period=bt.start_period,
                 end_period=bt.end_period,
+                is_activated=bt.is_activated,
+                draft_dates=bt.draft_dates,
                 user_id=user_id,
             )
             db.add(template_obj)

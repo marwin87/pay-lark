@@ -42,6 +42,10 @@ test('created bill appears in current month payments', async ({ page }) => {
   // Assert: form closes and bill appears in the list
   await expect(page.getByText(billName, { exact: true })).toBeVisible();
 
+  // A new bill is a draft: no payments until it is activated
+  await page.getByRole('button', { name: 'Generate payments' }).click();
+  await expect(page.getByRole('status')).toContainText('payments generated');
+
   // Step: navigate to payments page (triggers sync-instances on load)
   await page.goto('/dashboard/payments');
 

@@ -122,6 +122,7 @@
         "emptyHelp": "Eine Rechnung ist jede Zahlung: monatlich, jährlich oder einmalig. Einmal hinzufügen, und sie erscheint unter „Zu zahlen“.",
         "billPaused": "„{name}“ pausiert",
         "billResumed": "„{name}“ fortgesetzt",
+        "billActivated": "„{name}“ ist aktiv – Zahlungen erzeugt",
         "showPaused": "Pausierte zeigen",
         "paused": "Pausiert",
         "resumeError": "Rechnung konnte nicht fortgesetzt werden.",
@@ -167,6 +168,8 @@
         "saveFailed": "Speichern fehlgeschlagen."
     },
     "BillTemplateRow": {
+        "draft": "Entwurf",
+        "generatePayments": "Zahlungen erzeugen",
         "dueOn": "Fällig am",
         "lastPayment": "Letzte Zahlung: {month}",
         "close": "Schließen",

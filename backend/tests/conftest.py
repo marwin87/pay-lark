@@ -85,6 +85,32 @@ def db_sessionmaker(db_engine, db_tables):
     return sessionmaker(bind=db_engine, autocommit=False, autoflush=False)
 
 
+def _auto_activate_bills(client: TestClient) -> None:
+    """New bills are drafts; most tests want live payments, so a successful POST /bills
+    is followed by its activation. A test of the draft flow sets `client.auto_activate = False`.
+    """
+    client.auto_activate = True
+    real_request = client.request
+
+    def request(method, url, *args, **kwargs):
+        r = real_request(method, url, *args, **kwargs)
+        if (
+            client.auto_activate
+            and method == "POST"
+            and str(url) == "/bills"
+            and r.status_code == 201
+        ):
+            a = real_request(
+                "POST",
+                f"/bills/{r.json()['id']}/activate",
+                headers=kwargs.get("headers"),
+            )
+            assert a.status_code == 200, a.text
+        return r
+
+    client.request = request  # type: ignore[method-assign]
+
+
 @pytest.fixture()
 def client(db_engine):
     Base.metadata.create_all(bind=db_engine)
@@ -99,6 +125,7 @@ def client(db_engine):
 
     app.dependency_overrides[get_db] = _override_get_db
     with TestClient(app) as c:
+        _auto_activate_bills(c)
         yield c
     app.dependency_overrides.clear()
     Base.metadata.drop_all(bind=db_engine)
@@ -139,6 +166,7 @@ def client_db(db_engine):
 
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:
+        _auto_activate_bills(c)
         db = SessionLocal()
         _end_read_snapshots(c, db)
         yield c, db

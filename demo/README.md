@@ -15,7 +15,7 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Streaming (Old) | custom | **archived** — still referenced by an active bill |
 | Side Hustle | custom | active |
 
-**30 bill templates** covering all frequencies, plus these edge cases:
+**33 bill templates** covering all frequencies, plus these edge cases:
 
 | Name | Category | Frequency | Amount | Notes |
 |---|---|---|---|---|
@@ -39,6 +39,7 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Cloud Storage 2TB *(archived bill)* | Subscriptions | Monthly | €9.99 | |
 | Car Lease *(archived bill)* | Transport | Monthly | €310.00 | |
 | Piano Lessons *(archived bill)* | Education | Monthly | €40.00 | |
+| New Apartment Rent, Bike Insurance, Dentist Visits *(drafts)* | Housing, Insurance, Healthcare | Monthly, annual, one-off | €950.00, €85.00, €120.00 | **not activated yet**: no payments, Draft ribbon and Generate payments button on the Bills page (`inject_draft_bills` in `seed.py`) |
 
 5 bills are archived in total, spread across 4 categories, so the Archive page (`/dashboard/bills/archived`) has enough entries to exercise its category filter and sort.
 

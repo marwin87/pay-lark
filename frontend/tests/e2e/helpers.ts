@@ -149,6 +149,13 @@ export async function createBillViaApi(
   }
 
   const bill = await res.json();
+  // New bills are drafts; most specs need live payments.
+  const activated = await page.request.post(`${API}/bills/${bill.id}/activate`, {
+    headers: await getCsrfHeader(page),
+  });
+  if (!activated.ok()) {
+    throw new Error(`Activate bill failed: ${activated.status()} — ${await activated.text()}`);
+  }
   return bill.id as number;
 }
 

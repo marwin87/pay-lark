@@ -122,6 +122,7 @@
         "emptyHelp": "Una bolletta è tutto ciò che paghi: ogni mese, ogni anno o una volta sola. Aggiungila una volta e comparirà in «Da pagare».",
         "billPaused": "«{name}» in pausa",
         "billResumed": "«{name}» ripresa",
+        "billActivated": "«{name}» attivato: pagamenti generati",
         "showPaused": "Mostra in pausa",
         "paused": "In pausa",
         "resumeError": "Impossibile riprendere la bolletta.",
@@ -167,6 +168,8 @@
         "saveFailed": "Salvataggio non riuscito."
     },
     "BillTemplateRow": {
+        "draft": "Bozza",
+        "generatePayments": "Genera pagamenti",
         "dueOn": "Scade il",
         "lastPayment": "Ultimo pagamento: {month}",
         "close": "Chiudi",

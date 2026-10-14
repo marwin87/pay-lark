@@ -122,6 +122,7 @@
         "emptyHelp": "Een rekening is elke betaling: elke maand, elk jaar of eenmalig. Eén keer toevoegen en hij verschijnt bij “Te betalen”.",
         "billPaused": "“{name}” gepauzeerd",
         "billResumed": "“{name}” hervat",
+        "billActivated": "“{name}” is actief — betalingen aangemaakt",
         "showPaused": "Toon gepauzeerd",
         "paused": "Gepauzeerd",
         "resumeError": "Rekening hervatten mislukt.",
@@ -167,6 +168,8 @@
         "saveFailed": "Opslaan mislukt."
     },
     "BillTemplateRow": {
+        "draft": "Concept",
+        "generatePayments": "Betalingen genereren",
         "dueOn": "Vervalt op",
         "lastPayment": "Laatste betaling: {month}",
         "close": "Sluiten",

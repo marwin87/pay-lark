@@ -122,6 +122,7 @@
         "emptyHelp": "A bill is any payment: every month, every year or just once. Add it once and it appears in “To pay”.",
         "billPaused": "“{name}” paused",
         "billResumed": "“{name}” resumed",
+        "billActivated": "“{name}” is live — payments generated",
         "showPaused": "Show paused",
         "paused": "Paused",
         "resumeError": "Failed to resume bill.",
@@ -167,6 +168,8 @@
         "saveFailed": "Save failed."
     },
     "BillTemplateRow": {
+        "draft": "Draft",
+        "generatePayments": "Generate payments",
         "dueOn": "Due on",
         "lastPayment": "Last payment: {month}",
         "close": "Close",

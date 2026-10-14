@@ -122,6 +122,7 @@
         "emptyHelp": "Uma fatura é tudo o que paga: todos os meses, todos os anos ou uma só vez. Adicione-a uma vez e aparece em «A pagar».",
         "billPaused": "“{name}” em pausa",
         "billResumed": "“{name}” retomada",
+        "billActivated": "“{name}” ativado — pagamentos gerados",
         "showPaused": "Mostrar em pausa",
         "paused": "Em pausa",
         "resumeError": "Não foi possível retomar a conta.",
@@ -167,6 +168,8 @@
         "saveFailed": "Falha ao guardar."
     },
     "BillTemplateRow": {
+        "draft": "Rascunho",
+        "generatePayments": "Gerar pagamentos",
         "dueOn": "Vence em",
         "lastPayment": "Último pagamento: {month}",
         "close": "Fechar",

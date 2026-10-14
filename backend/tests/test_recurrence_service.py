@@ -198,6 +198,7 @@ def _make_bill(
         .first()
     )
     bill = BillTemplate(
+        is_activated=True,
         name="Test Bill",
         frequency=frequency,
         interval=interval,

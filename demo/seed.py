@@ -273,6 +273,36 @@ def inject_multi_day_bills(data: dict) -> dict:
     return data
 
 
+def inject_draft_bills(data: dict) -> dict:
+    """Bills that are not activated yet (no payments exist): a monthly one starting next
+    month, an annual one, and a one-off with its dates kept on the draft."""
+    today = today_in_demo_zone()
+
+    def period_at(offset: int) -> tuple[int, int]:
+        idx = today.year * 12 + today.month - 1 + offset
+        return idx // 12, idx % 12 + 1
+
+    ny, nm = period_at(1)
+    ay, am = period_at(4)
+    d1, d2 = date(ny, nm, 12), date(*period_at(2), 12)
+    created_at = f"{today.isoformat()}T09:00:00+00:00"
+    base = {"interval": 1, "is_archived": False, "is_activated": False, "end_period": None,
+            "created_at": created_at}
+    data["bill_templates"].extend([
+        {**base, "id": 31, "name": "New Apartment Rent", "category_id": 4,
+         "frequency": "monthly", "amount": 950.0, "currency": "EUR", "due_day": 1,
+         "notes": "Starts when the lease begins", "start_period": f"{ny}-{nm:02d}"},
+        {**base, "id": 32, "name": "Bike Insurance", "category_id": 5,
+         "frequency": "annual", "amount": 85.0, "currency": "EUR", "due_day": 10,
+         "notes": None, "start_period": f"{ay}-{am:02d}"},
+        {**base, "id": 33, "name": "Dentist Visits", "category_id": 3,
+         "frequency": "one_off", "amount": 120.0, "currency": "EUR", "due_day": None,
+         "notes": "Two appointments", "start_period": f"{ny}-{nm:02d}",
+         "draft_dates": [d1.isoformat(), d2.isoformat()]},
+    ])
+    return data
+
+
 def has_data(session: requests.Session, token: str) -> bool:
     r = session.get(
         f"{BASE_URL}/bills",
@@ -314,6 +344,7 @@ def restore(session: requests.Session, token: str) -> None:
     data = inject_current_month_cases(data)
     data = inject_history(data)
     data = inject_multi_day_bills(data)
+    data = inject_draft_bills(data)
     payload = json.dumps(data)
     r = session.post(
         f"{BASE_URL}/export/restore",

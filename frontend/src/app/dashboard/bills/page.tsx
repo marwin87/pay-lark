@@ -11,6 +11,7 @@ import {
   updateBill,
   archiveBill,
   unarchiveBill,
+  activateBill,
   hasDeletedFuture,
   type BillTemplateOut,
   type BillTemplateCreate,
@@ -190,6 +191,13 @@ export default function BillsPage() {
     } catch {
       // leave dialog open so user can retry
     }
+  }
+
+  async function handleActivate(bill: BillTemplateOut) {
+    await activateBill(bill.id);
+    setExpandedId(null);
+    reveal(bill, t("billActivated", { name: toastName(bill.name) }));
+    setRefreshKey((k) => k + 1);
   }
 
   async function handlePauseConfirm() {
@@ -443,6 +451,7 @@ export default function BillsPage() {
                         onSave={(data) => handleUpdate(tmpl.id, data)}
                         onPause={() => setPauseTarget(tmpl)}
                         onResume={() => setResumeTarget(tmpl)}
+                        onActivate={() => handleActivate(tmpl)}
                       />
                     ))}
                   </div>

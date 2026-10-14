@@ -66,6 +66,7 @@ def _default_category_id(db, user_id: int, slug: str = "utilities") -> int:
 
 def _make_bill(db, user_id: int) -> BillTemplate:
     bill = BillTemplate(
+        is_activated=True,
         name="Internet",
         frequency=BillFrequency.monthly,
         amount=Decimal("99.99"),
@@ -352,6 +353,7 @@ def _make_paid_instance(db, bill_id: int, due_date: date, **kwargs) -> PaymentIn
 
 def _make_bill_named(db, user_id: int, name: str) -> BillTemplate:
     bill = BillTemplate(
+        is_activated=True,
         name=name,
         frequency=BillFrequency.monthly,
         amount=Decimal("99.99"),

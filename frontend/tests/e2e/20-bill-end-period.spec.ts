@@ -38,6 +38,7 @@ test('paying the last instalment of a fixed-term bill creates no further payment
   await expect(endPicker).not.toHaveText('---');
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(page.getByText(billName, { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Generate payments' }).click();
 
   // Step: pay the (only, last) instalment on the payments page
   await page.goto('/dashboard/payments');

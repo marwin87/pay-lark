@@ -110,6 +110,7 @@ class BillTemplateOut(BaseModel):
     paid_dates: list[date] = []  # subset of `dates` that is already paid
     notes: str | None
     is_archived: bool
+    is_activated: bool
     created_at: datetime
     start_period: str | None = None
     end_period: str | None = None
@@ -209,6 +210,8 @@ class BackupTemplate(BaseModel):
     is_archived: bool
     start_period: str | None
     end_period: str | None = None
+    is_activated: bool = True  # older backups predate drafts: all were live
+    draft_dates: list[str] | None = None
     created_at: str
 
     @model_validator(mode="before")
