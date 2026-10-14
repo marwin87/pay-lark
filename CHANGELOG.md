@@ -6,16 +6,17 @@ Notable changes, release by release.
 
 ### Features
 
-- New bills start as drafts you can edit freely, and “Generate payments” turns them on when you're ready
-- Ribbons on bills and payments mark drafts, paused bills, overdue and due-today payments, and the last payment
-- Upcoming payments show how many days are left
-- Payment popups are tinted in the payment's status color
-- Collapse or expand all tiles at once in every Settings tab
-- The “Get started in 3 steps” card now sits on the Dashboard, the first page after login
+- New bills start as drafts; “Generate payments” activates them
+- Ribbons mark drafts, paused bills, overdue, due-today and last payments
+- Upcoming payments show days left
+- Payment popups are tinted by payment status
+- Collapse/expand all tiles in Settings
+- “Get started” card moved to the Dashboard
+- Dashboard currency switch adapts to screen width and remembers your choice
 
 ### Fixes
 
-- The “Get started” card is no longer hidden on a new account because it was hidden on another one
+- “Get started” card no longer hidden on new accounts
 - UI adjustments
 
 ## v1.4.0 — 14-10-2026

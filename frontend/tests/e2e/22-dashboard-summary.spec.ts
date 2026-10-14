@@ -37,6 +37,13 @@ test('dashboard summarises each currency separately and is reachable from the lo
   await expect(card).toContainText(/PLN\s?200/);
   await expect(card).not.toContainText('€');
 
+  // Step: the choice survives a visit to another page
+  await page.getByRole('navigation').getByRole('link', { name: 'To pay' }).click();
+  await expect(page).toHaveURL(/\/dashboard\/payments/);
+  await page.getByRole('navigation').getByRole('link', { name: 'Overview' }).click();
+  await expect(page.getByRole('group', { name: 'Show summary in:' }).getByRole('button', { name: 'PLN' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(card).toContainText(/PLN\s?200/);
+
   // Step: donut lists the bill's category and the trend chart is rendered
   await expect(page.getByRole('region', { name: 'By category' })).toContainText('Utilities');
   await expect(page.getByRole('region', { name: 'Last 12 months' })).toBeVisible();

@@ -25,6 +25,7 @@ import OnboardingChecklist from "@/components/help/OnboardingChecklist";
 import CurrencySwitch from "@/components/dashboard/CurrencySwitch";
 import MonthNav from "@/components/dashboard/MonthNav";
 import { useSwipe } from "@/hooks/useSwipe";
+import { useSessionString, VIEW_STATE_KEYS } from "@/hooks/useSessionState";
 
 export default function DashboardPage() {
   const t = useTranslations("Dashboard");
@@ -43,7 +44,9 @@ export default function DashboardPage() {
     defaultCurrency: string | null;
   } | null>(() => getCached(`dashboard:${currentMonth}`) ?? null);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  // Kept for the signed-in session, so coming back from another page shows the same currency
+  const [storedCurrency, setSelectedCurrency] = useSessionString(VIEW_STATE_KEYS.dashboardCurrency);
+  const selectedCurrency = storedCurrency || null;
 
   useEffect(() => {
     let cancelled = false;
