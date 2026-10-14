@@ -21,6 +21,7 @@ import { currenciesByVolume, pickCurrency, shiftMonth, summarize } from "@/lib/s
 import MonthSummaryCard, { CARD_CLASS } from "@/components/dashboard/MonthSummaryCard";
 import CategoryDonut from "@/components/dashboard/CategoryDonut";
 import TrendChart from "@/components/dashboard/TrendChart";
+import OnboardingChecklist from "@/components/help/OnboardingChecklist";
 import MonthNav from "@/components/dashboard/MonthNav";
 import { useSwipe } from "@/hooks/useSwipe";
 
@@ -88,6 +89,8 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 md:px-8 py-8">
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
+
+      <OnboardingChecklist currentMonth={currentMonth} />
 
       {error && (
         <p className="mb-6 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">

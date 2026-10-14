@@ -8,23 +8,27 @@ import { fetchBills } from "@/lib/bills-api";
 import { fetchTrend } from "@/lib/payments-api";
 import { fetchMe } from "@/lib/user-api";
 
+// Per account: a shared key hid the card for every new account created in a browser where
+// someone had once pressed "Hide".
 const HIDDEN_KEY = "onboarding-hidden";
 const RESET_EVENT = "onboarding-reset";
+const keyFor = (email: string) => `${HIDDEN_KEY}:${email}`;
 
 /** Brings the start steps back (from the help sheet), even when every step is already done. */
-export function resetOnboarding() {
+export async function resetOnboarding() {
   try {
-    localStorage.setItem(HIDDEN_KEY, "0");
+    const me = await fetchMe();
+    localStorage.setItem(keyFor(me.email), "0");
   } catch {
-    // storage blocked: the card simply stays as it is
+    // storage blocked or offline: the card simply stays as it is
   }
   window.dispatchEvent(new Event(RESET_EVENT));
 }
 
 // "1" = hidden, "0" = shown on request (even if complete), unset = automatic
-function stored(): string | null {
+function stored(email: string): string | null {
   try {
-    return localStorage.getItem(HIDDEN_KEY);
+    return localStorage.getItem(keyFor(email));
   } catch {
     return null;
   }
@@ -41,6 +45,7 @@ export default function OnboardingChecklist({ currentMonth }: { currentMonth: st
   const t = useTranslations("Help.checklist");
   const tRow = useTranslations("PaymentRow");
   const [done, setDone] = useState<[boolean, boolean, boolean] | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [pref, setPref] = useState<string | null>("1");
 
   useEffect(() => {
@@ -48,6 +53,7 @@ export default function OnboardingChecklist({ currentMonth }: { currentMonth: st
     Promise.all([fetchBills(true), fetchTrend(currentMonth), fetchMe()])
       .then(([bills, trend, me]) => {
         if (cancelled) return;
+        setEmail(me.email);
         setDone([
           bills.length > 0,
           trend.some((p) => Number(p.paid) > 0),
@@ -61,11 +67,12 @@ export default function OnboardingChecklist({ currentMonth }: { currentMonth: st
   }, [currentMonth]);
 
   useEffect(() => {
-    const sync = () => setPref(stored());
+    if (!email) return;
+    const sync = () => setPref(stored(email));
     sync();
     window.addEventListener(RESET_EVENT, sync);
     return () => window.removeEventListener(RESET_EVENT, sync);
-  }, []);
+  }, [email]);
 
   if (!done || pref === "1" || (pref !== "0" && done.every(Boolean))) return null;
 
@@ -109,7 +116,7 @@ export default function OnboardingChecklist({ currentMonth }: { currentMonth: st
           type="button"
           onClick={() => {
             try {
-              localStorage.setItem(HIDDEN_KEY, "1");
+              if (email) localStorage.setItem(keyFor(email), "1");
             } catch {
               // storage blocked: hide for this visit only
             }

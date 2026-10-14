@@ -31,7 +31,7 @@ No third-party data sharing. No subscription. Runs locally with Docker Compose o
 
 ## 📋 What it does
 
-- **Bill templates** — define a bill once: name, category, amount, currency, due day of month, and how often it repeats: monthly (every 1–12 months), annual (every 1–5 years) or one-off. Optionally set an end month to stop a recurring bill after its last installment. Pay Tracker generates payment instances automatically each period.
+- **Bill templates** — define a bill once: name, category, amount, currency, due day of month, and how often it repeats: monthly (every 1–12 months), annual (every 1–5 years) or one-off. Optionally set an end month to stop a recurring bill after its last installment. A new bill starts as a draft you can edit freely; **Generate payments** turns it on, and from then on Pay Tracker generates payment instances automatically each period.
 - **Dashboard** — month summary, a category donut and a 12-month trend at a glance.
 - **Pause bills** — pause a bill you no longer need to hide it from the list; its payment history stays intact. Use "Show paused" to see them and resume one any time to start generating payments again.
 - **Category grouping** — bills and payments are grouped under category headers. Every account starts with 9 defaults (Housing, Utilities, Insurance, Subscriptions, Entertainment, Transport, Healthcare, Education, Other); add your own, rename or recolor any of them, or delete ones you no longer use from Settings (a category used by bills is archived instead). Category is required on every bill. Archiving a category hides it from the "new bill" picker but doesn't touch bills already using it — they keep working and stay filterable, just flagged as archived.
@@ -107,7 +107,7 @@ Open http://localhost:3010 and register. Each account is isolated — register s
 
 ### 4. Add your first bill
 
-Go to **Bills → New Bill**. Fill in the name, category, amount, frequency (monthly/annual + interval), and due day of month. Save it — Pay Tracker will generate this month's payment instance automatically.
+Go to **Bills → New Bill**. Fill in the name, category, amount, frequency (monthly/annual + interval), and due day of month. Save it as a draft, then click **Generate payments** on its tile — Pay Tracker generates this month's payment instance and keeps creating them automatically.
 
 ### 5. Track payments
 
@@ -197,6 +197,6 @@ Requires HTTPS in production. Localhost works as an exception in most browsers.
 - **Undo a restore** — every restore automatically snapshots your prior data server-side first (skipped if you had no existing bills). If a restore turns out to be a mistake, Settings → Restore shows a "Restore This Snapshot" option with the snapshot's timestamp, letting you revert. Snapshots are kept for `RESTORE_SNAPSHOT_RETENTION_DAYS` (default 7) and only the single most recent one is retained per account.
 
 
-## 📄 License
+## ⚖️ License
 
 Releases up to and including v1.1.0 are MIT-licensed. **From v1.2.0 onward**, Pay Tracker is free for personal, educational, research and other non-commercial use — including modifying, forking and redistributing — with attribution back to this repository. Commercial use requires the copyright holder's written permission. See [LICENSE](LICENSE) for the full terms.

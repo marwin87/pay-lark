@@ -125,10 +125,10 @@ export default function HelpContent({ scroll = false, onDone }: { scroll?: boole
       <div className="border-t border-slate-100 px-5 py-3 dark:border-slate-700/60">
         <button
           type="button"
-          onClick={() => {
-            resetOnboarding();
+          onClick={async () => {
+            await resetOnboarding();
             onDone?.();
-            router.push("/dashboard/payments");
+            router.push("/dashboard");
           }}
           className="text-xs font-medium text-green-700 hover:underline dark:text-emerald-400"
         >

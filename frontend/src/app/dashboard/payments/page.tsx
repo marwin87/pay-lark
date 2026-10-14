@@ -29,7 +29,6 @@ import PaymentRow from "@/components/payments/PaymentRow";
 import PaymentsCalendar from "@/components/payments/PaymentsCalendar";
 import MarkPaidDialog from "@/components/payments/MarkPaidDialog";
 import PageHeader from "@/components/PageHeader";
-import OnboardingChecklist from "@/components/help/OnboardingChecklist";
 import Stepper, { StepperTitle, monthRelative } from "@/components/ui/Stepper";
 import MonthSheet from "@/components/payments/MonthSheet";
 import ShareMonthDialog from "@/components/payments/ShareMonthDialog";
@@ -521,8 +520,6 @@ function PaymentsPageInner() {
 
       {/* Page header */}
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
-
-      <OnboardingChecklist currentMonth={currentMonth} />
 
       {/* Month selector: one card, the title is the only place the month is named */}
       <div className="mb-6" {...swipeMonth}>

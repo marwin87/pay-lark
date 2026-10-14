@@ -11,6 +11,11 @@ Notable changes, release by release.
 - Upcoming payments show how many days are left
 - Payment popups are tinted in the payment's status color
 - Collapse or expand all tiles at once in every Settings tab
+- The “Get started in 3 steps” card now sits on the Dashboard, the first page after login
+
+### Fixes
+
+- The “Get started” card is no longer hidden on a new account because it was hidden on another one
 
 ## v1.4.0 — 14-10-2026
 
