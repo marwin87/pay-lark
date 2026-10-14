@@ -498,7 +498,7 @@ def test_monthly_summary_sent_and_flag_updated_on_last_day(
         send_daily_reminders(db_sessionmaker, send_minute=480)
 
     mock_send.assert_called_once()
-    db_session.expire_all()
+    db_session.commit()  # ends the SQLite read snapshot, then reloads
     refreshed_user = db_session.get(User, user_id)
     assert refreshed_user.monthly_summary_last_sent == fake_today.strftime("%Y-%m")
 

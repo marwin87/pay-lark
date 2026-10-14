@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     # Baked in at image build (same value as the frontend footer); shown in notification footers.
     app_version: str = "dev"
 
-    database_url: str = "postgresql://paytracker:changeme@localhost:5432/paytracker"
+    database_url: str = "sqlite:///./paytracker.db"
 
     jwt_secret: str = _DEFAULT_JWT_SECRET
     jwt_algorithm: str = "HS256"

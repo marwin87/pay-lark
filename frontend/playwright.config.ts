@@ -11,7 +11,7 @@ export default defineConfig({
   workers: 1,
   reporter: process.env.CI ? 'github' : 'html',
   webServer: {
-    command: 'docker compose up -d --wait postgres backend frontend demo-data',
+    command: 'docker compose up -d --wait backend frontend demo-data',
     // Forces the rate limiter off on a fresh start; see global-setup.ts for why and
     // for the already-running-stack case.
     env: { RATE_LIMIT_ENABLED: 'false' },

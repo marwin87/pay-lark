@@ -1,6 +1,6 @@
 # Repository Guidelines
 
-Pay Tracker is a household bill-tracking PWA. Stack: Next.js 16 (App Router, TypeScript, Tailwind) frontend, FastAPI + Python 3.13 backend, PostgreSQL 17 as its own Compose service.
+Pay Tracker is a household bill-tracking PWA. Stack: Next.js 16 (App Router, TypeScript, Tailwind) frontend, FastAPI + Python 3.13 backend, SQLite (file on the `app_data` Compose volume).
 
 ## Hard Rules
 
@@ -18,7 +18,7 @@ frontend/   Next.js 16 PWA — App Router, src/, Tailwind
 backend/    FastAPI — app/{routers,models,schemas,services,core}/, alembic/, tests/
 demo/       Seed data + demo image
 context/    10x workflow artifacts (foundation/ PRD, tech-stack, roadmap, test-plan; archive/history.md)
-postgres    separate Compose service, data in the `postgres_data` named volume
+SQLite     single file /data/paytracker.db, `app_data` named volume
 ```
 
 See `@context/foundation/prd.md` for domain rules and `@context/foundation/tech-stack.md` for stack rationale.

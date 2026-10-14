@@ -127,7 +127,7 @@ Send times and "today" follow your own time zone: it is taken from your browser 
 | `ENVIRONMENT` | no (default: `development`) | Set to `production` for any real deployment — enables the `Secure` cookie flag, rejects a weak/default `JWT_SECRET`, and disables `/docs`, `/redoc`, `/openapi.json` |
 | `JWT_SECRET` | yes | JWT signing secret — use a long random string |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | no | Login session lifetime in minutes (default: 60) |
-| `DATABASE_URL` | yes | PostgreSQL connection string |
+| `DATABASE_URL` | no | SQLite URL (default: `sqlite:///./paytracker.db`; the Docker image uses `/data/paytracker.db` on the `app_data` volume) |
 | `NEXT_PUBLIC_API_URL` | yes | Backend URL as seen by the browser. **Baked in at frontend build time**, not read at container startup — only takes effect when building the frontend yourself (`docker compose up --build`, see [Getting started](#getting-started)). The pre-built images used in [Quick start without cloning](#quick-start-without-cloning) always ship with this set to `http://localhost:8010`, since it's baked in once at release time before any deployment's real domain is known |
 | `NEXT_PUBLIC_SESSION_HEARTBEAT_SECONDS` | no | Seconds between session-expiry checks on an idle open tab (default: 180). Build-time, like `NEXT_PUBLIC_API_URL` |
 | `SMTP_HOST` | no | SMTP server for email reminders |
@@ -147,7 +147,7 @@ Copy `.env.example` to `.env`. Never commit `.env`.
 
 - **Frontend:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS, next-intl
 - **Backend:** FastAPI, Python 3.13, SQLAlchemy 2.0, Alembic, Pydantic v2
-- **Database:** PostgreSQL 17 (own Compose service)
+- **Database:** SQLite (a file on the `app_data` Compose volume)
 - **Runtime:** Docker Compose
 
 

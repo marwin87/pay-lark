@@ -1,10 +1,14 @@
 from datetime import date
 from calendar import monthrange
 
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
 from app.models.bill import BillFrequency, BillTemplate, PaymentInstance, PaymentStatus
+
+# A rival insert shows up as IntegrityError on the unique key, but on SQLite a writer whose
+# read snapshot went stale gets "database is locked" (OperationalError); the retry sees the winner.
+_WRITE_CONFLICT = (IntegrityError, OperationalError)
 
 
 def _step_months(frequency: BillFrequency, interval: int) -> int:
@@ -117,7 +121,7 @@ def backfill_template_instances(
     if db.new:
         try:
             db.commit()
-        except IntegrityError:
+        except _WRITE_CONFLICT:
             db.rollback()
 
 
@@ -133,7 +137,7 @@ def ensure_current_period_instances(db: Session, period: str, user_id: int) -> N
         try:
             db.commit()
             return
-        except IntegrityError:
+        except _WRITE_CONFLICT:
             db.rollback()
             if attempt:
                 raise
@@ -174,7 +178,7 @@ def generate_next_instance(
         db.add_all(created)
         try:
             db.commit()
-        except IntegrityError:
+        except _WRITE_CONFLICT:
             db.rollback()
     return (
         db.query(PaymentInstance)

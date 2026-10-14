@@ -23,6 +23,7 @@ Notable changes, release by release.
 - The selected month in the dashboard 12-month chart stands out more
 - Reset filters button on Payments and Bills
 - Pausing a bill hides its unpaid upcoming payments, and resuming brings them back
+- Lighter install: the database is now a single SQLite file, no separate Postgres container
 
 ### Fixes
 

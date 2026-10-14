@@ -233,7 +233,7 @@ def test_summary_month_is_the_users_month(db_session, db_sessionmaker, mail):
     # 1 April 03:30 UTC is still 31 March (20:30) in Los Angeles
     _tick(db_sessionmaker, _utc(2026, 4, 1, 3, 30))
     assert summary.call_count == 1
-    db_session.expire_all()
+    db_session.commit()  # ends the SQLite read snapshot, then reloads
     assert db_session.get(User, user_id).monthly_summary_last_sent == "2026-03"
 
     summary.reset_mock()

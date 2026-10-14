@@ -1,6 +1,7 @@
-"""Test fixtures: PostgreSQL via testcontainers + FastAPI TestClient."""
+"""Test fixtures: throwaway SQLite file + FastAPI TestClient."""
 
 import os
+import tempfile
 from datetime import date, datetime, timezone
 
 # Settings() runs at import time and warns on the weak default secret when ../.env isn't
@@ -10,6 +11,8 @@ os.environ.setdefault("JWT_SECRET", "x" * 32)  # pragma: allowlist secret
 # so the suite never depends on the developer's own .env, e.g. Europe/Warsaw, whose "today"
 # differs from UTC's for hours around midnight.
 os.environ["DEFAULT_TIMEZONE"] = "UTC"
+# Same engine as the app (pragmas, UTC datetimes), pointed at a throwaway file.
+os.environ["DATABASE_URL"] = f"sqlite:///{tempfile.mkdtemp()}/test.db"
 
 # Import models before app to (a) register them in Base.metadata for create_all
 # and (b) avoid shadowing the `app` FastAPI instance with the `app` package name.
@@ -22,13 +25,10 @@ import app.models.user  # noqa: F401
 import bcrypt
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import NullPool
-from testcontainers.postgres import PostgresContainer
 
 from app.core import rate_limit
-from app.core.database import Base, get_db
+from app.core.database import Base, engine, get_db
 from app.main import app
 
 
@@ -61,38 +61,34 @@ def _fresh_rate_limits():
 
 
 @pytest.fixture(scope="session")
-def postgres_engine():
-    with PostgresContainer("postgres:17") as pg:
-        engine = create_engine(pg.get_connection_url(), poolclass=NullPool)
-        yield engine
+def db_engine():
+    yield engine
 
 
 @pytest.fixture()
-def db_tables(postgres_engine):
-    Base.metadata.create_all(bind=postgres_engine)
+def db_tables(db_engine):
+    Base.metadata.create_all(bind=db_engine)
     yield
-    Base.metadata.drop_all(bind=postgres_engine)
+    Base.metadata.drop_all(bind=db_engine)
 
 
 @pytest.fixture()
-def db_session(postgres_engine, db_tables):
-    Session = sessionmaker(bind=postgres_engine, autocommit=False, autoflush=False)
+def db_session(db_engine, db_tables):
+    Session = sessionmaker(bind=db_engine, autocommit=False, autoflush=False)
     db = Session()
     yield db
     db.close()
 
 
 @pytest.fixture()
-def db_sessionmaker(postgres_engine, db_tables):
-    return sessionmaker(bind=postgres_engine, autocommit=False, autoflush=False)
+def db_sessionmaker(db_engine, db_tables):
+    return sessionmaker(bind=db_engine, autocommit=False, autoflush=False)
 
 
 @pytest.fixture()
-def client(postgres_engine):
-    Base.metadata.create_all(bind=postgres_engine)
-    _SessionLocal = sessionmaker(
-        bind=postgres_engine, autocommit=False, autoflush=False
-    )
+def client(db_engine):
+    Base.metadata.create_all(bind=db_engine)
+    _SessionLocal = sessionmaker(bind=db_engine, autocommit=False, autoflush=False)
 
     def _override_get_db():
         db = _SessionLocal()
@@ -105,14 +101,34 @@ def client(postgres_engine):
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
-    Base.metadata.drop_all(bind=postgres_engine)
+    Base.metadata.drop_all(bind=db_engine)
+
+
+def _end_read_snapshots(client: TestClient, db) -> None:
+    """SQLite pins a read transaction to a snapshot (Postgres READ COMMITTED does not), so the
+    test's long-lived session would miss, or fail to write over, what the app committed.
+    End its transaction around every request unless it has pending changes."""
+    real_request = client.request
+
+    def _release() -> None:
+        if not (db.new or db.dirty or db.deleted):
+            db.rollback()
+
+    def request(*args, **kwargs):
+        _release()
+        try:
+            return real_request(*args, **kwargs)
+        finally:
+            _release()
+
+    client.request = request  # type: ignore[method-assign]
 
 
 @pytest.fixture()
-def client_db(postgres_engine):
+def client_db(db_engine):
     """TestClient + direct DB session sharing the same engine."""
-    Base.metadata.create_all(bind=postgres_engine)
-    SessionLocal = sessionmaker(bind=postgres_engine, autocommit=False, autoflush=False)
+    Base.metadata.create_all(bind=db_engine)
+    SessionLocal = sessionmaker(bind=db_engine, autocommit=False, autoflush=False)
 
     def override_get_db():
         db = SessionLocal()
@@ -124,10 +140,11 @@ def client_db(postgres_engine):
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:
         db = SessionLocal()
+        _end_read_snapshots(c, db)
         yield c, db
         db.close()
     app.dependency_overrides.clear()
-    Base.metadata.drop_all(bind=postgres_engine)
+    Base.metadata.drop_all(bind=db_engine)
 
 
 def register_and_login(

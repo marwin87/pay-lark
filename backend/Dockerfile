@@ -16,7 +16,10 @@ COPY . .
 # Shared translations + locales.json, owned by the frontend (see docker-compose additional_contexts)
 COPY --from=i18n . /app/i18n
 
-RUN useradd -m appuser && chown -R appuser:appuser /app
+# SQLite lives on a volume mounted at /data (created here so it is owned by appuser)
+ENV DATABASE_URL=sqlite:////data/paytracker.db
+RUN useradd -m appuser && mkdir /data && chown -R appuser:appuser /app /data
+VOLUME /data
 USER appuser
 
 EXPOSE 8000

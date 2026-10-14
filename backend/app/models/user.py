@@ -3,10 +3,10 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ARRAY, Boolean, DateTime, Index, Integer, String, func
+from sqlalchemy import JSON, Boolean, Index, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.database import Base
+from app.core.database import Base, UTCDateTime
 from app.services.notify import decrypt_secret
 
 if TYPE_CHECKING:
@@ -31,9 +31,9 @@ class User(Base):
         String(5), nullable=True, default=None
     )
     enabled_languages: Mapped[list[str]] = mapped_column(
-        ARRAY(String(5)),
+        JSON,
         nullable=False,
-        server_default="{en,pl,de,es,it,fr,zh,nl,pt}",
+        server_default='["en","pl","de","es","it","fr","zh","nl","pt"]',
     )
     # IANA zone name; "today", the month and the reminder send time follow it.
     timezone: Mapped[str] = mapped_column(
@@ -112,17 +112,17 @@ class User(Base):
         Boolean, nullable=False, default=False, server_default="false"
     )
     share_emails: Mapped[list[str]] = mapped_column(
-        ARRAY(String(254)), nullable=False, server_default="{}"
+        JSON, nullable=False, server_default="[]"
     )
     export_fields: Mapped[list[str]] = mapped_column(
-        ARRAY(String(20)),
+        JSON,
         nullable=False,
-        server_default="{bill,category,period,due_date,amount,currency,status,paid_amount,paid_at,notes}",
+        server_default='["bill","category","period","due_date","amount","currency","status","paid_amount","paid_at","notes"]',
     )
     pdf_fields: Mapped[list[str]] = mapped_column(
-        ARRAY(String(20)),
+        JSON,
         nullable=False,
-        server_default="{bill,category,period,due_date,amount,currency,status,paid_amount,paid_at,notes}",
+        server_default='["bill","category","period","due_date","amount","currency","status","paid_amount","paid_at","notes"]',
     )
     telegram_chat_id: Mapped[str | None] = mapped_column(
         String(32), nullable=True, default=None
@@ -132,7 +132,7 @@ class User(Base):
         String(512), nullable=True, default=None
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(timezone.utc)
     )
 
     @property

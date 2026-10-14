@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 from sqlalchemy import (
     Boolean,
     Date,
-    DateTime,
     ForeignKey,
     Integer,
     JSON,
@@ -19,7 +18,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.database import Base
+from app.core.database import Base, UTCDateTime
 
 if TYPE_CHECKING:
     from app.models.category import Category
@@ -71,7 +70,7 @@ class BillTemplate(Base):
     end_period: Mapped[str | None] = mapped_column(String(7))
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(timezone.utc)
     )
 
     user: Mapped[User] = relationship(back_populates="bills")
@@ -132,7 +131,7 @@ class PaymentInstance(Base):
     status: Mapped[PaymentStatus] = mapped_column(
         String(10), nullable=False, default=PaymentStatus.upcoming
     )
-    paid_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    paid_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
     paid_amount: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
     # Per-payment amount set by the user (e.g. a known invoice); None = follow
     # the template's amount. Never touches the template or other periods.
@@ -171,10 +170,10 @@ class PaymentInstance(Base):
         Boolean, nullable=False, default=False, server_default="false"
     )
     email_sent_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True, default=None
+        UTCDateTime, nullable=True, default=None
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(timezone.utc)
     )
 
     template: Mapped["BillTemplate"] = relationship(back_populates="instances")
