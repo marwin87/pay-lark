@@ -7,7 +7,7 @@ import SearchInput from "@/components/SearchInput";
 import { resetOnboarding } from "@/components/help/OnboardingChecklist";
 
 const SECTIONS = [
-  { key: "bills", items: ["addBill", "repeat", "editBill", "pause", "resume"] },
+  { key: "bills", items: ["addBill", "draft", "repeat", "editBill", "pause", "resume"] },
   { key: "payments", items: ["seePayments", "filters", "markPaid", "editPayment", "revert", "deletePayment", "export", "share"] },
   { key: "settings", items: ["reminders", "backup", "restore", "categories", "language", "account", "install"] },
 ] as const;
@@ -44,6 +44,8 @@ export default function HelpContent({ scroll = false, onDone }: { scroll?: boole
     newBill: tBills("newBill"),
     showPaused: tBills("showPaused"),
     edit: tRow("edit"),
+    draft: tRow("draft"),
+    generatePayments: tRow("generatePayments"),
     pause: tRow("pause"),
     resume: tRow("resume"),
     markPaid: tPay("markAsPaid"),

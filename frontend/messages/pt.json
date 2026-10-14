@@ -736,7 +736,7 @@
             "progress": "{done} de {total} feitos",
             "hide": "Ocultar",
             "billT": "Adicionar a primeira fatura",
-            "billD": "Adicione cada fatura só uma vez, por exemplo a renda ou a luz. O pagamento de cada mês é criado automaticamente.",
+            "billD": "Adicione cada fatura só uma vez, por exemplo a renda ou a luz. Começa como rascunho: carregue em «Gerar pagamentos» para a ativar e depois o pagamento é criado automaticamente todos os meses.",
             "billCta": "Adicionar fatura",
             "paidT": "Marque um pagamento como pago",
             "paidD": "Quando pagar uma fatura, toque em <b>{markPaid}</b> ao lado dela.",
@@ -749,7 +749,13 @@
                 "q": "Como se adiciona uma fatura?",
                 "s1": "Abra <b>{bills}</b> e toque em <b>{newBill}</b>.",
                 "s2": "Escrever um nome, escolher uma categoria e escrever o valor.",
-                "s3": "Escolha o dia de vencimento e de quanto em quanto tempo se repete (todos os meses, todos os anos ou só uma vez). Depois guarde."
+                "s3": "Escolha o dia de vencimento e de quanto em quanto tempo se repete (todos os meses, todos os anos ou só uma vez). Depois guarde.",
+                "s4": "Uma conta nova fica como rascunho até carregar em <b>{generatePayments}</b>."
+            },
+            "draft": {
+                "q": "O que significa «Rascunho» numa conta?",
+                "s1": "Uma conta nova começa como <b>{draft}</b>. Ainda não tem pagamentos, por isso pode verificá-la e alterá-la à vontade.",
+                "s2": "Carregue em <b>{generatePayments}</b> e confirme. Os pagamentos são criados a partir do mês inicial e os novos aparecem sozinhos. Depois, o mês inicial de uma conta mensal já não pode ser alterado."
             },
             "repeat": {
                 "q": "A fatura não é mensal. E agora?",

@@ -736,7 +736,7 @@
             "progress": "{done} of {total} done",
             "hide": "Hide",
             "billT": "Add the first bill",
-            "billD": "Add each bill once, like rent or electricity. Its payment is created automatically every month.",
+            "billD": "Add each bill once, like rent or electricity. It starts as a draft: press “Generate payments” to make it live, and its payment is then created automatically every month.",
             "billCta": "Add bill",
             "paidT": "Mark a payment as paid",
             "paidD": "After a bill is paid, press <b>{markPaid}</b> next to it.",
@@ -749,7 +749,13 @@
                 "q": "How is a bill added?",
                 "s1": "Open <b>{bills}</b> and press <b>{newBill}</b>.",
                 "s2": "Type a name, pick a category and write the amount.",
-                "s3": "Choose the day it is due and how often it comes back (every month, every year or just once). Then save it."
+                "s3": "Choose the day it is due and how often it comes back (every month, every year or just once). Then save it.",
+                "s4": "A new bill stays a draft until <b>{generatePayments}</b> is pressed."
+            },
+            "draft": {
+                "q": "What does “Draft” on a bill mean?",
+                "s1": "A new bill starts as a <b>{draft}</b>. It has no payments yet, so it can be checked and changed freely.",
+                "s2": "Press <b>{generatePayments}</b> and confirm. Payments are created from the starting month on and new ones appear automatically. After that, a monthly bill’s starting month can no longer be changed."
             },
             "repeat": {
                 "q": "The bill is not monthly. What now?",

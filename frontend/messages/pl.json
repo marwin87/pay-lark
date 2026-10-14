@@ -736,7 +736,7 @@
             "progress": "Zrobione: {done} z {total}",
             "hide": "Ukryj",
             "billT": "Dodaj pierwszy rachunek",
-            "billD": "Dodaj każdy rachunek tylko raz, np. czynsz albo prąd. Płatność co miesiąc zostanie utworzona automatycznie.",
+            "billD": "Dodaj każdy rachunek tylko raz, np. czynsz albo prąd. Zaczyna jako szkic: naciśnij „Generuj płatności”, żeby ruszył, a płatność będzie potem tworzona automatycznie co miesiąc.",
             "billCta": "Dodaj rachunek",
             "paidT": "Oznacz płatność jako opłaconą",
             "paidD": "Po zapłaceniu rachunku nacisnąć <b>{markPaid}</b> obok niego.",
@@ -749,7 +749,13 @@
                 "q": "Jak dodać rachunek?",
                 "s1": "Wejdź w <b>{bills}</b> i naciśnij <b>{newBill}</b>.",
                 "s2": "Wpisz nazwę, wybierz kategorię i wpisz kwotę.",
-                "s3": "Wybierz dzień płatności i jak często wraca (co miesiąc, co rok albo jednorazowo). Potem zapisz."
+                "s3": "Wybierz dzień płatności i jak często wraca (co miesiąc, co rok albo jednorazowo). Potem zapisz.",
+                "s4": "Nowy rachunek jest szkicem, dopóki nie naciśniesz <b>{generatePayments}</b>."
+            },
+            "draft": {
+                "q": "Co oznacza „Szkic” przy rachunku?",
+                "s1": "Nowy rachunek zaczyna jako <b>{draft}</b>. Nie ma jeszcze płatności, więc można go spokojnie sprawdzić i zmienić.",
+                "s2": "Naciśnij <b>{generatePayments}</b> i potwierdź. Płatności powstaną od miesiąca startowego, a kolejne pojawią się automatycznie. Potem miesiąca startowego rachunku miesięcznego nie da się już zmienić."
             },
             "repeat": {
                 "q": "Rachunek nie powtarza się co miesiąc. Co robić?",

@@ -11,6 +11,7 @@ Notable changes, release by release.
 - Upcoming payments show days left
 - Payment popups are tinted by payment status
 - Collapse/expand all tiles in Settings
+- Help explains draft bills and “Generate payments”
 - “Get started” card moved to the Dashboard
 - Dashboard currency switch adapts to screen width and remembers your choice
 

@@ -736,7 +736,7 @@
             "progress": "{done} sur {total} faites",
             "hide": "Masquer",
             "billT": "Ajouter la première facture",
-            "billD": "Ajoutez chaque facture une seule fois, par exemple le loyer ou l’électricité. Son paiement est créé automatiquement chaque mois.",
+            "billD": "Ajoutez chaque facture une seule fois, par exemple le loyer ou l’électricité. Elle démarre en brouillon : appuyez sur « Générer les paiements » pour l’activer, puis son paiement est créé automatiquement chaque mois.",
             "billCta": "Ajouter une facture",
             "paidT": "Marquer un paiement comme payé",
             "paidD": "Après le paiement d’une facture, appuyer sur <b>{markPaid}</b> à côté.",
@@ -749,7 +749,13 @@
                 "q": "Comment ajouter une facture ?",
                 "s1": "Ouvrez <b>{bills}</b> et appuyez sur <b>{newBill}</b>.",
                 "s2": "Saisir un nom, choisir une catégorie et écrire le montant.",
-                "s3": "Choisissez le jour d’échéance et la fréquence (chaque mois, chaque année ou une seule fois). Puis enregistrez."
+                "s3": "Choisissez le jour d’échéance et la fréquence (chaque mois, chaque année ou une seule fois). Puis enregistrez.",
+                "s4": "Une nouvelle facture reste un brouillon tant que <b>{generatePayments}</b> n’est pas pressé."
+            },
+            "draft": {
+                "q": "Que signifie « Brouillon » sur une facture ?",
+                "s1": "Une nouvelle facture démarre en <b>{draft}</b>. Elle n’a pas encore de paiements, on peut donc la vérifier et la modifier librement.",
+                "s2": "Appuyez sur <b>{generatePayments}</b> et confirmez. Les paiements sont créés à partir du mois de début et les suivants apparaissent automatiquement. Ensuite, le mois de début d’une facture mensuelle ne peut plus être modifié."
             },
             "repeat": {
                 "q": "La facture n’est pas mensuelle. Que faire ?",

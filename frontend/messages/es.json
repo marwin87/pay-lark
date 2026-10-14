@@ -736,7 +736,7 @@
             "progress": "{done} de {total} hechos",
             "hide": "Ocultar",
             "billT": "Añadir la primera factura",
-            "billD": "Añade cada factura una sola vez, por ejemplo el alquiler o la luz. Su pago se crea automáticamente cada mes.",
+            "billD": "Añade cada factura una sola vez, por ejemplo el alquiler o la luz. Empieza como borrador: pulsa «Generar pagos» para activarla y después su pago se crea automáticamente cada mes.",
             "billCta": "Añadir factura",
             "paidT": "Marca un pago como pagado",
             "paidD": "Al pagar una factura, pulsar <b>{markPaid}</b> a su lado.",
@@ -749,7 +749,13 @@
                 "q": "¿Cómo se añade una factura?",
                 "s1": "Abre <b>{bills}</b> y pulsa <b>{newBill}</b>.",
                 "s2": "Escribir un nombre, elegir una categoría y escribir el importe.",
-                "s3": "Elige el día de vencimiento y cada cuánto se repite (cada mes, cada año o una sola vez). Luego guarda."
+                "s3": "Elige el día de vencimiento y cada cuánto se repite (cada mes, cada año o una sola vez). Luego guarda.",
+                "s4": "Una factura nueva sigue siendo borrador hasta que se pulsa <b>{generatePayments}</b>."
+            },
+            "draft": {
+                "q": "¿Qué significa «Borrador» en una factura?",
+                "s1": "Una factura nueva empieza como <b>{draft}</b>. Aún no tiene pagos, así que se puede revisar y cambiar con calma.",
+                "s2": "Pulsa <b>{generatePayments}</b> y confirma. Los pagos se crean desde el mes de inicio y los nuevos aparecen solos. Después, el mes de inicio de una factura mensual ya no se puede cambiar."
             },
             "repeat": {
                 "q": "La factura no es mensual. ¿Qué hacer?",

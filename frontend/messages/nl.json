@@ -736,7 +736,7 @@
             "progress": "{done} van {total} klaar",
             "hide": "Verbergen",
             "billT": "De eerste rekening toevoegen",
-            "billD": "Voeg elke rekening maar één keer toe, zoals huur of stroom. De betaling wordt elke maand automatisch aangemaakt.",
+            "billD": "Voeg elke rekening maar één keer toe, zoals huur of stroom. Ze start als concept: druk op “Betalingen genereren” om haar actief te maken, daarna wordt de betaling elke maand automatisch aangemaakt.",
             "billCta": "Rekening toevoegen",
             "paidT": "Markeer een betaling als betaald",
             "paidD": "Na het betalen van een rekening ernaast op <b>{markPaid}</b> tikken.",
@@ -749,7 +749,13 @@
                 "q": "Hoe wordt een rekening toegevoegd?",
                 "s1": "Open <b>{bills}</b> en tik op <b>{newBill}</b>.",
                 "s2": "Typ een naam, kies een categorie en vul het bedrag in.",
-                "s3": "Kies de vervaldag en hoe vaak hij terugkomt (elke maand, elk jaar of eenmalig). Sla het daarna op."
+                "s3": "Kies de vervaldag en hoe vaak hij terugkomt (elke maand, elk jaar of eenmalig). Sla het daarna op.",
+                "s4": "Een nieuwe rekening blijft een concept tot je op <b>{generatePayments}</b> drukt."
+            },
+            "draft": {
+                "q": "Wat betekent “Concept” bij een rekening?",
+                "s1": "Een nieuwe rekening start als <b>{draft}</b>. Ze heeft nog geen betalingen, dus je kunt haar rustig controleren en aanpassen.",
+                "s2": "Druk op <b>{generatePayments}</b> en bevestig. De betalingen worden vanaf de startmaand aangemaakt en nieuwe verschijnen vanzelf. Daarna kan de startmaand van een maandelijkse rekening niet meer worden gewijzigd."
             },
             "repeat": {
                 "q": "De rekening is niet maandelijks. Wat nu?",

@@ -736,7 +736,7 @@
             "progress": "{done} von {total} erledigt",
             "hide": "Ausblenden",
             "billT": "Erste Rechnung hinzufügen",
-            "billD": "Jede Rechnung nur einmal hinzufügen, z. B. Miete oder Strom. Die Zahlung wird jeden Monat automatisch angelegt.",
+            "billD": "Jede Rechnung nur einmal hinzufügen, z. B. Miete oder Strom. Sie startet als Entwurf: „Zahlungen erzeugen“ drücken, damit sie aktiv wird; danach wird die Zahlung jeden Monat automatisch angelegt.",
             "billCta": "Rechnung hinzufügen",
             "paidT": "Eine Zahlung als bezahlt markieren",
             "paidD": "Nach dem Bezahlen einer Rechnung daneben auf <b>{markPaid}</b> tippen.",
@@ -749,7 +749,13 @@
                 "q": "Wie wird eine Rechnung hinzugefügt?",
                 "s1": "Öffne <b>{bills}</b> und tippe auf <b>{newBill}</b>.",
                 "s2": "Einen Namen eingeben, eine Kategorie wählen und den Betrag schreiben.",
-                "s3": "Den Fälligkeitstag wählen und wie oft sie wiederkommt (jeden Monat, jedes Jahr oder einmalig). Dann speichern."
+                "s3": "Den Fälligkeitstag wählen und wie oft sie wiederkommt (jeden Monat, jedes Jahr oder einmalig). Dann speichern.",
+                "s4": "Eine neue Rechnung bleibt ein Entwurf, bis <b>{generatePayments}</b> gedrückt wird."
+            },
+            "draft": {
+                "q": "Was bedeutet „Entwurf“ bei einer Rechnung?",
+                "s1": "Eine neue Rechnung startet als <b>{draft}</b>. Sie hat noch keine Zahlungen und kann in Ruhe geprüft und geändert werden.",
+                "s2": "<b>{generatePayments}</b> drücken und bestätigen. Die Zahlungen werden ab dem Startmonat angelegt, neue kommen automatisch dazu. Danach lässt sich der Startmonat einer monatlichen Rechnung nicht mehr ändern."
             },
             "repeat": {
                 "q": "Die Rechnung kommt nicht monatlich. Was tun?",
