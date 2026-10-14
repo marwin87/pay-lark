@@ -25,7 +25,7 @@ export default function LanguageToggle() {
         aria-label={t("ariaLabel")}
         className={MENU_ROW_CLASS}
       >
-        <Languages className="h-[18px] w-[18px] md:h-[15px] md:w-[15px]" />
+        <Languages className="h-[20px] w-[20px] shrink-0 md:h-[17px] md:w-[17px]" />
         <span>{t("title")}</span>
         <span className="ml-auto flex items-center gap-1 text-[13px] md:text-xs font-normal text-slate-400 dark:text-slate-500">
           {current?.flag} {current?.name}

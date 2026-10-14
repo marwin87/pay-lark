@@ -22,6 +22,7 @@ import MonthSummaryCard, { CARD_CLASS } from "@/components/dashboard/MonthSummar
 import CategoryDonut from "@/components/dashboard/CategoryDonut";
 import TrendChart from "@/components/dashboard/TrendChart";
 import OnboardingChecklist from "@/components/help/OnboardingChecklist";
+import CurrencySwitch from "@/components/dashboard/CurrencySwitch";
 import MonthNav from "@/components/dashboard/MonthNav";
 import { useSwipe } from "@/hooks/useSwipe";
 
@@ -124,28 +125,13 @@ export default function DashboardPage() {
       {data && summary && currency && (
         <div className="mb-8 flex flex-col gap-4">
           {currencies.length > 1 && (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                {t("summary.currency")}
-              </span>
-              <div role="group" aria-label={t("summary.currency")} className="flex flex-wrap items-center gap-2">
-                {currencies.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    aria-pressed={c === currency}
-                    onClick={() => setSelectedCurrency(c)}
-                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
-                      c === currency
-                        ? "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900/30 dark:text-green-300"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-green-200 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-800 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-300"
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <CurrencySwitch
+              currencies={currencies}
+              active={currenciesByVolume(data.instances, [])}
+              value={currency}
+              onChange={setSelectedCurrency}
+              label={t("summary.currency")}
+            />
           )}
           <div {...swipe}>
             <MonthSummaryCard

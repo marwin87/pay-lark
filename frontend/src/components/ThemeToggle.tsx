@@ -33,7 +33,7 @@ export default function ThemeToggle() {
         suppressHydrationWarning
         className={MENU_ROW_CLASS}
       >
-        <Palette className="h-[18px] w-[18px] md:h-[15px] md:w-[15px]" />
+        <Palette className="h-[20px] w-[20px] shrink-0 md:h-[17px] md:w-[17px]" />
         <span>{t("label")}</span>
         <span
           suppressHydrationWarning

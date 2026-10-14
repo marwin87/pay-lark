@@ -153,7 +153,7 @@ export default function TrendChart({ points: initialPoints, currency, month, min
                   onFocus={() => setActive(i)}
                   onClick={() => { setActive(i); if (b.period >= minMonth && b.period <= maxMonth) onSelectMonth(b.period); }}
                 >
-                  <rect x={LEFT + i * step} y={TOP} width={step} height={BASE - TOP + 24} rx={6} strokeWidth={2}
+                  <rect x={LEFT + i * step} y={TOP} width={step} height={BASE - TOP + 29} rx={6} strokeWidth={2}
                     className={`stroke-transparent ${isSel ? "fill-slate-100 dark:fill-slate-700/60" : "fill-transparent"}`} />
                   {b.paid > 0 && (
                     <rect x={x} y={y(b.paid)} width={bw} height={BASE - y(b.paid)} rx={2}

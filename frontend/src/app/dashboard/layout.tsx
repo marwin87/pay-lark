@@ -367,7 +367,7 @@ export default function DashboardLayout({
               )}
               <div className="flex flex-col gap-0.5">
                 <Link href={SETTINGS_ITEM.href} onClick={() => setMenuOpen(false)} className={MENU_ROW_CLASS}>
-                  <Settings className="h-[18px] w-[18px] md:h-[15px] md:w-[15px]" />
+                  <Settings className="h-[18px] w-[18px] shrink-0 md:h-[15px] md:w-[15px]" />
                   {t(SETTINGS_ITEM.labelKey)}
                 </Link>
                 <ThemeToggle />
@@ -377,7 +377,7 @@ export default function DashboardLayout({
                   onClick={() => { setMenuOpen(false); logout(); }}
                   className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-medium text-slate-600 transition-all md:gap-2 md:rounded-lg md:py-2 md:text-sm hover:bg-red-50 hover:text-red-600 dark:text-slate-400 dark:hover:bg-red-900/20 dark:hover:text-red-400"
                 >
-                  <LogOut className="h-[18px] w-[18px] md:h-[15px] md:w-[15px]" />
+                  <LogOut className="h-[18px] w-[18px] shrink-0 md:h-[15px] md:w-[15px]" />
                   {t("logOut")}
                 </button>
               </div>

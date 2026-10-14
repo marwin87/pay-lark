@@ -16,6 +16,7 @@ Notable changes, release by release.
 ### Fixes
 
 - The “Get started” card is no longer hidden on a new account because it was hidden on another one
+- UI adjustments
 
 ## v1.4.0 — 14-10-2026
 
