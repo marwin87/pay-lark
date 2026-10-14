@@ -6,15 +6,18 @@ export default function DialogSubject({
   meta,
   dotClass,
   right,
+  toneClass = "border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900/40",
 }: {
   name: string;
   meta?: string;
   /** Category swatch classes (see categorySwatchClass). */
   dotClass?: string;
   right?: ReactNode;
+  /** Border + background classes; defaults to neutral slate. */
+  toneClass?: string;
 }) {
   return (
-    <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-900/40">
+    <div className={`mt-3 flex items-center gap-3 rounded-xl border px-3 py-2.5 ${toneClass}`}>
       {dotClass && <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${dotClass}`} />}
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{name}</p>

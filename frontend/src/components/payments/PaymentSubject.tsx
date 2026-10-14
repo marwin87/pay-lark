@@ -7,6 +7,7 @@ import { useFrequencyLabel } from "@/lib/frequency";
 import type { PaymentInstanceOut } from "@/lib/payments-api";
 import { formatAmount } from "@/lib/summary";
 import DialogSubject from "@/components/ui/DialogSubject";
+import { usePaymentTone } from "@/lib/payment-tone";
 
 /** The payment a popup acts on: category dot, name, category · frequency, amount and due date. */
 export default function PaymentSubject({ instance }: { instance: PaymentInstanceOut }) {
@@ -14,6 +15,7 @@ export default function PaymentSubject({ instance }: { instance: PaymentInstance
   const locale = useLocale();
   const { decimalSeparator } = useAppLocale();
   const frequencyLabel = useFrequencyLabel();
+  const tone = usePaymentTone(instance);
   const amount = instance.status === "paid" && instance.paid_amount ? instance.paid_amount : instance.amount;
   const due = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(
     new Date(instance.due_date + "T00:00:00Z"),
@@ -21,6 +23,7 @@ export default function PaymentSubject({ instance }: { instance: PaymentInstance
   return (
     <DialogSubject
       name={instance.bill_name}
+      toneClass={tone.subject}
       dotClass={categorySwatchClass(instance.category.color)}
       meta={`${categoryLabel(instance.category, tCat)} · ${frequencyLabel(instance.frequency, instance.interval)}`}
       right={
