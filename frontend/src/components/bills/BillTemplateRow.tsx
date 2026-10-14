@@ -87,6 +87,11 @@ export default function BillTemplateRow({
   const { decimalSeparator } = useAppLocale();
 
   const isDraft = !template.is_activated;
+  const ribbon = template.is_archived
+    ? { label: tPage("paused"), color: "bg-slate-500" }
+    : isDraft
+      ? { label: t("draft"), color: "bg-amber-500" }
+      : null;
   const [activating, setActivating] = useState(false);
 
   async function handleActivate() {
@@ -108,18 +113,20 @@ export default function BillTemplateRow({
     <div
       id={`bill-${template.id}`}
       className={`bill-row group relative rounded-xl border ${
-        isDraft ? "overflow-hidden border-dashed border-slate-400 dark:border-slate-500" : "border-slate-200"
+        isDraft ? "border-dashed border-slate-400 dark:border-slate-500" : "border-slate-200"
       } bg-white shadow-sm transition-shadow duration-500 dark:bg-slate-800 dark:border-slate-700 border-l-4 ${leftBorder} ${
         highlighted ? "bill-row-highlight ring-2 ring-green-200 dark:ring-green-800" : ""
       } ${template.is_archived ? "opacity-70" : ""}`}
     >
-      {isDraft && (
-        <span className="pointer-events-none absolute -left-9 top-4 w-32 -rotate-45 bg-amber-500 py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow">
-          {t("draft")}
-        </span>
+      {ribbon && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
+          <span className={`absolute -left-9 top-5 w-32 -rotate-45 ${ribbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
+            {ribbon.label}
+          </span>
+        </div>
       )}
       {/* Collapsed row */}
-      <div className={`flex flex-col gap-3 py-3 pr-4 sm:flex-row sm:items-center ${isDraft ? "pl-14" : "pl-4"}`}>
+      <div className={`flex flex-col gap-3 py-3 pr-4 sm:flex-row sm:items-center ${ribbon ? "pl-[58px]" : "pl-4"}`}>
         {/* Two-line content */}
         <div className="flex flex-1 flex-col min-w-0 gap-0.5">
           {/* Line 1: name */}
@@ -127,11 +134,6 @@ export default function BillTemplateRow({
             <span className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">
               {template.name}
             </span>
-            {template.is_archived && (
-              <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-                {tPage("paused")}
-              </span>
-            )}
           </div>
 
           {/* Line 2: amount · frequency · due */}

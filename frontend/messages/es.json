@@ -244,6 +244,8 @@
         "emptyHelp": "Los pagos aparecen aquí solos en cuanto añades una factura en «Facturas»."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {en # día} other {en # días}}",
+        "lastRibbon": "Última",
         "status": {
             "upcoming": "Próximo",
             "overdue": "Vencido",

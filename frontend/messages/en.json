@@ -244,6 +244,8 @@
         "emptyHelp": "Payments show up here by themselves once a bill is added in “Bills”."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {in # day} other {in # days}}",
+        "lastRibbon": "Last",
         "status": {
             "upcoming": "Upcoming",
             "overdue": "Overdue",

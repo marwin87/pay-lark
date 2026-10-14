@@ -244,6 +244,8 @@
         "emptyHelp": "Płatności pojawią się tu same, po dodaniu rachunku w zakładce „Rachunki”."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {za # dzień} few {za # dni} many {za # dni} other {za # dnia}}",
+        "lastRibbon": "Ostatnia",
         "status": {
             "upcoming": "Nadchodzące",
             "overdue": "Zaległe",

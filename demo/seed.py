@@ -273,6 +273,41 @@ def inject_multi_day_bills(data: dict) -> dict:
     return data
 
 
+def inject_last_payment_bill(data: dict) -> dict:
+    """A fixed-term bill whose final instalment is this month, so the Payments page shows
+    the "Last" ribbon on the month it opens to, whenever the script runs."""
+    today = today_in_demo_zone()
+    EDUCATION = 1
+
+    def period_at(offset: int) -> tuple[int, int]:
+        idx = today.year * 12 + today.month - 1 + offset
+        return idx // 12, idx % 12 + 1
+
+    sy, sm = period_at(-5)
+    cy, cm = period_at(0)
+    data["bill_templates"].append({
+        "id": 34, "name": "Course Instalments", "category_id": EDUCATION,
+        "frequency": "monthly", "interval": 1, "amount": 75.0, "currency": "EUR",
+        "due_day": 28, "notes": "Six instalments, this is the last one",
+        "is_archived": False, "start_period": f"{sy}-{sm:02d}",
+        "end_period": f"{cy}-{cm:02d}", "created_at": f"{sy}-{sm:02d}-01T08:00:00+00:00",
+    })
+    for n, offset in enumerate(range(-5, 1)):
+        y, m = period_at(offset)
+        due = date(y, m, 28)
+        paid = offset < 0
+        paid_at = f"{date(y, m, 27).isoformat()}T09:00:00+00:00" if paid else None
+        status = "paid" if paid else ("overdue" if due < today else "upcoming")
+        data["payment_instances"].append({
+            "id": 7500 + n, "bill_id": 34, "period": f"{y}-{m:02d}", "slot": 0,
+            "due_date": due.isoformat(), "amount": 75.0, "status": status,
+            "paid_at": paid_at, "paid_amount": 75.0 if paid else None, "notes": None,
+            "created_at": f"{y}-{m:02d}-01T08:00:00+00:00",
+            "reminder_sent_upcoming": True, "reminder_sent_overdue": status == "overdue",
+        })
+    return data
+
+
 def inject_draft_bills(data: dict) -> dict:
     """Bills that are not activated yet (no payments exist): a monthly one starting next
     month, an annual one, and a one-off with its dates kept on the draft."""
@@ -344,6 +379,7 @@ def restore(session: requests.Session, token: str) -> None:
     data = inject_current_month_cases(data)
     data = inject_history(data)
     data = inject_multi_day_bills(data)
+    data = inject_last_payment_bill(data)
     data = inject_draft_bills(data)
     payload = json.dumps(data)
     r = session.post(

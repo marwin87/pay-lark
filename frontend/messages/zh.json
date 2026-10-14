@@ -244,6 +244,8 @@
         "emptyHelp": "在“账单”中添加账单后，付款会自动出现在这里。"
     },
     "PaymentRow": {
+        "inDays": "{count}天后",
+        "lastRibbon": "最后一笔",
         "status": {
             "upcoming": "待付款",
             "overdue": "已逾期",

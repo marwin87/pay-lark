@@ -8,14 +8,6 @@ import { todayIn } from "@/lib/today";
 import type { PaymentInstanceOut } from "@/lib/payments-api";
 import { formatAmount } from "@/lib/summary";
 
-const STATUS_STYLES: Record<string, string> = {
-  upcoming:
-    "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-  overdue:
-    "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-  paid: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
-};
-
 interface Props {
   instance: PaymentInstanceOut;
   onMarkPaid: (instance: PaymentInstanceOut) => void;
@@ -56,7 +48,19 @@ export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, o
   const dueDateFormatted = formatDate(dueDate);
 
   // "Today" in the profile's zone, the same calendar the backend uses for overdue
-  const isDueToday = instance.due_date === todayIn(timeZone);
+  const today = todayIn(timeZone);
+  const isDueToday = instance.due_date === today;
+  const daysUntil = Math.round((Date.parse(instance.due_date) - Date.parse(today)) / 86_400_000);
+
+  // Status ribbon only for what needs action; upcoming gets a quieter marker instead.
+  const statusRibbon =
+    instance.status === "overdue"
+      ? { label: t("status.overdue"), color: "bg-red-600" }
+      : isDueToday && instance.status === "upcoming"
+        ? { label: t("dueToday"), color: "bg-orange-500" }
+        : null;
+  const isCalmUpcoming = instance.status === "upcoming" && !statusRibbon;
+  const ribbonCount = (statusRibbon ? 1 : 0) + (instance.is_last ? 1 : 0);
 
   function tileGradientClass(): string {
     const base = "bg-gradient-to-r from-0% to-70%";
@@ -87,16 +91,37 @@ export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, o
     : null;
 
   return (
-    <div className={`relative max-sm:pb-[76px] rounded-xl border border-slate-200 px-4 py-3 shadow-sm dark:border-slate-700 transition-colors ${tileGradientClass()}`}>
-      <div className="flex flex-col gap-0.5">
+    <div className={`relative max-sm:pb-[76px] rounded-xl border border-slate-200 px-4 py-3 shadow-sm dark:border-slate-700 transition-colors ${isCalmUpcoming ? "border-l-4 border-l-sky-500" : ""} ${tileGradientClass()}`}>
+      {ribbonCount > 0 && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
+          {statusRibbon && (
+            <span className={`absolute -left-9 top-5 w-32 -rotate-45 ${statusRibbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
+              {statusRibbon.label}
+            </span>
+          )}
+          {instance.is_last && (
+            <span
+              aria-hidden="true"
+              className={`absolute -rotate-45 bg-violet-600 py-0.5 text-center font-bold uppercase tracking-wide text-white shadow ${
+                statusRibbon ? "-left-[1.6rem] top-[1.9rem] w-36 text-[10px]" : "-left-9 top-5 w-32 text-[11px]"
+              }`}
+            >
+              {t("lastRibbon")}
+            </span>
+          )}
+        </div>
+      )}
+      <div className={`flex flex-col gap-0.5 ${ribbonCount === 2 ? "pl-[66px]" : ribbonCount === 1 ? "pl-[50px]" : ""}`}>
         {/* Name */}
         <div className="flex items-center gap-2 min-w-0">
+          {instance.is_last && <span className="sr-only">{t("lastPayment")}</span>}
           <span className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">
             {instance.bill_name}
           </span>
-          {instance.is_last && (
-            <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400 shrink-0">
-              {t("lastPayment")}
+          {isCalmUpcoming && (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+              {t("inDays", { count: daysUntil })}
             </span>
           )}
         </div>
@@ -112,22 +137,16 @@ export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, o
             <span className="text-slate-400 dark:text-slate-500 shrink-0">
               {t("due")} {dueDateFormatted}
             </span>
-            <span className="text-slate-300 dark:text-slate-600">•</span>
-            {instance.status === "paid" && paidAtFormatted ? (
-              <span className="text-emerald-600 dark:text-emerald-400 truncate">
-                {t("paidOn")} {paidAtFormatted}
-                {instance.paid_amount != null && parseFloat(instance.paid_amount) > 0 && (
-                  <> · {formatAmount(instance.paid_amount, decimalSeparator)} {instance.currency}</>
-                )}
-              </span>
-            ) : isDueToday && instance.status === "upcoming" ? (
-              <span className="rounded-full px-2 py-0.5 text-xs font-medium shrink-0 bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
-                {t("dueToday")}
-              </span>
-            ) : (
-              <span className={`rounded-full px-2 py-0.5 text-xs font-medium shrink-0 ${STATUS_STYLES[instance.status] ?? ""}`}>
-                {t(`status.${instance.status}` as Parameters<typeof t>[0])}
-              </span>
+            {instance.status === "paid" && paidAtFormatted && (
+              <>
+                <span className="text-slate-300 dark:text-slate-600">•</span>
+                <span className="text-emerald-600 dark:text-emerald-400 truncate">
+                  {t("paidOn")} {paidAtFormatted}
+                  {instance.paid_amount != null && parseFloat(instance.paid_amount) > 0 && (
+                    <> · {formatAmount(instance.paid_amount, decimalSeparator)} {instance.currency}</>
+                  )}
+                </span>
+              </>
             )}
           </div>
 

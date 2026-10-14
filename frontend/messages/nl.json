@@ -244,6 +244,8 @@
         "emptyHelp": "Betalingen verschijnen hier vanzelf zodra een rekening is toegevoegd bij “Rekeningen”."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {over # dag} other {over # dagen}}",
+        "lastRibbon": "Laatste",
         "status": {
             "upcoming": "Aankomend",
             "overdue": "Te laat",

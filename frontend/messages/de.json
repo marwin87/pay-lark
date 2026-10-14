@@ -244,6 +244,8 @@
         "emptyHelp": "Zahlungen erscheinen hier von selbst, sobald unter „Rechnungen“ eine Rechnung hinzugefügt wird."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {in # Tag} other {in # Tagen}}",
+        "lastRibbon": "Letzte",
         "status": {
             "upcoming": "Bevorstehend",
             "overdue": "Überfällig",

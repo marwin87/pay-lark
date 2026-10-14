@@ -244,6 +244,8 @@
         "emptyHelp": "I pagamenti compaiono qui da soli appena aggiungi una bolletta in «Bollette»."
     },
     "PaymentRow": {
+        "inDays": "{count, plural, one {tra # giorno} other {tra # giorni}}",
+        "lastRibbon": "Ultima",
         "status": {
             "upcoming": "In arrivo",
             "overdue": "Scaduto",
