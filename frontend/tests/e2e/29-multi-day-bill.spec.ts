@@ -35,6 +35,7 @@ test('a bill with three days gets three payments, and editing the days updates t
   // The bills list shows every day
   await expect(page.getByText(/Due on/)).toContainText('3, 10, 17');
   await page.getByRole('button', { name: 'Generate payments' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Generate payments' }).click();
 
   // One tile per day on the Payments page
   await page.goto('/dashboard/payments');

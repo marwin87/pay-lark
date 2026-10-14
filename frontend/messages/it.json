@@ -123,6 +123,7 @@
         "billPaused": "«{name}» in pausa",
         "billResumed": "«{name}» ripresa",
         "billActivated": "«{name}» attivato: pagamenti generati",
+        "activateError": "Impossibile generare i pagamenti.",
         "showPaused": "Mostra in pausa",
         "paused": "In pausa",
         "resumeError": "Impossibile riprendere la bolletta.",
@@ -706,6 +707,13 @@
         "cancel": "Annulla",
         "pause": "Metti in pausa",
         "pausing": "Messa in pausa…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Generare i pagamenti?",
+        "description": "I pagamenti vengono creati ora, dal mese di inizio, e i successivi compaiono automaticamente. Il mese di inizio di una bolletta mensile non potrà più essere modificato.",
+        "cancel": "Annulla",
+        "confirm": "Genera pagamenti",
+        "activating": "Generazione…"
     },
     "ResumeConfirmDialog": {
         "title": "Riprendere la bolletta?",

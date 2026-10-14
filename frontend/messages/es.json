@@ -123,6 +123,7 @@
         "billPaused": "«{name}» en pausa",
         "billResumed": "«{name}» reanudada",
         "billActivated": "«{name}» activado: pagos generados",
+        "activateError": "No se pudieron generar los pagos.",
         "showPaused": "Mostrar en pausa",
         "paused": "En pausa",
         "resumeError": "No se pudo reanudar la factura.",
@@ -706,6 +707,13 @@
         "cancel": "Cancelar",
         "pause": "Pausar factura",
         "pausing": "Pausando…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "¿Generar pagos?",
+        "description": "Los pagos se crean ahora, desde el mes de inicio, y los siguientes aparecen solos. El mes de inicio de una factura mensual ya no se podrá cambiar.",
+        "cancel": "Cancelar",
+        "confirm": "Generar pagos",
+        "activating": "Generando…"
     },
     "ResumeConfirmDialog": {
         "title": "¿Reanudar factura?",

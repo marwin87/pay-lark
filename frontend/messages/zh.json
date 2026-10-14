@@ -123,6 +123,7 @@
         "billPaused": "已暂停“{name}”",
         "billResumed": "已恢复“{name}”",
         "billActivated": "“{name}”已启用——付款已生成",
+        "activateError": "生成付款失败。",
         "showPaused": "显示已暂停",
         "paused": "已暂停",
         "resumeError": "恢复账单失败。",
@@ -706,6 +707,13 @@
         "cancel": "取消",
         "pause": "暂停账单",
         "pausing": "正在暂停…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "生成付款？",
+        "description": "将从起始月份起立即创建付款，之后的付款会自动出现。每月账单的起始月份之后将无法更改。",
+        "cancel": "取消",
+        "confirm": "生成付款",
+        "activating": "正在生成…"
     },
     "ResumeConfirmDialog": {
         "title": "恢复账单？",

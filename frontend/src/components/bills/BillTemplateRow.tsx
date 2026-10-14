@@ -8,7 +8,6 @@ import {
   ChevronUp,
   NotebookPen,
 } from "lucide-react";
-import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
 import BillTemplateForm from "./BillTemplateForm";
@@ -25,7 +24,7 @@ interface Props {
   onSave: (data: BillTemplateUpdate) => Promise<void>;
   onPause: () => void;
   onResume: () => void;
-  onActivate: () => Promise<void>;
+  onActivate: () => void;
 }
 
 export function formatDueLabel(template: BillTemplateOut, locale: string): string | null {
@@ -92,17 +91,6 @@ export default function BillTemplateRow({
     : isDraft
       ? { label: t("draft"), color: "bg-amber-500" }
       : null;
-  const [activating, setActivating] = useState(false);
-
-  async function handleActivate() {
-    if (activating) return;
-    setActivating(true);
-    try {
-      await onActivate();
-    } finally {
-      setActivating(false);
-    }
-  }
 
   const dueLabel = formatDueLabel(template, locale);
 
@@ -178,10 +166,9 @@ export default function BillTemplateRow({
             </button>
             {isDraft && !template.is_archived && (
               <button
-                onClick={handleActivate}
-                disabled={activating}
+                onClick={onActivate}
                 aria-label={t("generatePayments")}
-                className="flex items-center gap-1.5 rounded-xl border border-transparent bg-emerald-600 px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-xl border border-transparent bg-emerald-600 px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 "
               >
                 <Rocket className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />
                 <span>{t("generatePayments")}</span>

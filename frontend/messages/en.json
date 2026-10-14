@@ -123,6 +123,7 @@
         "billPaused": "“{name}” paused",
         "billResumed": "“{name}” resumed",
         "billActivated": "“{name}” is live — payments generated",
+        "activateError": "Failed to generate payments.",
         "showPaused": "Show paused",
         "paused": "Paused",
         "resumeError": "Failed to resume bill.",
@@ -706,6 +707,13 @@
         "cancel": "Cancel",
         "pause": "Pause bill",
         "pausing": "Pausing…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Generate payments?",
+        "description": "Its payments are created now, from the starting month on, and new ones appear automatically. A monthly bill's starting month can no longer be changed.",
+        "cancel": "Cancel",
+        "confirm": "Generate payments",
+        "activating": "Generating…"
     },
     "ResumeConfirmDialog": {
         "title": "Resume bill?",

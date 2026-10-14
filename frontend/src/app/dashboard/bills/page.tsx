@@ -29,6 +29,7 @@ import {
 import BillTemplateForm from "@/components/bills/BillTemplateForm";
 import BillTemplateRow from "@/components/bills/BillTemplateRow";
 import PauseConfirmDialog from "@/components/bills/PauseConfirmDialog";
+import ActivateConfirmDialog from "@/components/bills/ActivateConfirmDialog";
 import ResumeConfirmDialog from "@/components/bills/ResumeConfirmDialog";
 import RestoreDeletedDialog from "@/components/bills/RestoreDeletedDialog";
 import FilterSelect from "@/components/FilterSelect";
@@ -56,6 +57,8 @@ export default function BillsPage() {
   const [pausing, setPausing] = useState(false);
   const [resumeTarget, setResumeTarget] = useState<BillTemplateOut | null>(null);
   const [resuming, setResuming] = useState(false);
+  const [activateTarget, setActivateTarget] = useState<BillTemplateOut | null>(null);
+  const [activating, setActivating] = useState(false);
   const [showPaused, setShowPaused] = useSessionBoolean(VIEW_STATE_KEYS.billsShowPaused);
   const [deletedFutureMap, setDeletedFutureMap] = useState<Record<number, boolean>>({});
   const [restoreTarget, setRestoreTarget] = useState<{ id: number; name: string; data: BillTemplateUpdate } | null>(null);
@@ -193,11 +196,22 @@ export default function BillsPage() {
     }
   }
 
-  async function handleActivate(bill: BillTemplateOut) {
-    await activateBill(bill.id);
-    setExpandedId(null);
-    reveal(bill, t("billActivated", { name: toastName(bill.name) }));
-    setRefreshKey((k) => k + 1);
+  async function handleActivateConfirm() {
+    if (!activateTarget || activating) return;
+    setActivating(true);
+    try {
+      await activateBill(activateTarget.id);
+      setExpandedId(null);
+      reveal(activateTarget, t("billActivated", { name: toastName(activateTarget.name) }));
+      setActivateTarget(null);
+      setRefreshKey((k) => k + 1);
+    } catch (err: unknown) {
+      if (err instanceof SessionExpiredError) return;
+      setLoadError(err instanceof Error ? err.message : t("activateError"));
+      setActivateTarget(null);
+    } finally {
+      setActivating(false);
+    }
   }
 
   async function handlePauseConfirm() {
@@ -253,6 +267,14 @@ export default function BillsPage() {
         />
       )}
 
+      {activateTarget && (
+        <ActivateConfirmDialog
+          billName={activateTarget.name}
+          onConfirm={handleActivateConfirm}
+          onCancel={() => setActivateTarget(null)}
+          activating={activating}
+        />
+      )}
       {resumeTarget && (
         <ResumeConfirmDialog
           billName={resumeTarget.name}
@@ -451,7 +473,7 @@ export default function BillsPage() {
                         onSave={(data) => handleUpdate(tmpl.id, data)}
                         onPause={() => setPauseTarget(tmpl)}
                         onResume={() => setResumeTarget(tmpl)}
-                        onActivate={() => handleActivate(tmpl)}
+                        onActivate={() => setActivateTarget(tmpl)}
                       />
                     ))}
                   </div>

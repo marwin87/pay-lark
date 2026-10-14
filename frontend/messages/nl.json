@@ -123,6 +123,7 @@
         "billPaused": "“{name}” gepauzeerd",
         "billResumed": "“{name}” hervat",
         "billActivated": "“{name}” is actief — betalingen aangemaakt",
+        "activateError": "Betalingen genereren is mislukt.",
         "showPaused": "Toon gepauzeerd",
         "paused": "Gepauzeerd",
         "resumeError": "Rekening hervatten mislukt.",
@@ -706,6 +707,13 @@
         "cancel": "Annuleren",
         "pause": "Rekening pauzeren",
         "pausing": "Bezig met pauzeren…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Betalingen genereren?",
+        "description": "De betalingen worden nu aangemaakt vanaf de startmaand, en nieuwe verschijnen automatisch. De startmaand van een maandelijkse rekening kan daarna niet meer worden gewijzigd.",
+        "cancel": "Annuleren",
+        "confirm": "Betalingen genereren",
+        "activating": "Genereren…"
     },
     "ResumeConfirmDialog": {
         "title": "Rekening hervatten?",

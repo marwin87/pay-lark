@@ -123,6 +123,7 @@
         "billPaused": "“{name}” em pausa",
         "billResumed": "“{name}” retomada",
         "billActivated": "“{name}” ativado — pagamentos gerados",
+        "activateError": "Não foi possível gerar os pagamentos.",
         "showPaused": "Mostrar em pausa",
         "paused": "Em pausa",
         "resumeError": "Não foi possível retomar a conta.",
@@ -706,6 +707,13 @@
         "cancel": "Cancelar",
         "pause": "Pausar conta",
         "pausing": "A pausar…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Gerar pagamentos?",
+        "description": "Os pagamentos são criados agora, a partir do mês de início, e os seguintes aparecem automaticamente. O mês de início de uma conta mensal já não poderá ser alterado.",
+        "cancel": "Cancelar",
+        "confirm": "Gerar pagamentos",
+        "activating": "A gerar…"
     },
     "ResumeConfirmDialog": {
         "title": "Retomar conta?",

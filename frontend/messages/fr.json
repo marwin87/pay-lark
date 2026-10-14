@@ -123,6 +123,7 @@
         "billPaused": "« {name} » mise en pause",
         "billResumed": "« {name} » reprise",
         "billActivated": "« {name} » activé : paiements générés",
+        "activateError": "Impossible de générer les paiements.",
         "showPaused": "Afficher en pause",
         "paused": "En pause",
         "resumeError": "Impossible de reprendre la facture.",
@@ -706,6 +707,13 @@
         "cancel": "Annuler",
         "pause": "Mettre en pause",
         "pausing": "Mise en pause…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Générer les paiements ?",
+        "description": "Les paiements sont créés maintenant, à partir du mois de départ, et les suivants apparaissent automatiquement. Le mois de départ d'une facture mensuelle ne pourra plus être modifié.",
+        "cancel": "Annuler",
+        "confirm": "Générer les paiements",
+        "activating": "Génération…"
     },
     "ResumeConfirmDialog": {
         "title": "Reprendre la facture ?",

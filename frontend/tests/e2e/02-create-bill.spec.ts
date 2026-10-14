@@ -44,6 +44,7 @@ test('created bill appears in current month payments', async ({ page }) => {
 
   // A new bill is a draft: no payments until it is activated
   await page.getByRole('button', { name: 'Generate payments' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Generate payments' }).click();
   await expect(page.getByRole('status')).toContainText('payments generated');
 
   // Step: navigate to payments page (triggers sync-instances on load)

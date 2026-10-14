@@ -123,6 +123,7 @@
         "billPaused": "Wstrzymano „{name}”",
         "billResumed": "Wznowiono „{name}”",
         "billActivated": "„{name}” uruchomiony — płatności wygenerowane",
+        "activateError": "Nie udało się wygenerować płatności.",
         "showPaused": "Pokaż wstrzymane",
         "paused": "Wstrzymany",
         "resumeError": "Nie udało się wznowić rachunku.",
@@ -706,6 +707,13 @@
         "cancel": "Anuluj",
         "pause": "Wstrzymaj rachunek",
         "pausing": "Wstrzymywanie…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Wygenerować płatności?",
+        "description": "Płatności zostaną utworzone teraz, od miesiąca startu, a kolejne będą pojawiać się automatycznie. Miesiąca startu rachunku miesięcznego nie będzie już można zmienić.",
+        "cancel": "Anuluj",
+        "confirm": "Generuj płatności",
+        "activating": "Generowanie…"
     },
     "ResumeConfirmDialog": {
         "title": "Wznowić rachunek?",

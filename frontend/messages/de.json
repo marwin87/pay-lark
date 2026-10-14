@@ -123,6 +123,7 @@
         "billPaused": "„{name}“ pausiert",
         "billResumed": "„{name}“ fortgesetzt",
         "billActivated": "„{name}“ ist aktiv – Zahlungen erzeugt",
+        "activateError": "Zahlungen konnten nicht erzeugt werden.",
         "showPaused": "Pausierte zeigen",
         "paused": "Pausiert",
         "resumeError": "Rechnung konnte nicht fortgesetzt werden.",
@@ -706,6 +707,13 @@
         "cancel": "Abbrechen",
         "pause": "Rechnung pausieren",
         "pausing": "Pausiere…"
+    },
+    "ActivateConfirmDialog": {
+        "title": "Zahlungen erzeugen?",
+        "description": "Die Zahlungen werden jetzt ab dem Startmonat erzeugt, weitere entstehen automatisch. Der Startmonat einer monatlichen Rechnung kann danach nicht mehr geändert werden.",
+        "cancel": "Abbrechen",
+        "confirm": "Zahlungen erzeugen",
+        "activating": "Wird erzeugt…"
     },
     "ResumeConfirmDialog": {
         "title": "Rechnung fortsetzen?",
