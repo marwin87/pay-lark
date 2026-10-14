@@ -162,24 +162,12 @@ export default function SettingsPage() {
     };
   }
 
-  // Fold everything if anything is open, otherwise open everything. Desktop acts on the
-  // active tab, mobile on every expanded section.
-  function foldAllButton(ids: string[], className: string) {
-    if (ids.length === 0) return null;
-    const anyOpen = ids.some((id) => !collapsedTiles.has(id));
+  // Fold everything if anything is open, otherwise open everything.
+  function foldAllButton(anyOpen: boolean, onClick: () => void, className: string) {
     return (
       <button
         type="button"
-        onClick={() =>
-          setCollapsedTiles((prev) => {
-            const next = new Set(prev);
-            for (const id of ids) {
-              if (anyOpen) next.add(id);
-              else next.delete(id);
-            }
-            return next;
-          })
-        }
+        onClick={onClick}
         className={`items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-green-700 dark:hover:bg-green-900/20 dark:hover:text-green-400 ${className}`}
       >
         {anyOpen ? <ChevronsDownUp size={18} /> : <ChevronsUpDown size={18} />}
@@ -187,8 +175,26 @@ export default function SettingsPage() {
       </button>
     );
   }
-  const desktopTileIds = TILES_BY_TAB[activeTab];
-  const mobileTileIds = TABS.filter((tab) => expandedMobile.has(tab)).flatMap((tab) => TILES_BY_TAB[tab]);
+
+  // Desktop: folds the tiles of the active tab.
+  const desktopAnyOpen = TILES_BY_TAB[activeTab].some((id) => !collapsedTiles.has(id));
+  function toggleDesktopTiles() {
+    setCollapsedTiles((prev) => {
+      const next = new Set(prev);
+      for (const id of TILES_BY_TAB[activeTab]) {
+        if (desktopAnyOpen) next.add(id);
+        else next.delete(id);
+      }
+      return next;
+    });
+  }
+
+  // Mobile: folds the accordion sections; expanding also reopens every tile inside them.
+  const mobileAnyOpen = expandedMobile.size > 0;
+  function toggleMobileSections() {
+    setExpandedMobile(new Set(mobileAnyOpen ? [] : TABS));
+    if (!mobileAnyOpen) setCollapsedTiles(new Set());
+  }
 
   function toggleMobileSection(tab: TabKey) {
     setExpandedMobile((prev) => {
@@ -311,10 +317,12 @@ export default function SettingsPage() {
         ))}
       </div>
       {/* Same spot in every tab, so tiles never shift when switching tabs. */}
-      <div className="hidden justify-end sm:flex">{foldAllButton(desktopTileIds, "flex")}</div>
-      {mobileTileIds.length > 0 && (
-        <div className="flex justify-end sm:hidden">{foldAllButton(mobileTileIds, "flex")}</div>
-      )}
+      <div className="hidden justify-end sm:flex">
+        {foldAllButton(desktopAnyOpen, toggleDesktopTiles, "flex")}
+      </div>
+      <div className="flex justify-end sm:hidden">
+        {foldAllButton(mobileAnyOpen, toggleMobileSections, "flex")}
+      </div>
 
       {/* Mobile accordion header for "account" — desktop uses the tablist above instead. */}
       <button
