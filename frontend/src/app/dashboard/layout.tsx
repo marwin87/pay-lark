@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/auth-context";
 import { getAuthToken } from "@/lib/auth";
 import { fetchMe } from "@/lib/user-api";
-import { fetchPayments } from "@/lib/payments-api";
+import { fetchPayments, syncInstances } from "@/lib/payments-api";
 import { setOverdueBadge, useOverdueCount } from "@/lib/app-badge";
 import { monthIn } from "@/lib/today";
 import { useLocale } from "@/context/locale-context";
@@ -160,7 +160,12 @@ export default function DashboardLayout({
     // Home refreshes on every visit; other pages fetch once so the tab badge is filled.
     if (pathname !== "/dashboard" && overdueLoaded.current) return;
     overdueLoaded.current = true;
-    fetchPayments(monthIn(timeZone))
+    // Seed this month's recurring payments first (as the Payments page does), or the
+    // count is short until that page is opened.
+    const month = monthIn(timeZone);
+    syncInstances(month)
+      .catch(() => {})
+      .then(() => fetchPayments(month))
       .then((list) => setOverdueBadge(list.filter((i) => i.status === "overdue").length))
       .catch(() => {});
   }, [isAuthenticated, pathname, timeZone]);
