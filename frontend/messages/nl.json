@@ -376,6 +376,8 @@
         "disable": "E-mailherinneringen uitschakelen"
     },
     "SettingsPage": {
+        "collapseAll": "Alles inklappen",
+        "expandAll": "Alles uitklappen",
         "pageTitle": "Instellingen",
         "subtitle": "{brand} naar wens instellen.",
         "tabs": {

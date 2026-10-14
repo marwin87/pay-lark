@@ -17,10 +17,14 @@ export function ShareSettingsTile({
   profile,
   onProfileUpdate,
   t,
+  isCollapsed,
+  onToggle,
 }: {
   profile: UserProfile;
   onProfileUpdate: (p: UserProfile) => void;
   t: ReturnType<typeof useTranslations>;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }) {
   const tp = useTranslations("SettingsPage");
   const showToast = useToast();
@@ -77,6 +81,8 @@ export function ShareSettingsTile({
       title={tp("shareByEmail.title")}
       description={tp("shareByEmail.description")}
       t={t}
+      isCollapsed={isCollapsed}
+      onToggle={onToggle}
     >
       <Switch
         checked={enabled}

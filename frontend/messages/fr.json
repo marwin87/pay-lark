@@ -376,6 +376,8 @@
         "disable": "Désactiver les rappels par email"
     },
     "SettingsPage": {
+        "collapseAll": "Tout réduire",
+        "expandAll": "Tout développer",
         "pageTitle": "Paramètres",
         "subtitle": "Faites de {brand} le vôtre.",
         "tabs": {

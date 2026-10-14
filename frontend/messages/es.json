@@ -376,6 +376,8 @@
         "disable": "Desactivar recordatorios por correo"
     },
     "SettingsPage": {
+        "collapseAll": "Contraer todo",
+        "expandAll": "Expandir todo",
         "pageTitle": "Ajustes",
         "subtitle": "Haz que {brand} sea tuyo.",
         "tabs": {

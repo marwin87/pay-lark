@@ -19,11 +19,15 @@ export function TelegramNotificationsTile({
   onProfileUpdate,
   onDirtyChange,
   t,
+  isCollapsed,
+  onToggle,
 }: {
   profile: UserProfile;
   onProfileUpdate: (p: UserProfile) => void;
   onDirtyChange: (dirty: boolean) => void;
   t: ReturnType<typeof useTranslations>;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }) {
   const tp = useTranslations("SettingsPage");
   const showToast = useToast();
@@ -96,6 +100,8 @@ export function TelegramNotificationsTile({
       title={tp("telegramNotifications.title")}
       description={tp("telegramNotifications.description")}
       t={t}
+      isCollapsed={isCollapsed}
+      onToggle={onToggle}
     >
       <details className="group rounded-lg border border-slate-200 bg-white text-sm text-slate-700 shadow-sm dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
         <summary className="flex cursor-pointer select-none list-none items-center gap-2 rounded-lg px-3 py-2 font-medium text-slate-600 transition-colors hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-600/50 [&::-webkit-details-marker]:hidden">

@@ -376,6 +376,8 @@
         "disable": "Disable email reminders"
     },
     "SettingsPage": {
+        "collapseAll": "Collapse all",
+        "expandAll": "Expand all",
         "pageTitle": "Settings",
         "subtitle": "Make {brand} fit its use.",
         "tabs": {

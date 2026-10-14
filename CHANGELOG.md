@@ -7,6 +7,10 @@ Notable changes, release by release.
 ### Features
 
 - New bills start as drafts you can edit freely, and “Generate payments” turns them on when you're ready
+- Ribbons on bills and payments mark drafts, paused bills, overdue and due-today payments, and the last payment
+- Upcoming payments show how many days are left
+- Payment popups are tinted in the payment's status color
+- Collapse or expand all tiles at once in every Settings tab
 
 ## v1.4.0 — 14-10-2026
 

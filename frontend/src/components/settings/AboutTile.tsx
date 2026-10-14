@@ -58,12 +58,16 @@ const LICENSES: { group: string; items: LicenseItem[] }[] = [
 export function AboutTile({
   color,
   t,
+  isCollapsed,
+  onToggle,
 }: {
   color: TileColor;
   t: ReturnType<typeof useTranslations>;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }) {
   return (
-    <Tile color={color} icon={Info} title={t("about.title")} description={t("about.description")} t={t}>
+    <Tile color={color} icon={Info} title={t("about.title")} description={t("about.description")} t={t} isCollapsed={isCollapsed} onToggle={onToggle}>
       <p className="text-sm text-slate-600 dark:text-slate-300">{t("about.text")}</p>
       <dl className="divide-y divide-slate-200 rounded-lg border border-slate-200 text-sm dark:divide-slate-700 dark:border-slate-700">
         <InfoRow label={t("about.version")}>

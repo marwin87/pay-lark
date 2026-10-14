@@ -376,6 +376,8 @@
         "disable": "Desativar lembretes por e-mail"
     },
     "SettingsPage": {
+        "collapseAll": "Recolher tudo",
+        "expandAll": "Expandir tudo",
         "pageTitle": "Definições",
         "subtitle": "Ajustar o {brand} às necessidades.",
         "tabs": {

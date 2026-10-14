@@ -376,6 +376,8 @@
         "disable": "E-Mail-Erinnerungen deaktivieren"
     },
     "SettingsPage": {
+        "collapseAll": "Alle einklappen",
+        "expandAll": "Alle ausklappen",
         "pageTitle": "Einstellungen",
         "subtitle": "{brand} nach Bedarf anpassen.",
         "tabs": {

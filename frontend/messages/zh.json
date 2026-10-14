@@ -376,6 +376,8 @@
         "disable": "关闭邮件提醒"
     },
     "SettingsPage": {
+        "collapseAll": "全部收起",
+        "expandAll": "全部展开",
         "pageTitle": "设置",
         "subtitle": "把 {brand} 调整成合适的样子。",
         "tabs": {

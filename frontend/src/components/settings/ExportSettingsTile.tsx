@@ -20,11 +20,15 @@ export function ExportSettingsTile({
   profile,
   onProfileUpdate,
   t,
+  isCollapsed,
+  onToggle,
 }: {
   format?: "excel" | "pdf";
   profile: UserProfile;
   onProfileUpdate: (p: UserProfile) => void;
   t: ReturnType<typeof useTranslations>;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }) {
   const tp = useTranslations("SettingsPage");
   const showToast = useToast();
@@ -72,6 +76,8 @@ export function ExportSettingsTile({
       title={tp(`${ns}.title`)}
       description={tp(`${ns}.description`)}
       t={t}
+      isCollapsed={isCollapsed}
+      onToggle={onToggle}
     >
       <Switch
         checked={enabled}

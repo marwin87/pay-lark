@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import {
   Bell,
   ChevronRight,
+  ChevronsDownUp,
+  ChevronsUpDown,
   DatabaseBackup,
   FileText,
   Info,
@@ -79,6 +81,17 @@ const TAB_COLOR: Record<TabKey, TileColor> = {
   about: "slate",
 };
 
+// Tile ids per tab, in render order. A tab with more than one tile gets a collapse/expand-all button.
+const TILES_BY_TAB: Record<TabKey, string[]> = {
+  account: ["profile", "password", "deleteAccount"],
+  preferences: ["currency", "timeZone", "decimalSeparator", "languages"],
+  notifications: ["email", "telegram", "browser"],
+  categories: ["categories"],
+  reports: ["exportXlsx", "exportPdf", "share"],
+  data: ["backup", "restore"],
+  about: ["about"],
+};
+
 function tabFromUrl(): TabKey {
   if (typeof window === "undefined") return "account";
   const tab = new URLSearchParams(window.location.search).get("tab");
@@ -132,6 +145,50 @@ export default function SettingsPage() {
     setActiveTab(tab);
     window.history.replaceState(null, "", `?tab=${tab}`);
   }
+
+  // Tiles can be folded one by one; every tile starts open. Keyed by tile id, see TILES_BY_TAB.
+  const [collapsedTiles, setCollapsedTiles] = useState<Set<string>>(new Set());
+
+  function tileFold(id: string) {
+    return {
+      isCollapsed: collapsedTiles.has(id),
+      onToggle: () =>
+        setCollapsedTiles((prev) => {
+          const next = new Set(prev);
+          if (next.has(id)) next.delete(id);
+          else next.add(id);
+          return next;
+        }),
+    };
+  }
+
+  // Fold everything if anything is open, otherwise open everything. Desktop acts on the
+  // active tab, mobile on every expanded section.
+  function foldAllButton(ids: string[], className: string) {
+    if (ids.length === 0) return null;
+    const anyOpen = ids.some((id) => !collapsedTiles.has(id));
+    return (
+      <button
+        type="button"
+        onClick={() =>
+          setCollapsedTiles((prev) => {
+            const next = new Set(prev);
+            for (const id of ids) {
+              if (anyOpen) next.add(id);
+              else next.delete(id);
+            }
+            return next;
+          })
+        }
+        className={`items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-green-700 dark:hover:bg-green-900/20 dark:hover:text-green-400 ${className}`}
+      >
+        {anyOpen ? <ChevronsDownUp size={18} /> : <ChevronsUpDown size={18} />}
+        {anyOpen ? t("collapseAll") : t("expandAll")}
+      </button>
+    );
+  }
+  const desktopTileIds = TILES_BY_TAB[activeTab];
+  const mobileTileIds = TABS.filter((tab) => expandedMobile.has(tab)).flatMap((tab) => TILES_BY_TAB[tab]);
 
   function toggleMobileSection(tab: TabKey) {
     setExpandedMobile((prev) => {
@@ -253,6 +310,11 @@ export default function SettingsPage() {
           </button>
         ))}
       </div>
+      {/* Same spot in every tab, so tiles never shift when switching tabs. */}
+      <div className="hidden justify-end sm:flex">{foldAllButton(desktopTileIds, "flex")}</div>
+      {mobileTileIds.length > 0 && (
+        <div className="flex justify-end sm:hidden">{foldAllButton(mobileTileIds, "flex")}</div>
+      )}
 
       {/* Mobile accordion header for "account" — desktop uses the tablist above instead. */}
       <button
@@ -286,16 +348,17 @@ export default function SettingsPage() {
           activeTab === "account" ? "sm:block" : "sm:hidden"
         }`}
       >
-        <ProfileTile
+        <ProfileTile {...tileFold("profile")}
           profile={profile}
           onProfileUpdate={setProfile}
           onDirtyChange={onProfileDirty}
           t={t}
         />
-        <PasswordTile onDirtyChange={onPasswordDirty} t={t} />
+        <PasswordTile {...tileFold("password")} onDirtyChange={onPasswordDirty} t={t} />
 
         <Tile
           color="red"
+          {...tileFold("deleteAccount")}
           icon={Trash2}
           title={t("deleteAccount.title")}
           description={t("deleteAccount.description")}
@@ -342,20 +405,20 @@ export default function SettingsPage() {
           activeTab === "preferences" ? "sm:block" : "sm:hidden"
         }`}
       >
-        <CurrencyTile
+        <CurrencyTile {...tileFold("currency")}
           profile={profile}
           onProfileUpdate={setProfile}
           onDirtyChange={onCurrencyDirty}
           t={t}
         />
-        <TimeZoneTile
+        <TimeZoneTile {...tileFold("timeZone")}
           profile={profile}
           onProfileUpdate={setProfile}
           onDirtyChange={onTimeZoneDirty}
           t={t}
         />
-        <DecimalSeparatorTile t={t} />
-        <LanguagesTile t={t} />
+        <DecimalSeparatorTile {...tileFold("decimalSeparator")} t={t} />
+        <LanguagesTile {...tileFold("languages")} t={t} />
       </div>
 
       <button
@@ -391,21 +454,21 @@ export default function SettingsPage() {
       >
         <ServerTimeNote timeZone={profile.timezone} />
 
-        <EmailNotificationsTile
+        <EmailNotificationsTile {...tileFold("email")}
           profile={profile}
           onProfileUpdate={setProfile}
           onDirtyChange={onEmailDirty}
           t={t}
         />
 
-        <TelegramNotificationsTile
+        <TelegramNotificationsTile {...tileFold("telegram")}
           profile={profile}
           onProfileUpdate={setProfile}
           onDirtyChange={onTelegramDirty}
           t={t}
         />
 
-        <BrowserNotificationsTile profile={profile} t={t} />
+        <BrowserNotificationsTile {...tileFold("browser")} profile={profile} t={t} />
       </div>
 
       <button
@@ -439,7 +502,7 @@ export default function SettingsPage() {
           activeTab === "categories" ? "sm:block" : "sm:hidden"
         }`}
       >
-        <CategoriesTile t={t} />
+        <CategoriesTile {...tileFold("categories")} t={t} />
       </div>
 
       <button
@@ -473,9 +536,9 @@ export default function SettingsPage() {
           activeTab === "reports" ? "sm:block" : "sm:hidden"
         }`}
       >
-        <ExportSettingsTile profile={profile} onProfileUpdate={setProfile} t={t} />
-        <ExportSettingsTile format="pdf" profile={profile} onProfileUpdate={setProfile} t={t} />
-        <ShareSettingsTile profile={profile} onProfileUpdate={setProfile} t={t} />
+        <ExportSettingsTile {...tileFold("exportXlsx")} profile={profile} onProfileUpdate={setProfile} t={t} />
+        <ExportSettingsTile {...tileFold("exportPdf")} format="pdf" profile={profile} onProfileUpdate={setProfile} t={t} />
+        <ShareSettingsTile {...tileFold("share")} profile={profile} onProfileUpdate={setProfile} t={t} />
       </div>
 
       <button
@@ -511,6 +574,7 @@ export default function SettingsPage() {
       >
         <Tile
           color={TAB_COLOR.data}
+          {...tileFold("backup")}
           icon={HardDriveDownload}
           title={t("backup.title")}
           description={t("backup.description")}
@@ -521,6 +585,7 @@ export default function SettingsPage() {
 
         <Tile
           color={TAB_COLOR.data}
+          {...tileFold("restore")}
           icon={HardDriveUpload}
           title={t("restore.title")}
           description={t("restore.description")}
@@ -562,7 +627,7 @@ export default function SettingsPage() {
           activeTab === "about" ? "sm:block" : "sm:hidden"
         }`}
       >
-        <AboutTile color={TAB_COLOR.about} t={t} />
+        <AboutTile {...tileFold("about")} color={TAB_COLOR.about} t={t} />
       </div>
 
       {(pendingHref || pendingLogout) && (

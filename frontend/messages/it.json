@@ -376,6 +376,8 @@
         "disable": "Disattiva promemoria via email"
     },
     "SettingsPage": {
+        "collapseAll": "Comprimi tutto",
+        "expandAll": "Espandi tutto",
         "pageTitle": "Impostazioni",
         "subtitle": "Personalizzare {brand}.",
         "tabs": {

@@ -376,6 +376,8 @@
         "disable": "Wyłącz przypomnienia e-mail"
     },
     "SettingsPage": {
+        "collapseAll": "Zwiń wszystko",
+        "expandAll": "Rozwiń wszystko",
         "pageTitle": "Ustawienia",
         "subtitle": "Dostosuj {brand} do siebie.",
         "tabs": {
