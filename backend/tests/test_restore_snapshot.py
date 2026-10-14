@@ -222,6 +222,7 @@ def test_restore_from_snapshot_restores_data_and_removes_snapshot(client, client
 
     _, db = client_db
     assert db.query(RestoreSnapshot).count() == 0
+    db.rollback()  # SQLite: an open session transaction holds the write lock
 
     # Consumed snapshot cannot be replayed.
     r = client.post("/export/restore-snapshot", headers=auth(tok))

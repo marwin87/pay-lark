@@ -229,12 +229,14 @@ def test_summary_month_is_the_users_month(db_session, db_sessionmaker, mail):
     _, summary = mail
     user = _summary_user(db_session, "la@test.com", "America/Los_Angeles")
     user_id = user.id
+    db_session.rollback()  # SQLite: an open session transaction holds the write lock
 
     # 1 April 03:30 UTC is still 31 March (20:30) in Los Angeles
     _tick(db_sessionmaker, _utc(2026, 4, 1, 3, 30))
     assert summary.call_count == 1
-    db_session.commit()  # ends the SQLite read snapshot, then reloads
+    db_session.rollback()  # ends the SQLite read snapshot, so the get below reloads
     assert db_session.get(User, user_id).monthly_summary_last_sent == "2026-03"
+    db_session.rollback()  # SQLite: an open session transaction holds the write lock
 
     summary.reset_mock()
     _tick(db_sessionmaker, _utc(2026, 4, 1, 4, 0))  # once per month

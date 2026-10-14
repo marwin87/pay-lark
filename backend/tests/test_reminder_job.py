@@ -479,6 +479,7 @@ def test_monthly_summary_sent_and_flag_updated_on_last_day(
     _make_instance(db_session, bill.id, due_date=fake_today)
     db_session.commit()
     user_id = user.id
+    db_session.rollback()  # SQLite: an open session transaction holds the write lock
 
     with (
         patch("app.services.reminder_job.settings") as mock_settings,

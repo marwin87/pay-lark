@@ -413,6 +413,7 @@ def test_patch_me_telegram_token_is_write_only_and_encrypted(client, db_session)
 
     stored = db_session.query(User).filter_by(email="tg@test.com").one()
     assert stored.telegram_bot_token and _BOT_TOKEN not in stored.telegram_bot_token
+    db_session.rollback()  # SQLite: an open session transaction holds the write lock
 
     # omitting the token keeps it; empty string clears it
     r = client.patch("/auth/me", json={"telegram_chat_id": "43"}, headers=auth(token))

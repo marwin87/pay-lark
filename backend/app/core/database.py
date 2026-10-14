@@ -44,7 +44,11 @@ def _sqlite_pragmas(dbapi_conn, _record):
 
 @event.listens_for(engine, "begin")
 def _sqlite_begin(conn):
-    conn.exec_driver_sql("BEGIN")
+    # IMMEDIATE takes the write lock up front, so a second writer waits (busy_timeout) instead of
+    # failing at once with "database is locked" when its read snapshot can't upgrade to a write.
+    # ponytail: serialises all requests, reads included; fine for a household app, switch to
+    # per-endpoint IMMEDIATE if reads ever queue behind writes.
+    conn.exec_driver_sql("BEGIN IMMEDIATE")
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
