@@ -247,17 +247,22 @@ def activate_bill(
     bill = db.get(BillTemplate, bill_id)
     if not bill or bill.user_id != me.id:
         raise HTTPException(status_code=404, detail="Bill not found")
-    if bill.is_activated:
-        raise HTTPException(status_code=409, detail="Bill is already activated")
     if bill.is_archived:
         raise HTTPException(status_code=409, detail="Resume the bill first")
 
     current_period = now_for(me).strftime("%Y-%m")
     start_period = bill.start_period or current_period  # drafts always have one
     dates = bill.dates  # reads draft_dates while still a draft
-    bill.is_activated = True
-    bill.draft_dates = None
-    db.flush()
+    # Claim the draft atomically: of two concurrent activations only one updates the row
+    # (SQLite serializes the writers), the other gets 409 instead of a duplicate-key 500.
+    claimed = (
+        db.query(BillTemplate)
+        .filter(BillTemplate.id == bill.id, BillTemplate.is_activated.is_(False))
+        .update({"is_activated": True, "draft_dates": None}, synchronize_session=False)
+    )
+    if not claimed:
+        raise HTTPException(status_code=409, detail="Bill is already activated")
+    db.refresh(bill)
     if bill.frequency == BF.monthly and start_period < current_period:
         backfill_template_instances(db, bill, start_period, current_period)
     elif dates:

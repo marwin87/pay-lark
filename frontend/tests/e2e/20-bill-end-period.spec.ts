@@ -129,6 +129,11 @@ test('the final instalment is labelled "Last payment" on the payments page', asy
     headers: { 'Content-Type': 'application/json', ...(await getCsrfHeader(page)) },
   });
   expect(res.ok()).toBeTruthy();
+  // A new bill is a draft: activate it so its payments exist
+  const activated = await page.request.post(`${API}/bills/${(await res.json()).id}/activate`, {
+    headers: await getCsrfHeader(page),
+  });
+  expect(activated.ok()).toBeTruthy();
 
   await page.goto('/dashboard/payments');
   await expect(page.getByText(billName, { exact: true })).toBeVisible();

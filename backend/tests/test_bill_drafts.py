@@ -65,3 +65,52 @@ def test_activate_other_users_bill_is_404(client):
     assert (
         client.post(f"/bills/{bill['id']}/activate", headers=auth(b)).status_code == 404
     )
+
+
+def test_lost_activation_race_is_409_not_500(client, monkeypatch):
+    # Both requests passed the "is draft" read; only the first atomic claim wins.
+    tok = register_and_login(client, "d7@test.com")
+    bill = _draft(client, tok, due_month=1)
+    from sqlalchemy.orm import Session
+
+    from app.models.bill import BillTemplate
+
+    real_get = Session.get
+
+    def stale_get(self, entity, ident, *a, **kw):
+        obj = real_get(self, entity, ident, *a, **kw)
+        if entity is BillTemplate and obj is not None:
+            obj.is_activated = False  # what a concurrent request would still see
+        return obj
+
+    first = client.post(f"/bills/{bill['id']}/activate", headers=auth(tok))
+    assert first.status_code == 200
+    monkeypatch.setattr(Session, "get", stale_get)
+    second = client.post(f"/bills/{bill['id']}/activate", headers=auth(tok))
+    assert second.status_code == 409
+    monkeypatch.undo()
+    assert len(client.get("/bills/payments", headers=auth(tok)).json()) >= 1
+
+
+def test_draft_can_be_paused_and_resumed_and_stays_a_draft(client):
+    tok = register_and_login(client, "d8@test.com")
+    bill = _draft(client, tok, due_month=1)
+    assert (
+        client.post(f"/bills/{bill['id']}/archive", headers=auth(tok)).status_code
+        == 204
+    )
+    # A paused draft can't be activated, and pausing created no payments.
+    r = client.post(f"/bills/{bill['id']}/activate", headers=auth(tok))
+    assert r.status_code == 409
+    assert _payments(client, tok) == []
+    assert (
+        client.post(f"/bills/{bill['id']}/unarchive", headers=auth(tok)).status_code
+        == 204
+    )
+    listed = client.get("/bills", headers=auth(tok)).json()
+    assert [b["is_activated"] for b in listed] == [False]
+    assert _payments(client, tok) == []
+    assert (
+        client.post(f"/bills/{bill['id']}/activate", headers=auth(tok)).status_code
+        == 200
+    )
