@@ -2,7 +2,7 @@
 
 Notable changes, release by release.
 
-## v1.4.0 (Not released yet)
+## v1.4.0 — 14-10-2026
 
 ### Features
 
