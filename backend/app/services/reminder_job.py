@@ -11,7 +11,7 @@ from app.core.config import settings
 from app.core.i18n import t
 from app.core import tz
 from app.core.tz import user_tz
-from app.models.bill import BillTemplate, PaymentInstance, PaymentStatus
+from app.models.bill import BillStatus, BillTemplate, PaymentInstance, PaymentStatus
 from app.models.user import User
 from app.services.email import (
     send_monthly_summary_email,
@@ -113,7 +113,7 @@ def send_monthly_summary_for_user(
         .filter(
             BillTemplate.user_id == user.id,
             PaymentInstance.period == month,
-            PaymentInstance.is_deleted.is_(False),
+            PaymentInstance.hidden.is_(None),
         )
         .all()
     )
@@ -226,7 +226,7 @@ def send_reminders_for_user(
         for t in db.query(BillTemplate.id)
         .filter(
             BillTemplate.user_id == user.id,
-            BillTemplate.is_archived.is_(False),
+            BillTemplate.status == BillStatus.active,
         )
         .all()
     ]
@@ -245,7 +245,7 @@ def send_reminders_for_user(
                 PaymentInstance.bill_id.in_(template_ids),
                 PaymentInstance.due_date == due_by_kind[kind],
                 PaymentInstance.status != PaymentStatus.paid,
-                PaymentInstance.is_deleted.is_(False),
+                PaymentInstance.hidden.is_(None),
                 true() if force else getattr(PaymentInstance, sent_flag).is_(False),
             )
             .all()

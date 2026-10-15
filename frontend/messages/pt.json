@@ -178,7 +178,9 @@
         "edit": "Editar",
         "pause": "Pausar",
         "resume": "Retomar",
-        "delete": "Excluir"
+        "delete": "Excluir",
+        "deleteHint": "Nada foi pago, por isso pode ser excluída.",
+        "keepHint": "Não pode ser excluída: pelo menos um pagamento foi pago."
     },
     "RestoreDeletedDialog": {
         "title": "Restaurar pagamentos eliminados?",
@@ -284,7 +286,8 @@
         "cancel": "Cancelar",
         "confirm": "Reverter pagamento",
         "reverting": "A reverter…",
-        "revertFailed": "Falha ao reverter o pagamento."
+        "revertFailed": "Falha ao reverter o pagamento.",
+        "billPaused": "Esta conta está em pausa. Retome-a primeiro para reverter este pagamento."
     },
     "MarkPaidDialog": {
         "title": "Marcar como pago",
@@ -758,7 +761,7 @@
                 "q": "O que significa «Rascunho» numa conta?",
                 "s1": "Uma conta nova começa como <b>{draft}</b>. Ainda não tem pagamentos, por isso pode verificá-la e alterá-la à vontade.",
                 "s2": "Carregue em <b>{generatePayments}</b> e confirme. Os pagamentos são criados a partir do mês inicial e os novos aparecem sozinhos. Depois, o mês inicial de uma conta mensal já não pode ser alterado.",
-                "s3": "Um rascunho desnecessário pode ser removido com <b>{delete}</b>."
+                "s3": "Uma conta em que nada foi pago (um rascunho, ou uma em pausa sem pagamento efetuado) pode ser removida com <b>{delete}</b>."
             },
             "repeat": {
                 "q": "A fatura não é mensal. E agora?",
@@ -774,7 +777,8 @@
                 "q": "Como se coloca uma fatura em pausa?",
                 "s1": "Abra <b>{bills}</b>.",
                 "s2": "Toque em <b>{pause}</b> ao lado da fatura e confirme.",
-                "s3": "Não chegam novos pagamentos nem lembretes. O que já foi pago fica no histórico."
+                "s3": "Não chegam novos pagamentos nem lembretes. O que já foi pago fica no histórico.",
+                "s4": "Nada foi pago? Então ao lado da conta aparece <b>{delete}</b>. Uma conta com um pagamento efetuado só pode ser pausada."
             },
             "resume": {
                 "q": "Como se retoma uma fatura em pausa?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Uma fatura foi marcada como paga por engano",
                 "s1": "Abra <b>{payments}</b> e encontre a fatura.",
-                "s2": "Toque em <b>{revert}</b>. A fatura volta a não paga."
+                "s2": "Toque em <b>{revert}</b>. A fatura volta a não paga.",
+                "s3": "Conta em pausa? Retome-a primeiro (veja como se retoma uma conta em pausa)."
             },
             "deletePayment": {
                 "q": "Como se retira um só pagamento?",
@@ -843,7 +848,7 @@
                 "q": "Como se recuperam os dados de uma cópia?",
                 "s1": "Abra <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Toque em <b>{restore}</b> e escolha o ficheiro da cópia.",
-                "s3": "Veja a comparação e confirme. Atenção: isto substitui os dados atuais.",
+                "s3": "Veja a comparação e confirme. Atenção: isto substitui os dados atuais. As cópias de segurança de versões antigas da app não podem ser restauradas.",
                 "s4": "Mudança de ideias? Logo após restaurar, os dados de antes podem ser recuperados na mesma página."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Pesquisar na ajuda…",
         "noResults": "Nada encontrado. Tente outras palavras."
     },
-    "DeleteDraftDialog": {
-        "title": "Excluir o rascunho?",
-        "description": "Este rascunho será removido permanentemente. Não tem pagamentos, por isso nenhum histórico é perdido.",
+    "DeleteBillDialog": {
+        "title": "Excluir a conta?",
+        "description": "Esta conta e os seus pagamentos por pagar serão removidos permanentemente. Nada foi pago, por isso nenhum histórico é perdido.",
         "cancel": "Cancelar",
-        "delete": "Excluir rascunho",
+        "delete": "Excluir conta",
         "deleting": "Excluindo…"
     }
 }

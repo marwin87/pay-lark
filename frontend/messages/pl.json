@@ -178,7 +178,9 @@
         "edit": "Edytuj",
         "pause": "Wstrzymaj",
         "resume": "Wznów",
-        "delete": "Usuń"
+        "delete": "Usuń",
+        "deleteHint": "Nic nie zapłacono, więc można go usunąć.",
+        "keepHint": "Nie można usunąć: zapłacono co najmniej jedną płatność."
     },
     "RestoreDeletedDialog": {
         "title": "Przywrócić usunięte płatności?",
@@ -284,7 +286,8 @@
         "cancel": "Anuluj",
         "confirm": "Cofnij płatność",
         "reverting": "Cofanie…",
-        "revertFailed": "Nie udało się cofnąć płatności."
+        "revertFailed": "Nie udało się cofnąć płatności.",
+        "billPaused": "Ten rachunek jest wstrzymany. Najpierw go wznów, żeby cofnąć tę płatność."
     },
     "MarkPaidDialog": {
         "title": "Oznacz jako opłacone",
@@ -758,7 +761,7 @@
                 "q": "Co oznacza „Szkic” przy rachunku?",
                 "s1": "Nowy rachunek zaczyna jako <b>{draft}</b>. Nie ma jeszcze płatności, więc można go spokojnie sprawdzić i zmienić.",
                 "s2": "Naciśnij <b>{generatePayments}</b> i potwierdź. Płatności powstaną od miesiąca startowego, a kolejne pojawią się automatycznie. Potem miesiąca startowego rachunku miesięcznego nie da się już zmienić.",
-                "s3": "Niepotrzebny szkic można usunąć przyciskiem <b>{delete}</b>."
+                "s3": "Rachunek, w którym nic nie zapłacono (szkic lub wstrzymany bez zapłaconej płatności), można usunąć przyciskiem <b>{delete}</b>."
             },
             "repeat": {
                 "q": "Rachunek nie powtarza się co miesiąc. Co robić?",
@@ -774,7 +777,8 @@
                 "q": "Jak wstrzymać rachunek?",
                 "s1": "Wejdź w <b>{bills}</b>.",
                 "s2": "Naciśnij <b>{pause}</b> przy rachunku i potwierdź.",
-                "s3": "Nie pojawią się nowe płatności ani przypomnienia. To, co już zapłacone, zostaje w historii."
+                "s3": "Nie pojawią się nowe płatności ani przypomnienia. To, co już zapłacone, zostaje w historii.",
+                "s4": "Nic nie zapłacono? Wtedy obok rachunku jest przycisk <b>{delete}</b>. Rachunek z zapłaconą płatnością można tylko wstrzymać."
             },
             "resume": {
                 "q": "Jak przywrócić wstrzymany rachunek?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Rachunek został oznaczony jako opłacony przez pomyłkę",
                 "s1": "Wejdź w <b>{payments}</b> i znajdź rachunek.",
-                "s2": "Naciśnij <b>{revert}</b>. Rachunek wróci do nieopłaconych."
+                "s2": "Naciśnij <b>{revert}</b>. Rachunek wróci do nieopłaconych.",
+                "s3": "Rachunek wstrzymany? Najpierw go wznów (zobacz, jak wrócić do wstrzymanego rachunku)."
             },
             "deletePayment": {
                 "q": "Jak usunąć jedną płatność?",
@@ -843,7 +848,7 @@
                 "q": "Jak przywrócić dane z kopii zapasowej?",
                 "s1": "Wejdź w <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Naciśnij <b>{restore}</b> i wybierz plik kopii.",
-                "s3": "Sprawdź porównanie i potwierdź. Uwaga: to zastępuje obecne dane.",
+                "s3": "Sprawdź porównanie i potwierdź. Uwaga: to zastępuje obecne dane. Kopie zapasowe zrobione w starszych wersjach aplikacji nie zostaną wczytane.",
                 "s4": "Zmiana decyzji? Zaraz po przywróceniu na tej samej stronie można odzyskać dane sprzed zmiany."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Szukaj w pomocy…",
         "noResults": "Nic nie znaleziono. Warto spróbować innych słów."
     },
-    "DeleteDraftDialog": {
-        "title": "Usunąć szkic?",
-        "description": "Szkic zostanie trwale usunięty. Nie ma płatności, więc żadna historia nie zostanie utracona.",
+    "DeleteBillDialog": {
+        "title": "Usunąć rachunek?",
+        "description": "Rachunek i jego niezapłacone płatności zostaną trwale usunięte. Nic nie zapłacono, więc żadna historia nie zostanie utracona.",
         "cancel": "Anuluj",
-        "delete": "Usuń szkic",
+        "delete": "Usuń rachunek",
         "deleting": "Usuwanie…"
     }
 }

@@ -5,6 +5,7 @@ import {
   Pause,
   Trash2,
   Play,
+  Info,
   Rocket,
   ChevronUp,
   NotebookPen,
@@ -88,12 +89,13 @@ export default function BillTemplateRow({
   const locale = useLocale();
   const { decimalSeparator } = useAppLocale();
 
-  const isDraft = !template.is_activated;
-  const ribbon = template.is_archived
-    ? { label: tPage("paused"), color: "bg-slate-500" }
-    : isDraft
-      ? { label: t("draft"), color: "bg-amber-500" }
-      : null;
+  const { status, can_delete: canDelete } = template;
+  const ribbon =
+    status === "paused"
+      ? { label: tPage("paused"), color: "bg-slate-500" }
+      : status === "draft"
+        ? { label: t("draft"), color: "bg-amber-500" }
+        : null;
 
   const dueLabel = formatDueLabel(template, locale);
 
@@ -103,11 +105,12 @@ export default function BillTemplateRow({
   return (
     <div
       id={`bill-${template.id}`}
+      data-testid="bill-tile"
       className={`bill-row group relative rounded-xl border ${
-        isDraft ? "border-dashed border-slate-400 dark:border-slate-500" : "border-slate-200"
+        status === "draft" ? "border-dashed border-slate-400 dark:border-slate-500" : "border-slate-200"
       } bg-white shadow-sm transition-shadow duration-500 dark:bg-slate-800 dark:border-slate-700 border-l-4 ${leftBorder} ${
         highlighted ? "bill-row-highlight ring-2 ring-green-200 dark:ring-green-800" : ""
-      } ${template.is_archived ? "opacity-70" : ""}`}
+      } ${status === "paused" ? "opacity-70" : ""}`}
     >
       {ribbon && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
@@ -117,9 +120,10 @@ export default function BillTemplateRow({
         </div>
       )}
       {/* Collapsed row */}
-      <div className={`flex flex-col gap-3 py-3 pr-4 sm:flex-row sm:items-center ${ribbon ? "pl-[58px]" : "pl-4"}`}>
+      <div className={`flex flex-col gap-3 py-3 pr-4 sm:flex-row sm:items-center ${ribbon ? "pl-4 sm:pl-[58px]" : "pl-4"}`}>
         {/* Two-line content */}
-        <div className="flex flex-1 flex-col min-w-0 gap-0.5">
+        {/* On a phone the ribbon only overlaps this text, not the button row below it. */}
+        <div className={`flex flex-1 flex-col min-w-0 gap-0.5 ${ribbon ? "pl-[42px] sm:pl-0" : ""}`}>
           {/* Line 1: name */}
           <div className="flex items-center gap-2 min-w-0">
             <span className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">
@@ -159,48 +163,49 @@ export default function BillTemplateRow({
         {/* Actions */}
         <div className="sm:shrink-0">
           <div className="flex items-center justify-end gap-2 sm:gap-1">
-            {isDraft && !template.is_archived && (
+            {status === "draft" && (
               <button
                 onClick={onActivate}
                 aria-label={t("generatePayments")}
-                className="flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-transparent bg-emerald-600 px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 "
+                className="flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-transparent bg-emerald-600 px-2.5 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 "
               >
                 <Rocket className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
                 <span className="truncate">{t("generatePayments")}</span>
               </button>
             )}
-            {template.is_archived ? (
+            {status === "paused" ? (
               <button
                 onClick={onResume}
                 aria-label={t("resume")}
-                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-2.5 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
               >
                 <Play className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
                 <span className="truncate">{t("resume")}</span>
               </button>
-            ) : isDraft ? (
-              <button
-                onClick={onDelete}
-                aria-label={t("delete")}
-                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-red-800 dark:hover:bg-red-900/20 dark:hover:text-red-400"
-              >
-                <Trash2 className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
-                <span className="truncate">{t("delete")}</span>
-              </button>
-            ) : (
+            ) : status === "active" && (
               <button
                 onClick={onPause}
                 aria-label={t("pause")}
-                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-amber-800 dark:hover:bg-amber-900/20 dark:hover:text-amber-400"
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-2.5 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-amber-800 dark:hover:bg-amber-900/20 dark:hover:text-amber-400"
               >
                 <Pause className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
                 <span className="truncate">{t("pause")}</span>
               </button>
             )}
+            {canDelete && (
+              <button
+                onClick={onDelete}
+                aria-label={t("delete")}
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-2.5 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-red-800 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+              >
+                <Trash2 className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span className="truncate">{t("delete")}</span>
+              </button>
+            )}
             <button
               onClick={onEditToggle}
               aria-label={isExpanded ? t("close") : t("edit")}
-              className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+              className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-2.5 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
             >
               {isExpanded ? <ChevronUp className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" /> : <Pencil className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />}
               <span className="truncate">{isExpanded ? t("close") : t("edit")}</span>
@@ -209,12 +214,20 @@ export default function BillTemplateRow({
         </div>
       </div>
 
+      {/* Why a paused bill can or cannot be deleted: a cut-off line, then the note, right-aligned. */}
+      {status === "paused" && (
+        <p className="mx-4 flex items-start justify-end gap-1.5 border-t border-dashed border-slate-200 py-2 text-xs text-slate-400 dark:border-slate-600 dark:text-slate-500">
+          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span>{canDelete ? t("deleteHint") : t("keepHint")}</span>
+        </p>
+      )}
+
       {/* Expanded edit form */}
       {isExpanded && (
         <div className="rounded-b-xl border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 p-5">
           <BillTemplateForm
             startPeriod={template.start_period}
-            isDraft={isDraft}
+            isDraft={status === "draft"}
             paidDates={template.paid_dates}
             initial={{
               name: template.name,

@@ -178,7 +178,9 @@
         "edit": "Modifier",
         "pause": "Mettre en pause",
         "resume": "Reprendre",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "deleteHint": "Rien n’a été payé, elle peut donc être supprimée.",
+        "keepHint": "Ne peut pas être supprimée : au moins un paiement a été payé."
     },
     "RestoreDeletedDialog": {
         "title": "Restaurer les paiements supprimés ?",
@@ -284,7 +286,8 @@
         "cancel": "Annuler",
         "confirm": "Annuler le paiement",
         "reverting": "Annulation…",
-        "revertFailed": "Échec de l'annulation du paiement."
+        "revertFailed": "Échec de l'annulation du paiement.",
+        "billPaused": "Cette facture est en pause. Reprenez-la d’abord pour annuler ce paiement."
     },
     "MarkPaidDialog": {
         "title": "Marquer comme payé",
@@ -758,7 +761,7 @@
                 "q": "Que signifie « Brouillon » sur une facture ?",
                 "s1": "Une nouvelle facture démarre en <b>{draft}</b>. Elle n’a pas encore de paiements, on peut donc la vérifier et la modifier librement.",
                 "s2": "Appuyez sur <b>{generatePayments}</b> et confirmez. Les paiements sont créés à partir du mois de début et les suivants apparaissent automatiquement. Ensuite, le mois de début d’une facture mensuelle ne peut plus être modifié.",
-                "s3": "Un brouillon inutile peut être retiré avec <b>{delete}</b>."
+                "s3": "Une facture dont rien n’a été payé (un brouillon, ou une facture en pause sans paiement effectué) peut être retirée avec <b>{delete}</b>."
             },
             "repeat": {
                 "q": "La facture n’est pas mensuelle. Que faire ?",
@@ -774,7 +777,8 @@
                 "q": "Comment mettre une facture en pause ?",
                 "s1": "Ouvrez <b>{bills}</b>.",
                 "s2": "Appuyez sur <b>{pause}</b> à côté de la facture et confirmez.",
-                "s3": "Plus de nouveaux paiements ni de rappels. Ce qui est déjà payé reste dans l’historique."
+                "s3": "Plus de nouveaux paiements ni de rappels. Ce qui est déjà payé reste dans l’historique.",
+                "s4": "Rien n’a été payé ? Alors <b>{delete}</b> apparaît à côté de la facture. Une facture avec un paiement effectué ne peut être que mise en pause."
             },
             "resume": {
                 "q": "Comment reprendre une facture en pause ?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Une facture a été marquée comme payée par erreur",
                 "s1": "Ouvrez <b>{payments}</b> et trouvez la facture.",
-                "s2": "Appuyez sur <b>{revert}</b>. La facture redevient impayée."
+                "s2": "Appuyez sur <b>{revert}</b>. La facture redevient impayée.",
+                "s3": "Facture en pause ? Reprenez-la d’abord (voir comment reprendre une facture en pause)."
             },
             "deletePayment": {
                 "q": "Comment supprimer un seul paiement ?",
@@ -843,7 +848,7 @@
                 "q": "Comment récupérer les données depuis une sauvegarde ?",
                 "s1": "Ouvrez <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Appuyer sur <b>{restore}</b> et choisir le fichier de sauvegarde.",
-                "s3": "Regarder la comparaison et confirmer. Attention : cela remplace les données actuelles.",
+                "s3": "Regarder la comparaison et confirmer. Attention : cela remplace les données actuelles. Les sauvegardes faites avec d’anciennes versions de l’application ne peuvent pas être restaurées.",
                 "s4": "Changement d’avis ? Juste après une restauration, les données d’avant se retrouvent sur la même page."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Rechercher dans l’aide…",
         "noResults": "Rien trouvé. Essayez d’autres mots."
     },
-    "DeleteDraftDialog": {
-        "title": "Supprimer le brouillon ?",
-        "description": "Ce brouillon sera supprimé définitivement. Il n’a aucun paiement, donc aucun historique n’est perdu.",
+    "DeleteBillDialog": {
+        "title": "Supprimer la facture ?",
+        "description": "Cette facture et ses paiements non payés seront supprimés définitivement. Rien n’a été payé, donc aucun historique n’est perdu.",
         "cancel": "Annuler",
-        "delete": "Supprimer le brouillon",
+        "delete": "Supprimer la facture",
         "deleting": "Suppression…"
     }
 }

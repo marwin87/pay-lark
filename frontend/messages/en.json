@@ -178,7 +178,9 @@
         "edit": "Edit",
         "pause": "Pause",
         "resume": "Resume",
-        "delete": "Delete"
+        "delete": "Delete",
+        "deleteHint": "Nothing was paid, so it can be deleted.",
+        "keepHint": "Can’t be deleted: at least one payment was paid."
     },
     "RestoreDeletedDialog": {
         "title": "Restore deleted payments?",
@@ -284,7 +286,8 @@
         "cancel": "Cancel",
         "confirm": "Revert payment",
         "reverting": "Reverting…",
-        "revertFailed": "Failed to revert payment."
+        "revertFailed": "Failed to revert payment.",
+        "billPaused": "This bill is paused. Resume it first to revert this payment."
     },
     "MarkPaidDialog": {
         "title": "Mark as Paid",
@@ -758,7 +761,7 @@
                 "q": "What does “Draft” on a bill mean?",
                 "s1": "A new bill starts as a <b>{draft}</b>. It has no payments yet, so it can be checked and changed freely.",
                 "s2": "Press <b>{generatePayments}</b> and confirm. Payments are created from the starting month on and new ones appear automatically. After that, a monthly bill’s starting month can no longer be changed.",
-                "s3": "A draft that is not needed can be removed with <b>{delete}</b>."
+                "s3": "A bill with nothing paid (a draft, or a paused one with no paid payment) can be removed with <b>{delete}</b>."
             },
             "repeat": {
                 "q": "The bill is not monthly. What now?",
@@ -774,7 +777,8 @@
                 "q": "How is a bill paused?",
                 "s1": "Open <b>{bills}</b>.",
                 "s2": "Press <b>{pause}</b> next to the bill and confirm.",
-                "s3": "No new payments or reminders will come. What is already paid stays in the history."
+                "s3": "No new payments or reminders will come. What is already paid stays in the history.",
+                "s4": "Nothing was paid on it? Then <b>{delete}</b> is offered next to the bill. A bill with a paid payment can only be paused."
             },
             "resume": {
                 "q": "How is a paused bill brought back?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "A bill was marked as paid by mistake",
                 "s1": "Open <b>{payments}</b> and find the bill.",
-                "s2": "Press <b>{revert}</b>. The bill goes back to unpaid."
+                "s2": "Press <b>{revert}</b>. The bill goes back to unpaid.",
+                "s3": "Bill paused? Resume it first (see how a paused bill is brought back)."
             },
             "deletePayment": {
                 "q": "How is one payment removed?",
@@ -843,7 +848,7 @@
                 "q": "How is data brought back from a backup?",
                 "s1": "Open <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Press <b>{restore}</b> and choose the backup file.",
-                "s3": "Check the comparison and confirm. Careful: this replaces the current data.",
+                "s3": "Check the comparison and confirm. Careful: this replaces the current data. Backups made by older versions of the app can’t be restored.",
                 "s4": "Changed course? Right after a restore the previous data can be brought back, on the same page."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Search help…",
         "noResults": "Nothing found. Try other words."
     },
-    "DeleteDraftDialog": {
-        "title": "Delete draft?",
-        "description": "This draft will be removed permanently. It has no payments, so no history is lost.",
+    "DeleteBillDialog": {
+        "title": "Delete bill?",
+        "description": "This bill and its unpaid payments will be removed permanently. Nothing was paid, so no history is lost.",
         "cancel": "Cancel",
-        "delete": "Delete draft",
+        "delete": "Delete bill",
         "deleting": "Deleting…"
     }
 }

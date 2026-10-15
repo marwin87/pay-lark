@@ -2,7 +2,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field, computed_field, field_validator, model_validator
-from app.models.bill import BillFrequency, PaymentStatus
+from app.models.bill import BillFrequency, BillStatus, PaymentStatus
 from app.schemas.auth import (
     ShareEmails,
     normalize_bot_token,
@@ -109,8 +109,8 @@ class BillTemplateOut(BaseModel):
     dates: list[date] = []  # one-off bills: their payment dates
     paid_dates: list[date] = []  # subset of `dates` that is already paid
     notes: str | None
-    is_archived: bool
-    is_activated: bool
+    status: BillStatus
+    can_delete: bool  # draft, or paused with no payment history
     created_at: datetime
     start_period: str | None = None
     end_period: str | None = None
@@ -143,6 +143,7 @@ class PaymentInstanceOut(BaseModel):
     category: CategoryOut
     email_sent_at: datetime | None
     is_last: bool = False  # final instalment of a fixed-term bill
+    bill_status: BillStatus  # a paused bill's paid payments cannot be reverted
 
 
 class TrendPointOut(BaseModel):
@@ -207,10 +208,9 @@ class BackupTemplate(BaseModel):
     due_day: int | None
     due_days: list[int] | None = None  # v8+: several payment days per cycle
     notes: str | None
-    is_archived: bool
+    status: BillStatus
     start_period: str | None
     end_period: str | None = None
-    is_activated: bool = True  # older backups predate drafts: all were live
     draft_dates: list[str] | None = None
     created_at: str
 

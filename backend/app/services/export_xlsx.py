@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.core.i18n import t
 from app.core.tz import today_for, user_tz
-from app.models.bill import BillFrequency, BillTemplate, PaymentInstance
+from app.models.bill import BillFrequency, BillStatus, BillTemplate, PaymentInstance
 from app.models.user import User
 from app.schemas.auth import EXPORT_FIELD_KEYS
 from app.services.notify import footer_text
@@ -85,8 +85,7 @@ def _ensure_year_instances(db: Session, user_id: int, year: int) -> None:
         db.query(BillTemplate)
         .filter(
             BillTemplate.user_id == user_id,
-            BillTemplate.is_archived.is_(False),
-            BillTemplate.is_activated.is_(True),
+            BillTemplate.status == BillStatus.active,
             BillTemplate.frequency != BillFrequency.one_off,
         )
         .all()
@@ -109,7 +108,7 @@ def _rows_by_month(
         .filter(
             BillTemplate.user_id == me.id,
             PaymentInstance.period.startswith(f"{year}-"),
-            PaymentInstance.is_deleted.is_(False),
+            PaymentInstance.hidden.is_(None),
         )
         .order_by(PaymentInstance.due_date)
         .all()

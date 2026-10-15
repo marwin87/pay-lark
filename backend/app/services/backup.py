@@ -9,6 +9,7 @@ from app.core.config import settings
 from app.core.tz import is_valid_tz
 from app.models.bill import (
     BillFrequency,
+    BillStatus,
     BillTemplate,
     PaymentInstance,
     PaymentStatus,
@@ -180,7 +181,7 @@ def _build_backup_arrays(
             db.query(PaymentInstance)
             .filter(
                 PaymentInstance.bill_id.in_(template_ids),
-                PaymentInstance.is_deleted.is_(False),
+                PaymentInstance.hidden.is_(None),
             )
             .all()
             if template_ids
@@ -199,10 +200,9 @@ def _build_backup_arrays(
                 "due_day": t.due_day,
                 "due_days": t.due_days,
                 "notes": t.notes,
-                "is_archived": t.is_archived,
+                "status": t.status,
                 "start_period": t.start_period,
                 "end_period": t.end_period,
-                "is_activated": t.is_activated,
                 "draft_dates": t.draft_dates,
                 "created_at": t.created_at.isoformat(),
             }
@@ -325,10 +325,9 @@ def _apply_backup(db: Session, user_id: int, backup: BackupPayload) -> tuple[int
                 due_day=bt.due_day,
                 due_days=bt.due_days,
                 notes=bt.notes,
-                is_archived=bt.is_archived,
+                status=BillStatus(bt.status),
                 start_period=bt.start_period,
                 end_period=bt.end_period,
-                is_activated=bt.is_activated,
                 draft_dates=bt.draft_dates,
                 user_id=user_id,
             )

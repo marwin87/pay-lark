@@ -22,7 +22,7 @@ test('restoring a backup creates a recoverable snapshot that restores the prior 
   // per the safety net, must snapshot it first.
   const apiUrl = process.env.E2E_API_URL ?? 'http://localhost:8010';
   const emptyBackup = {
-    schema_version: 3,
+    schema_version: 9,
     exported_by: 'e2e@test.com',
     exported_at: new Date().toISOString(),
     bill_templates: [],

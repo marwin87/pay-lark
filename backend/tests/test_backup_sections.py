@@ -91,7 +91,7 @@ def test_export_default_is_full(client):
     _seed(client, tok)
     body = _export(client, tok)
     assert set(body) == _META | _ALL_KEYS
-    assert body["schema_version"] == 8
+    assert body["schema_version"] == 9
     assert body["preferences"] == {
         "language_preference": "de",
         "enabled_languages": ["en", "de"],
@@ -217,7 +217,7 @@ def test_full_round_trip_restores_everything(client):
 def test_currency_only_restore_leaves_everything_else(client):
     tok = register_and_login(client, "cur@test.com")
     _seed(client, tok)
-    payload = {"schema_version": 5, "preferences": {"default_currency": "GBP"}}
+    payload = {"schema_version": 9, "preferences": {"default_currency": "GBP"}}
     assert _upload(client, tok, payload).status_code == 200
     me = _me(client, tok)
     assert me["default_currency"] == "GBP"
@@ -229,7 +229,7 @@ def test_currency_only_restore_leaves_everything_else(client):
 def test_decimal_separator_only_restore_leaves_everything_else(client):
     tok = register_and_login(client, "sep@test.com")
     _seed(client, tok)
-    payload = {"schema_version": 6, "preferences": {"decimal_separator": ","}}
+    payload = {"schema_version": 9, "preferences": {"decimal_separator": ","}}
     assert _upload(client, tok, payload).status_code == 200
     me = _me(client, tok)
     assert me["decimal_separator"] == ","
@@ -303,7 +303,7 @@ def test_telegram_only_restore(client):
 def test_restore_rejects_active_language_not_enabled(client):
     tok = register_and_login(client, "lang@test.com")
     payload = {
-        "schema_version": 5,
+        "schema_version": 9,
         "preferences": {"language_preference": "fr", "enabled_languages": ["en"]},
     }
     assert _upload(client, tok, payload).status_code == 422
@@ -314,7 +314,7 @@ def test_snapshot_undo_restores_preferences(client):
     tok = register_and_login(client, "snap@test.com")
     _seed(client, tok)
     payload = {
-        "schema_version": 5,
+        "schema_version": 9,
         "bill_templates": [],
         "payment_instances": [],
         "preferences": {"default_currency": "JPY", "decimal_separator": ","},
@@ -348,7 +348,7 @@ def test_share_enabled_round_trip_and_old_backup_leaves_it(client):
     assert _upload(client, tok, backup).status_code == 200
     assert _me(client, tok)["share_enabled"] is True
     assert _me(client, tok)["share_emails"] == ["a@gmail.com"]
-    old = {"schema_version": 6, "preferences": {"decimal_separator": ","}}
+    old = {"schema_version": 9, "preferences": {"decimal_separator": ","}}
     assert _upload(client, tok, old).status_code == 200
     assert _me(client, tok)["share_enabled"] is True
 
@@ -361,6 +361,6 @@ def test_pdf_enabled_round_trip_and_old_backup_leaves_it(client):
     client.patch("/auth/me", json={"pdf_enabled": True}, headers=auth(tok))
     assert _upload(client, tok, backup).status_code == 200
     assert _me(client, tok)["pdf_enabled"] is False
-    old = {"schema_version": 6, "preferences": {"decimal_separator": ","}}
+    old = {"schema_version": 9, "preferences": {"decimal_separator": ","}}
     assert _upload(client, tok, old).status_code == 200
     assert _me(client, tok)["pdf_enabled"] is False

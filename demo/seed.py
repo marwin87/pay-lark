@@ -225,14 +225,14 @@ def inject_multi_day_bills(data: dict) -> dict:
             "category_id": ENTERTAINMENT, "frequency": "monthly",
             "interval": 1, "amount": 12.0, "currency": "EUR", "due_day": 3,
             "due_days": [3, 10, 17], "notes": "Single entries instead of a pass",
-            "is_archived": False, "start_period": f"{sy}-{sm:02d}", "end_period": None,
+            "status": "active", "start_period": f"{sy}-{sm:02d}", "end_period": None,
             "created_at": f"{sy}-{sm:02d}-01T08:00:00+00:00",
         },
         {
             "id": 30, "name": "Concert Tickets",
             "category_id": ENTERTAINMENT, "frequency": "one_off",
             "interval": 1, "amount": 65.0, "currency": "EUR", "due_day": None,
-            "notes": "Two shows, bought separately", "is_archived": False,
+            "notes": "Two shows, bought separately", "status": "active",
             "start_period": f"{cy}-{cm:02d}", "end_period": None,
             "created_at": f"{cy}-{cm:02d}-01T08:00:00+00:00",
         },
@@ -289,7 +289,7 @@ def inject_last_payment_bill(data: dict) -> dict:
         "id": 34, "name": "Course Instalments", "category_id": EDUCATION,
         "frequency": "monthly", "interval": 1, "amount": 75.0, "currency": "EUR",
         "due_day": 28, "notes": "Six instalments, this is the last one",
-        "is_archived": False, "start_period": f"{sy}-{sm:02d}",
+        "status": "active", "start_period": f"{sy}-{sm:02d}",
         "end_period": f"{cy}-{cm:02d}", "created_at": f"{sy}-{sm:02d}-01T08:00:00+00:00",
     })
     for n, offset in enumerate(range(-5, 1)):
@@ -321,7 +321,7 @@ def inject_draft_bills(data: dict) -> dict:
     ay, am = period_at(4)
     d1, d2 = date(ny, nm, 12), date(*period_at(2), 12)
     created_at = f"{today.isoformat()}T09:00:00+00:00"
-    base = {"interval": 1, "is_archived": False, "is_activated": False, "end_period": None,
+    base = {"interval": 1, "status": "draft", "end_period": None,
             "created_at": created_at}
     data["bill_templates"].extend([
         {**base, "id": 31, "name": "New Apartment Rent", "category_id": 4,
@@ -334,6 +334,28 @@ def inject_draft_bills(data: dict) -> dict:
          "frequency": "one_off", "amount": 120.0, "currency": "EUR", "due_day": None,
          "notes": "Two appointments", "start_period": f"{ny}-{nm:02d}",
          "draft_dates": [d1.isoformat(), d2.isoformat()]},
+    ])
+    return data
+
+
+def inject_subscriptions_lifecycle(data: dict) -> dict:
+    """Completes the Subscriptions category so it shows every bill lifecycle state: Cloud
+    Storage 2TB and Spotify are already paused with payments (Resume only), so this adds a
+    draft and a paused bill with no payments at all (Resume and Delete)."""
+    today = today_in_demo_zone()
+    SUBSCRIPTIONS = 6
+    ny, m0 = divmod(today.year * 12 + today.month - 1 + 2, 12)
+    start = f"{ny}-{m0 + 1:02d}"
+    created_at = f"{today.isoformat()}T09:00:00+00:00"
+    base = {"category_id": SUBSCRIPTIONS, "interval": 1, "frequency": "monthly",
+            "currency": "EUR", "end_period": None, "created_at": created_at}
+    data["bill_templates"].extend([
+        {**base, "id": 35, "name": "Magazine Bundle", "amount": 14.0, "due_day": 8,
+         "notes": "Waiting for the offer to start", "status": "draft",
+         "start_period": start},
+        {**base, "id": 36, "name": "Audiobook Plan", "amount": 9.5, "due_day": 8,
+         "notes": "Paused before the first payment", "status": "paused",
+         "start_period": start},
     ])
     return data
 
@@ -381,6 +403,7 @@ def restore(session: requests.Session, token: str) -> None:
     data = inject_multi_day_bills(data)
     data = inject_last_payment_bill(data)
     data = inject_draft_bills(data)
+    data = inject_subscriptions_lifecycle(data)
     payload = json.dumps(data)
     r = session.post(
         f"{BASE_URL}/export/restore",

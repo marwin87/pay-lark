@@ -178,7 +178,9 @@
         "edit": "Modifica",
         "pause": "Metti in pausa",
         "resume": "Riprendi",
-        "delete": "Elimina"
+        "delete": "Elimina",
+        "deleteHint": "Non è stato pagato nulla, quindi si può eliminare.",
+        "keepHint": "Non si può eliminare: almeno un pagamento è stato pagato."
     },
     "RestoreDeletedDialog": {
         "title": "Ripristinare i pagamenti eliminati?",
@@ -284,7 +286,8 @@
         "cancel": "Annulla",
         "confirm": "Annulla pagamento",
         "reverting": "Annullamento…",
-        "revertFailed": "Impossibile annullare il pagamento."
+        "revertFailed": "Impossibile annullare il pagamento.",
+        "billPaused": "Questa bolletta è in pausa. Riprendila prima per annullare questo pagamento."
     },
     "MarkPaidDialog": {
         "title": "Segna come pagato",
@@ -758,7 +761,7 @@
                 "q": "Cosa significa «Bozza» su una bolletta?",
                 "s1": "Una nuova bolletta parte come <b>{draft}</b>. Non ha ancora pagamenti, quindi si può controllare e modificare con calma.",
                 "s2": "Premi <b>{generatePayments}</b> e conferma. I pagamenti vengono creati dal mese di inizio e quelli nuovi compaiono da soli. Dopo, il mese di inizio di una bolletta mensile non si può più cambiare.",
-                "s3": "Una bozza non necessaria si può rimuovere con <b>{delete}</b>."
+                "s3": "Una bolletta senza nulla di pagato (una bozza, o una in pausa senza pagamenti effettuati) si può rimuovere con <b>{delete}</b>."
             },
             "repeat": {
                 "q": "La bolletta non è mensile. Che fare?",
@@ -774,7 +777,8 @@
                 "q": "Come si mette in pausa una bolletta?",
                 "s1": "Apri <b>{bills}</b>.",
                 "s2": "Premi <b>{pause}</b> accanto alla bolletta e conferma.",
-                "s3": "Non arriveranno nuovi pagamenti né promemoria. Ciò che è già stato pagato resta nella cronologia."
+                "s3": "Non arriveranno nuovi pagamenti né promemoria. Ciò che è già stato pagato resta nella cronologia.",
+                "s4": "Non è stato pagato nulla? Allora accanto alla bolletta compare <b>{delete}</b>. Una bolletta con un pagamento effettuato si può solo mettere in pausa."
             },
             "resume": {
                 "q": "Come si riattiva una bolletta in pausa?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Una bolletta è stata segnata come pagata per sbaglio",
                 "s1": "Apri <b>{payments}</b> e trova la bolletta.",
-                "s2": "Premi <b>{revert}</b>. La bolletta torna da pagare."
+                "s2": "Premi <b>{revert}</b>. La bolletta torna da pagare.",
+                "s3": "Bolletta in pausa? Riprendila prima (vedi come si riprende una bolletta in pausa)."
             },
             "deletePayment": {
                 "q": "Come si toglie un singolo pagamento?",
@@ -843,7 +848,7 @@
                 "q": "Come si recuperano i dati da un backup?",
                 "s1": "Apri <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Premi <b>{restore}</b> e scegli il file di backup.",
-                "s3": "Guarda il confronto e conferma. Attenzione: questo sostituisce i dati attuali.",
+                "s3": "Guarda il confronto e conferma. Attenzione: questo sostituisce i dati attuali. I backup fatti con versioni precedenti dell’app non si possono ripristinare.",
                 "s4": "Ripensamento? Subito dopo il ripristino i dati di prima si possono riavere nella stessa pagina."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Cerca nell’aiuto…",
         "noResults": "Nessun risultato. Prova con altre parole."
     },
-    "DeleteDraftDialog": {
-        "title": "Eliminare la bozza?",
-        "description": "Questa bozza verrà eliminata definitivamente. Non ha pagamenti, quindi non si perde nessuna cronologia.",
+    "DeleteBillDialog": {
+        "title": "Eliminare la bolletta?",
+        "description": "Questa bolletta e i suoi pagamenti non pagati verranno eliminati definitivamente. Non è stato pagato nulla, quindi non si perde nessuna cronologia.",
         "cancel": "Annulla",
-        "delete": "Elimina bozza",
+        "delete": "Elimina bolletta",
         "deleting": "Eliminazione…"
     }
 }

@@ -20,7 +20,9 @@ import app.models.category  # noqa: F401
 import app.models.user  # noqa: F401
 from app.models.bill import (
     BillFrequency,
+    BillStatus,
     BillTemplate,
+    Hidden,
     PaymentInstance,
     PaymentStatus,
 )
@@ -189,7 +191,7 @@ def _make_bill(
     due_day: int = 15,
     amount: Decimal = Decimal("100.00"),
     start_period: str = "2026-01",
-    is_archived: bool = False,
+    status: BillStatus = BillStatus.active,
     end_period: str | None = None,
 ) -> BillTemplate:
     category = (
@@ -198,7 +200,7 @@ def _make_bill(
         .first()
     )
     bill = BillTemplate(
-        is_activated=True,
+        status=status,
         name="Test Bill",
         frequency=frequency,
         interval=interval,
@@ -207,7 +209,6 @@ def _make_bill(
         due_day=due_day,
         start_period=start_period,
         end_period=end_period,
-        is_archived=is_archived,
         category_id=category.id,
         user_id=user_id,
     )
@@ -230,7 +231,7 @@ def _make_instance(
         due_date=date(year, month, 1),
         amount=Decimal("100.00"),
         status=PaymentStatus.upcoming,
-        is_deleted=is_deleted,
+        hidden=Hidden.user if is_deleted else None,
     )
     db.add(inst)
     db.flush()
@@ -433,7 +434,9 @@ def test_ensure_survives_a_concurrent_request_seeding_the_same_period(
 
 def test_ensure_skips_archived_template(db_session) -> None:
     user = _make_user(db_session)
-    _make_bill(db_session, user.id, frequency=BillFrequency.monthly, is_archived=True)
+    _make_bill(
+        db_session, user.id, frequency=BillFrequency.monthly, status=BillStatus.paused
+    )
     user_id = user.id
     db_session.commit()
 
@@ -487,7 +490,7 @@ def test_ensure_idempotent(db_session) -> None:
 
 
 def test_ensure_respects_soft_delete_tombstone(db_session) -> None:
-    """A soft-deleted instance (is_deleted=True) acts as a tombstone.
+    """A soft-deleted instance (a hidden payment) acts as a tombstone.
 
     ensure_current_period_instances must NOT re-generate the instance for
     the same (bill_id, period) — the existing-row check at recurrence.py:87
@@ -737,14 +740,14 @@ def test_seed_period_does_not_regenerate_a_deleted_slot(db_session) -> None:
     user = _make_user(db_session)
     bill = _multi_day_bill(db_session, user.id, [3, 10, 17], start_period="2026-05")
     ensure_current_period_instances(db_session, "2026-05", user.id)
-    _rows(db_session, bill.id, "2026-05")[1].is_deleted = True
+    _rows(db_session, bill.id, "2026-05")[1].hidden = Hidden.user
     db_session.commit()
 
     ensure_current_period_instances(db_session, "2026-05", user.id)
 
     rows = _rows(db_session, bill.id, "2026-05")
     assert len(rows) == 3
-    assert [r.is_deleted for r in rows] == [False, True, False]
+    assert [r.hidden for r in rows] == [None, Hidden.user, None]
 
 
 def test_seed_period_fills_only_missing_slots(db_session) -> None:

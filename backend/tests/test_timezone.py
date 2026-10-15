@@ -140,10 +140,10 @@ def test_backup_without_notification_sections_leaves_the_zone_out(client):
 def test_restoring_an_old_backup_or_an_unknown_zone_keeps_the_current_zone(client):
     token = register_and_login(client, "tz9@test.com")
     client.patch("/auth/me", json={"timezone": "Asia/Tokyo"}, headers=auth(token))
-    old = {"schema_version": 7, "preferences": {"default_currency": "EUR"}}
+    old = {"schema_version": 9, "preferences": {"default_currency": "EUR"}}
     assert _restore(client, token, old).status_code == 200
     assert _tz(client, token) == "Asia/Tokyo"
 
-    bad = {"schema_version": 7, "notifications": {"timezone": "Mars/Olympus"}}
+    bad = {"schema_version": 9, "notifications": {"timezone": "Mars/Olympus"}}
     assert _restore(client, token, bad).status_code == 200
     assert _tz(client, token) == "Asia/Tokyo"

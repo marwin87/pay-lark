@@ -5,7 +5,7 @@ from datetime import date, datetime, timezone
 import pytest
 from fastapi.testclient import TestClient
 
-from app.models.bill import PaymentInstance, PaymentStatus
+from app.models.bill import Hidden, PaymentInstance, PaymentStatus
 from app.services.recurrence import _due_date_for_period
 from tests.conftest import auth, category_id, register_and_login, today_utc
 
@@ -35,14 +35,16 @@ def _insert_instance(
     is_deleted: bool = False,
     amount="120.00",
 ) -> PaymentInstance:
-    inst = PaymentInstance(
-        bill_id=bill_id,
-        period=period,
-        due_date=due_date,
-        amount=amount,
-        status=status,
-        is_deleted=is_deleted,
-    )
+    # Activation already seeds the current month, so reuse that row instead of duplicating it.
+    inst = (
+        db.query(PaymentInstance)
+        .filter_by(bill_id=bill_id, period=period, slot=0)
+        .one_or_none()
+    ) or PaymentInstance(bill_id=bill_id, period=period)
+    inst.due_date = due_date
+    inst.amount = amount
+    inst.status = status
+    inst.hidden = Hidden.user if is_deleted else None
     db.add(inst)
     db.commit()
     db.refresh(inst)
@@ -129,7 +131,7 @@ def test_has_deleted_future_cross_user_returns_404(client_db):
 
 
 def test_patch_restore_flips_tombstone_to_active(client_db):
-    """recreate_deleted_future=true restores is_deleted=False and status=upcoming."""
+    """recreate_deleted_future=true restores hidden=None and status=upcoming."""
     client, db = client_db
     token = register_and_login(client, "u4@test.com")
     bill_id = _create_bill(client, token)
@@ -145,7 +147,7 @@ def test_patch_restore_flips_tombstone_to_active(client_db):
 
     db.expire_all()
     refreshed = db.get(PaymentInstance, inst.id)
-    assert refreshed.is_deleted is False
+    assert refreshed.hidden is None
     assert refreshed.status == PaymentStatus.upcoming
 
 
@@ -208,7 +210,7 @@ def test_patch_without_restore_flag_leaves_tombstone_intact(client_db):
     assert r.status_code == 200
 
     db.expire_all()
-    assert db.get(PaymentInstance, inst.id).is_deleted is True
+    assert db.get(PaymentInstance, inst.id).hidden == Hidden.user
 
 
 def test_patch_restore_no_tombstones_is_noop(client_db):
@@ -255,8 +257,8 @@ def test_patch_restore_does_not_restore_past_tombstones(client_db):
     assert r.status_code == 200
 
     db.expire_all()
-    assert db.get(PaymentInstance, past_inst.id).is_deleted is True  # untouched
-    assert db.get(PaymentInstance, future_inst.id).is_deleted is False  # restored
+    assert db.get(PaymentInstance, past_inst.id).hidden == Hidden.user  # untouched
+    assert db.get(PaymentInstance, future_inst.id).hidden is None  # restored
 
 
 # ---------------------------------------------------------------------------
@@ -354,7 +356,7 @@ def test_patch_restore_keeps_a_paid_payment_paid(client_db):
     assert r.status_code == 200
     db.expire_all()
     inst = db.get(PaymentInstance, inst.id)
-    assert inst.is_deleted is False
+    assert inst.hidden is None
     assert inst.status == PaymentStatus.paid
     assert str(inst.paid_amount) == "99.00" and inst.paid_at is not None
     # history is untouched by the bill's new price / due day

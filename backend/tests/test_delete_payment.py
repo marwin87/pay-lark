@@ -5,7 +5,7 @@ from datetime import date
 import pytest
 from fastapi.testclient import TestClient
 
-from app.models.bill import PaymentInstance, PaymentStatus
+from app.models.bill import Hidden, PaymentInstance, PaymentStatus
 from tests.conftest import auth, category_id, register_and_login
 
 _BILL = {
@@ -60,9 +60,9 @@ def test_delete_single_leaves_other_instances(client_db):
     assert r.status_code == 204
 
     db.expire_all()
-    assert db.get(PaymentInstance, i_prev.id).is_deleted is False
-    assert db.get(PaymentInstance, i_target.id).is_deleted is True
-    assert db.get(PaymentInstance, i_next.id).is_deleted is False
+    assert db.get(PaymentInstance, i_prev.id).hidden is None
+    assert db.get(PaymentInstance, i_target.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, i_next.id).hidden is None
 
 
 # ---------------------------------------------------------------------------
@@ -87,10 +87,10 @@ def test_delete_future_removes_target_and_future_unpaid(client_db):
     assert r.status_code == 204
 
     db.expire_all()
-    assert db.get(PaymentInstance, i_past.id).is_deleted is False
-    assert db.get(PaymentInstance, i_target.id).is_deleted is True
-    assert db.get(PaymentInstance, i_future1.id).is_deleted is True
-    assert db.get(PaymentInstance, i_future2.id).is_deleted is True
+    assert db.get(PaymentInstance, i_past.id).hidden is None
+    assert db.get(PaymentInstance, i_target.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, i_future1.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, i_future2.id).hidden == Hidden.user
 
 
 def test_delete_future_does_not_touch_paid_instances(client_db):
@@ -111,9 +111,9 @@ def test_delete_future_does_not_touch_paid_instances(client_db):
     assert r.status_code == 204
 
     db.expire_all()
-    assert db.get(PaymentInstance, i_target.id).is_deleted is True
-    assert db.get(PaymentInstance, i_paid.id).is_deleted is False
-    assert db.get(PaymentInstance, i_upcoming.id).is_deleted is True
+    assert db.get(PaymentInstance, i_target.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, i_paid.id).hidden is None
+    assert db.get(PaymentInstance, i_upcoming.id).hidden == Hidden.user
 
 
 def test_delete_future_does_not_affect_other_bills(client_db):
@@ -132,8 +132,8 @@ def test_delete_future_does_not_affect_other_bills(client_db):
     assert r.status_code == 204
 
     db.expire_all()
-    assert db.get(PaymentInstance, i_a.id).is_deleted is True
-    assert db.get(PaymentInstance, i_b_future.id).is_deleted is False
+    assert db.get(PaymentInstance, i_a.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, i_b_future.id).hidden is None
 
 
 # ---------------------------------------------------------------------------

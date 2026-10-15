@@ -37,6 +37,19 @@ class PaymentStatus(str, Enum):
     paid = "paid"
 
 
+class BillStatus(str, Enum):
+    draft = "draft"  # no payments until activated; can be deleted
+    active = "active"
+    paused = "paused"  # nothing new is generated; its unpaid payments are hidden
+
+
+class Hidden(str, Enum):
+    """Why a payment is not shown. A visible payment has `hidden = None`."""
+
+    user = "user"  # the user deleted it (kept as a tombstone so it is not regenerated)
+    paused = "paused"  # its bill was paused; Resume brings it back
+
+
 class BillTemplate(Base):
     """Recurring bill definition. Instances are generated from this."""
 
@@ -61,17 +74,15 @@ class BillTemplate(Base):
     # always mirrors the first entry so single-day readers keep working.
     due_days: Mapped[list[int] | None] = mapped_column(JSON)
     notes: Mapped[str | None] = mapped_column(Text)
-    is_archived: Mapped[bool] = mapped_column(Boolean, default=False)
     # Recurrence anchor: YYYY-MM string set at creation from UTC month.
     # Avoids UTC-vs-local off-by-one when created_at straddles a month boundary.
     # NULL for rows created before this column existed; code falls back to created_at.
     start_period: Mapped[str | None] = mapped_column(String(7))
     # Last period (YYYY-MM, inclusive) to generate instances for; NULL = open-ended.
     end_period: Mapped[str | None] = mapped_column(String(7))
-    # New bills are drafts: no payments exist until the user activates them. The
-    # server default only covers rows that predate the column (they were live).
-    is_activated: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=False, server_default="1"
+    # New bills are drafts: no payments exist until the user activates them.
+    status: Mapped[BillStatus] = mapped_column(
+        String(10), nullable=False, default=BillStatus.draft
     )
     # One-off dates (ISO strings) of a draft; instances take over on activation.
     draft_dates: Mapped[list[str] | None] = mapped_column(JSON)
@@ -85,6 +96,18 @@ class BillTemplate(Base):
     instances: Mapped[list["PaymentInstance"]] = relationship(
         back_populates="template", cascade="all, delete-orphan"
     )
+
+    # Set by list_bills from one query; anything that did not look stays True, so a
+    # missing answer never offers a delete.
+    has_paid_history = True
+
+    @property
+    def can_delete(self) -> bool:
+        """Only a bill with no paid history can go: a draft, or a paused bill whose
+        payments are all unpaid (nothing real to lose). Anything else stays paused."""
+        return self.status == BillStatus.draft or (
+            self.status == BillStatus.paused and not self.has_paid_history
+        )
 
     @property
     def days(self) -> list[int | None]:
@@ -100,9 +123,9 @@ class BillTemplate(Base):
     def dates(self) -> list[date]:
         if self.frequency != BillFrequency.one_off:
             return []
-        if not self.is_activated:
+        if self.status == BillStatus.draft:
             return sorted(date.fromisoformat(d) for d in self.draft_dates or [])
-        return sorted(i.due_date for i in self.instances if not i.is_deleted)
+        return sorted(i.due_date for i in self.instances if i.hidden is None)
 
     @property
     def paid_dates(self) -> list[date]:
@@ -111,7 +134,7 @@ class BillTemplate(Base):
         return sorted(
             i.due_date
             for i in self.instances
-            if not i.is_deleted and i.status == PaymentStatus.paid
+            if i.hidden is None and i.status == PaymentStatus.paid
         )
 
 
@@ -146,14 +169,9 @@ class PaymentInstance(Base):
     # the template's amount. Never touches the template or other periods.
     amount_override: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
     notes: Mapped[str | None] = mapped_column(Text)
-    is_deleted: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=False, server_default="false"
-    )
-    # Set together with is_deleted when archiving the bill hid this payment, so
-    # unarchiving restores exactly those rows and not ones the user deleted by hand.
-    deleted_by_archive: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=False, server_default="false"
-    )
+    # NULL = visible. One column, so "deleted by the user" and "hidden by pausing the
+    # bill" can never be set together: Resume restores only the second kind.
+    hidden: Mapped[Hidden | None] = mapped_column(String(10))
     reminder_sent_upcoming: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
     )

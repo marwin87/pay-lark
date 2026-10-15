@@ -3,7 +3,7 @@ exactly those, never payments the user deleted by hand."""
 
 from datetime import date
 
-from app.models.bill import PaymentInstance, PaymentStatus
+from app.models.bill import Hidden, PaymentInstance, PaymentStatus
 from tests.conftest import auth, category_id, register_and_login, today_utc
 
 _BILL = {
@@ -34,14 +34,16 @@ def _inst(
 ) -> PaymentInstance:
     period = _period(offset)
     y, m = map(int, period.split("-"))
-    inst = PaymentInstance(
-        bill_id=bill_id,
-        period=period,
-        due_date=date(y, m, 15),
-        amount="50.00",
-        status=status,
-        is_deleted=deleted,
-    )
+    # Activation already seeds the current month, so reuse that row instead of duplicating it.
+    inst = (
+        db.query(PaymentInstance)
+        .filter_by(bill_id=bill_id, period=period, slot=0)
+        .one_or_none()
+    ) or PaymentInstance(bill_id=bill_id, period=period)
+    inst.due_date = date(y, m, 15)
+    inst.amount = "50.00"
+    inst.status = status
+    inst.hidden = Hidden.user if deleted else None
     db.add(inst)
     db.commit()
     db.refresh(inst)
@@ -124,8 +126,8 @@ def test_unarchive_keeps_hand_deleted_payments_deleted(client_db):
     assert _listed(client, token, 1) == []
     assert _listed(client, token, 2) == [archived_later.id]
     db.expire_all()
-    assert db.get(PaymentInstance, hand_deleted_now.id).is_deleted is True
-    assert db.get(PaymentInstance, hand_deleted_next.id).is_deleted is True
+    assert db.get(PaymentInstance, hand_deleted_now.id).hidden == Hidden.user
+    assert db.get(PaymentInstance, hand_deleted_next.id).hidden == Hidden.user
 
 
 def test_unarchive_does_not_bring_back_months_that_already_passed(client_db):
@@ -224,3 +226,57 @@ def test_unarchive_keeps_a_last_payment_month_still_ahead(client_db):
 
     db.expire_all()
     assert db.get(BillTemplate, bill_id).end_period == _period(3)
+
+
+def test_editing_a_paused_bill_does_not_bring_back_what_pausing_hid(client_db):
+    client, db = client_db
+    token = register_and_login(client, "arch-edit@test.com")
+    bill_id = _bill(client, token)
+    hidden = _inst(db, bill_id, 1)
+    _archive(client, token, bill_id)
+
+    # Pausing is not a "deleted payment" the user would be asked to restore...
+    r = client.get(f"/bills/{bill_id}/has-deleted-future", headers=auth(token))
+    assert r.json() == {"has_deleted_future": False}
+
+    # ...and even a forced restore on edit leaves them hidden until Resume.
+    r = client.patch(
+        f"/bills/{bill_id}",
+        json={"amount": "60.00", "recreate_deleted_future": True},
+        headers=auth(token),
+    )
+    assert r.status_code == 200
+    assert hidden.id not in _listed(client, token, 1)
+
+    _unarchive(client, token, bill_id)
+    assert hidden.id in _listed(client, token, 1)
+
+
+def _unpay(client, token, instance_id):
+    return client.post(f"/bills/payments/{instance_id}/unpay", headers=auth(token))
+
+
+def test_cannot_revert_a_payment_of_a_paused_bill(client_db):
+    client, db = client_db
+    token = register_and_login(client, "arch-unpay@test.com")
+    bill_id = _bill(client, token)
+    paid_past = _inst(db, bill_id, -1, status=PaymentStatus.paid)
+    paid_now = _inst(db, bill_id, 0, status=PaymentStatus.paid)
+    paid_next = _inst(db, bill_id, 1, status=PaymentStatus.paid)
+    _archive(client, token, bill_id)
+
+    for inst in (paid_past, paid_now, paid_next):
+        r = _unpay(client, token, inst.id)
+        assert r.status_code == 409
+        assert r.json()["detail"] == "Resume the bill first"
+    # The payment tells the UI its bill is paused, so the revert dialog can say so up front.
+    r = client.get(f"/bills/payments?month={_period(0)}", headers=auth(token))
+    assert [p["bill_status"] for p in r.json()] == ["paused"]
+    # Still paid, still shown: nothing half-reverted.
+    assert _listed(client, token, -1) == [paid_past.id]
+    assert _listed(client, token, 0) == [paid_now.id]
+    assert _listed(client, token, 1) == [paid_next.id]
+
+    _unarchive(client, token, bill_id)
+    for inst in (paid_past, paid_now):
+        assert _unpay(client, token, inst.id).status_code == 200

@@ -10,7 +10,7 @@ import {
   createBill,
   updateBill,
   archiveBill,
-  deleteDraftBill,
+  deleteBill,
   unarchiveBill,
   activateBill,
   hasDeletedFuture,
@@ -30,7 +30,7 @@ import {
 import BillTemplateForm from "@/components/bills/BillTemplateForm";
 import BillTemplateRow from "@/components/bills/BillTemplateRow";
 import PauseConfirmDialog from "@/components/bills/PauseConfirmDialog";
-import DeleteDraftDialog from "@/components/bills/DeleteDraftDialog";
+import DeleteBillDialog from "@/components/bills/DeleteBillDialog";
 import ActivateConfirmDialog from "@/components/bills/ActivateConfirmDialog";
 import ResumeConfirmDialog from "@/components/bills/ResumeConfirmDialog";
 import RestoreDeletedDialog from "@/components/bills/RestoreDeletedDialog";
@@ -54,7 +54,7 @@ export default function BillsPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [expandedId, setExpandedId] = useState<number | "new" | null>(null);
-  // "Paused" in the UI == `is_archived` in the API.
+  // "Paused" in the UI == `status === "paused"` in the API.
   const [pauseTarget, setPauseTarget] = useState<BillTemplateOut | null>(null);
   const [pausing, setPausing] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<BillTemplateOut | null>(null);
@@ -77,16 +77,16 @@ export default function BillsPage() {
     fetchMe().then((p) => setDefaultCurrency(p.default_currency)).catch(() => {});
   }, []);
 
-  const pausedCount = templates.filter((tmpl) => tmpl.is_archived).length;
+  const pausedCount = templates.filter((tmpl) => tmpl.status === "paused").length;
   const allPaused = templates.length > 0 && pausedCount === templates.length;
   const filteredTemplates = templates
-    .filter((tmpl) => showPaused || !tmpl.is_archived)
+    .filter((tmpl) => showPaused || tmpl.status !== "paused")
     .filter((tmpl) => categoryFilter.size === 0 || categoryFilter.has(String(tmpl.category.id)))
     .filter(
       (tmpl) => !searchQuery || tmpl.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-  const categoryOptions = distinctCategories(templates.filter((tmpl) => showPaused || !tmpl.is_archived), (tmpl) => tmpl.category).map((cat) => ({
+  const categoryOptions = distinctCategories(templates.filter((tmpl) => showPaused || tmpl.status !== "paused"), (tmpl) => tmpl.category).map((cat) => ({
     value: String(cat.id),
     label: categoryFilterLabel(cat, tCategories),
   }));
@@ -235,7 +235,7 @@ export default function BillsPage() {
     if (!deleteTarget || deleting) return;
     setDeleting(true);
     try {
-      await deleteDraftBill(deleteTarget.id);
+      await deleteBill(deleteTarget.id);
       showToast(t("billDeleted", { name: toastName(deleteTarget.name) }));
       setDeleteTarget(null);
       setRefreshKey((k) => k + 1);
@@ -285,7 +285,7 @@ export default function BillsPage() {
       )}
 
       {deleteTarget && (
-        <DeleteDraftDialog
+        <DeleteBillDialog
           billName={deleteTarget.name}
           onConfirm={handleDeleteConfirm}
           onCancel={() => setDeleteTarget(null)}
@@ -431,7 +431,7 @@ export default function BillsPage() {
             <div key={i} className="h-16 rounded-xl bg-slate-200 dark:bg-slate-700 animate-pulse" />
           ))}
         </div>
-      ) : templates.every((tmpl) => tmpl.is_archived) && !showPaused && expandedId !== "new" ? (
+      ) : templates.every((tmpl) => tmpl.status === "paused") && !showPaused && expandedId !== "new" ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 px-6 py-16 text-center">
           <div
             className={`mb-3 rounded-full p-4 ${

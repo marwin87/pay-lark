@@ -178,7 +178,9 @@
         "edit": "Bearbeiten",
         "pause": "Pausieren",
         "resume": "Fortsetzen",
-        "delete": "Löschen"
+        "delete": "Löschen",
+        "deleteHint": "Nichts wurde bezahlt, daher kann sie gelöscht werden.",
+        "keepHint": "Kann nicht gelöscht werden: mindestens eine Zahlung wurde bezahlt."
     },
     "RestoreDeletedDialog": {
         "title": "Gelöschte Zahlungen wiederherstellen?",
@@ -284,7 +286,8 @@
         "cancel": "Abbrechen",
         "confirm": "Zahlung zurücksetzen",
         "reverting": "Wird rückgängig gemacht…",
-        "revertFailed": "Zahlung konnte nicht rückgängig gemacht werden."
+        "revertFailed": "Zahlung konnte nicht rückgängig gemacht werden.",
+        "billPaused": "Diese Rechnung ist pausiert. Setze sie zuerst fort, um diese Zahlung zurückzusetzen."
     },
     "MarkPaidDialog": {
         "title": "Als bezahlt markieren",
@@ -758,7 +761,7 @@
                 "q": "Was bedeutet „Entwurf“ bei einer Rechnung?",
                 "s1": "Eine neue Rechnung startet als <b>{draft}</b>. Sie hat noch keine Zahlungen und kann in Ruhe geprüft und geändert werden.",
                 "s2": "<b>{generatePayments}</b> drücken und bestätigen. Die Zahlungen werden ab dem Startmonat angelegt, neue kommen automatisch dazu. Danach lässt sich der Startmonat einer monatlichen Rechnung nicht mehr ändern.",
-                "s3": "Ein nicht benötigter Entwurf kann mit <b>{delete}</b> entfernt werden."
+                "s3": "Eine Rechnung, bei der nichts bezahlt wurde (ein Entwurf oder eine pausierte ohne bezahlte Zahlung), kann mit <b>{delete}</b> entfernt werden."
             },
             "repeat": {
                 "q": "Die Rechnung kommt nicht monatlich. Was tun?",
@@ -774,7 +777,8 @@
                 "q": "Wie wird eine Rechnung pausiert?",
                 "s1": "Öffne <b>{bills}</b>.",
                 "s2": "Tippe neben der Rechnung auf <b>{pause}</b> und bestätige.",
-                "s3": "Es kommen keine neuen Zahlungen oder Erinnerungen mehr. Was schon bezahlt wurde, bleibt im Verlauf."
+                "s3": "Es kommen keine neuen Zahlungen oder Erinnerungen mehr. Was schon bezahlt wurde, bleibt im Verlauf.",
+                "s4": "Wurde nichts bezahlt? Dann gibt es neben der Rechnung <b>{delete}</b>. Eine Rechnung mit bezahlter Zahlung kann nur pausiert werden."
             },
             "resume": {
                 "q": "Wie wird eine pausierte Rechnung zurückgeholt?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Eine Rechnung wurde versehentlich als bezahlt markiert",
                 "s1": "Öffne <b>{payments}</b> und suche die Rechnung.",
-                "s2": "Tippe auf <b>{revert}</b>. Die Rechnung ist wieder unbezahlt."
+                "s2": "Tippe auf <b>{revert}</b>. Die Rechnung ist wieder unbezahlt.",
+                "s3": "Rechnung pausiert? Setze sie zuerst fort (siehe, wie eine pausierte Rechnung zurückgeholt wird)."
             },
             "deletePayment": {
                 "q": "Wie wird eine einzelne Zahlung entfernt?",
@@ -843,7 +848,7 @@
                 "q": "Wie werden Daten aus einer Sicherung zurückgeholt?",
                 "s1": "Öffne <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Auf <b>{restore}</b> tippen und die Sicherungsdatei wählen.",
-                "s3": "Den Vergleich prüfen und bestätigen. Achtung: Das ersetzt die aktuellen Daten.",
+                "s3": "Den Vergleich prüfen und bestätigen. Achtung: Das ersetzt die aktuellen Daten. Sicherungen älterer App-Versionen lassen sich nicht wiederherstellen.",
                 "s4": "Anders überlegt? Direkt nach dem Wiederherstellen lassen sich auf derselben Seite die vorherigen Daten zurückholen."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "In der Hilfe suchen …",
         "noResults": "Nichts gefunden. Versuche andere Wörter."
     },
-    "DeleteDraftDialog": {
-        "title": "Entwurf löschen?",
-        "description": "Dieser Entwurf wird dauerhaft entfernt. Er hat keine Zahlungen, es geht also kein Verlauf verloren.",
+    "DeleteBillDialog": {
+        "title": "Rechnung löschen?",
+        "description": "Diese Rechnung und ihre unbezahlten Zahlungen werden dauerhaft entfernt. Es wurde nichts bezahlt, es geht also kein Verlauf verloren.",
         "cancel": "Abbrechen",
-        "delete": "Entwurf löschen",
+        "delete": "Rechnung löschen",
         "deleting": "Wird gelöscht…"
     }
 }

@@ -13,12 +13,12 @@ interface Props {
   deleting?: boolean;
 }
 
-export default function DeleteDraftDialog({ billName, onConfirm, onCancel, deleting = false }: Props) {
-  const t = useTranslations("DeleteDraftDialog");
+export default function DeleteBillDialog({ billName, onConfirm, onCancel, deleting = false }: Props) {
+  const t = useTranslations("DeleteBillDialog");
   return (
-    <DialogShell labelledBy="delete-draft-dialog-title" onClose={onCancel}>
+    <DialogShell labelledBy="delete-bill-dialog-title" onClose={onCancel}>
         <DialogHeader
-          id="delete-draft-dialog-title"
+          id="delete-bill-dialog-title"
           badgeClass="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400"
           icon={<Trash2 size={18} />}
           title={t("title")}

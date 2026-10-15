@@ -178,7 +178,9 @@
         "edit": "Bewerken",
         "pause": "Pauzeren",
         "resume": "Hervatten",
-        "delete": "Verwijderen"
+        "delete": "Verwijderen",
+        "deleteHint": "Er is niets betaald, dus ze kan worden verwijderd.",
+        "keepHint": "Kan niet worden verwijderd: minstens één betaling is betaald."
     },
     "RestoreDeletedDialog": {
         "title": "Verwijderde betalingen herstellen?",
@@ -284,7 +286,8 @@
         "cancel": "Annuleren",
         "confirm": "Betaling terugdraaien",
         "reverting": "Bezig met terugdraaien…",
-        "revertFailed": "Betaling terugdraaien mislukt."
+        "revertFailed": "Betaling terugdraaien mislukt.",
+        "billPaused": "Deze rekening is gepauzeerd. Hervat haar eerst om deze betaling terug te zetten."
     },
     "MarkPaidDialog": {
         "title": "Markeer als betaald",
@@ -758,7 +761,7 @@
                 "q": "Wat betekent “Concept” bij een rekening?",
                 "s1": "Een nieuwe rekening start als <b>{draft}</b>. Ze heeft nog geen betalingen, dus je kunt haar rustig controleren en aanpassen.",
                 "s2": "Druk op <b>{generatePayments}</b> en bevestig. De betalingen worden vanaf de startmaand aangemaakt en nieuwe verschijnen vanzelf. Daarna kan de startmaand van een maandelijkse rekening niet meer worden gewijzigd.",
-                "s3": "Een concept dat niet nodig is, kan met <b>{delete}</b> worden verwijderd."
+                "s3": "Een rekening waarvan niets is betaald (een concept, of een gepauzeerde zonder betaalde betaling) kan met <b>{delete}</b> worden verwijderd."
             },
             "repeat": {
                 "q": "De rekening is niet maandelijks. Wat nu?",
@@ -774,7 +777,8 @@
                 "q": "Hoe wordt een rekening gepauzeerd?",
                 "s1": "Open <b>{bills}</b>.",
                 "s2": "Tik naast de rekening op <b>{pause}</b> en bevestig.",
-                "s3": "Er komen geen nieuwe betalingen of herinneringen. Wat al betaald is, blijft in de geschiedenis."
+                "s3": "Er komen geen nieuwe betalingen of herinneringen. Wat al betaald is, blijft in de geschiedenis.",
+                "s4": "Is er niets betaald? Dan staat naast de rekening <b>{delete}</b>. Een rekening met een betaalde betaling kan alleen worden gepauzeerd."
             },
             "resume": {
                 "q": "Hoe wordt een gepauzeerde rekening teruggehaald?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Een rekening is per ongeluk als betaald gemarkeerd",
                 "s1": "Open <b>{payments}</b> en zoek de rekening.",
-                "s2": "Tik op <b>{revert}</b>. De rekening staat weer als onbetaald."
+                "s2": "Tik op <b>{revert}</b>. De rekening staat weer als onbetaald.",
+                "s3": "Rekening gepauzeerd? Hervat haar eerst (zie hoe een gepauzeerde rekening terugkomt)."
             },
             "deletePayment": {
                 "q": "Hoe wordt één betaling verwijderd?",
@@ -843,7 +848,7 @@
                 "q": "Hoe worden gegevens uit een back-up teruggehaald?",
                 "s1": "Open <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Tik op <b>{restore}</b> en kies het back-upbestand.",
-                "s3": "Bekijk de vergelijking en bevestig. Let op: dit vervangt de huidige gegevens.",
+                "s3": "Bekijk de vergelijking en bevestig. Let op: dit vervangt de huidige gegevens. Back-ups van oudere versies van de app kunnen niet worden hersteld.",
                 "s4": "Bedenkt men zich? Direct na het herstellen zijn de gegevens van daarvoor op dezelfde pagina terug te halen."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Zoeken in help…",
         "noResults": "Niets gevonden. Probeer andere woorden."
     },
-    "DeleteDraftDialog": {
-        "title": "Concept verwijderen?",
-        "description": "Dit concept wordt definitief verwijderd. Het heeft geen betalingen, dus er gaat geen geschiedenis verloren.",
+    "DeleteBillDialog": {
+        "title": "Rekening verwijderen?",
+        "description": "Deze rekening en haar onbetaalde betalingen worden definitief verwijderd. Er is niets betaald, dus er gaat geen geschiedenis verloren.",
         "cancel": "Annuleren",
-        "delete": "Concept verwijderen",
+        "delete": "Rekening verwijderen",
         "deleting": "Verwijderen…"
     }
 }

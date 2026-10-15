@@ -29,7 +29,7 @@ def payment_trend(db: Session, user_id: int, month: str) -> list[dict]:
         .filter(
             BillTemplate.user_id == user_id,
             PaymentInstance.period.in_(periods),
-            PaymentInstance.is_deleted.is_(False),
+            PaymentInstance.hidden.is_(None),
         )
         .all()
     )

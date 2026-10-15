@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Undo2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ApiError } from "@/lib/api";
 import { revertPay, type PaymentInstanceOut } from "@/lib/payments-api";
 import DialogHeader from "@/components/ui/DialogHeader";
 import PaymentSubject from "./PaymentSubject";
@@ -36,6 +37,9 @@ export default function RevertPaymentDialog({
 
   if (!isOpen) return null;
 
+  // A paused bill keeps its paid history; the server refuses a revert too (409).
+  const billPaused = instance.bill_status === "paused";
+
   async function handleConfirm() {
     setIsReverting(true);
     setError(null);
@@ -44,7 +48,14 @@ export default function RevertPaymentDialog({
       if (mounted.current) onReverted(updated);
     } catch (err) {
       if (!mounted.current) return;
-      setError(err instanceof Error ? err.message : t("revertFailed"));
+      // 409: the bill is paused, so this payment can't come back until it is resumed.
+      setError(
+        err instanceof ApiError && err.status === 409
+          ? t("billPaused")
+          : err instanceof Error
+            ? err.message
+            : t("revertFailed"),
+      );
       setIsReverting(false);
     }
   }
@@ -61,9 +72,15 @@ export default function RevertPaymentDialog({
           busy={isReverting}
         />
 
-        <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
-          {t("description")}
-        </p>
+        {billPaused ? (
+          <p className="mb-4 rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+            {t("billPaused")}
+          </p>
+        ) : (
+          <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+            {t("description")}
+          </p>
+        )}
 
         {error && (
           <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
@@ -82,7 +99,7 @@ export default function RevertPaymentDialog({
           </button>
           <button
             onClick={handleConfirm}
-            disabled={isReverting}
+            disabled={isReverting || billPaused}
             className="flex-1 rounded-lg border border-transparent bg-amber-600 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-amber-700 disabled:opacity-50"
           >
             {isReverting ? t("reverting") : t("confirm")}

@@ -4,7 +4,13 @@ from calendar import monthrange
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
-from app.models.bill import BillFrequency, BillTemplate, PaymentInstance, PaymentStatus
+from app.models.bill import (
+    BillFrequency,
+    BillStatus,
+    BillTemplate,
+    PaymentInstance,
+    PaymentStatus,
+)
 
 # A rival insert shows up as IntegrityError on the unique key, but on SQLite a writer whose
 # read snapshot went stale gets "database is locked" (OperationalError); the retry sees the winner.
@@ -148,8 +154,7 @@ def _seed_period(db: Session, period: str, user_id: int) -> None:
         db.query(BillTemplate)
         .filter(
             BillTemplate.user_id == user_id,
-            BillTemplate.is_archived.is_(False),
-            BillTemplate.is_activated.is_(True),
+            BillTemplate.status == BillStatus.active,
             BillTemplate.frequency != BillFrequency.one_off,
         )
         .all()

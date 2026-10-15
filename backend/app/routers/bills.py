@@ -6,7 +6,13 @@ from sqlalchemy.orm import Session, selectinload
 from app.core.database import get_db
 from app.core.deps import current_user
 from app.core.tz import now_for, today_for, user_tz
-from app.models.bill import BillTemplate, PaymentInstance, PaymentStatus
+from app.models.bill import (
+    BillStatus,
+    BillTemplate,
+    Hidden,
+    PaymentInstance,
+    PaymentStatus,
+)
 from app.models.category import Category
 from app.models.user import User
 from app.schemas.bill import (
@@ -81,9 +87,9 @@ def _sync_one_off_dates(db: Session, bill: BillTemplate, dates: list[date]) -> N
     live_dates: set[date] = set()
     removed: set[int] = set()
     for inst in rows:
-        if inst.is_deleted:
+        if inst.hidden == Hidden.user:
             if inst.due_date in wanted and inst.status != PaymentStatus.paid:
-                inst.is_deleted = False
+                inst.hidden = None
                 inst.amount = bill.amount
                 live_dates.add(inst.due_date)
         elif inst.due_date in wanted:
@@ -99,7 +105,7 @@ def _sync_one_off_dates(db: Session, bill: BillTemplate, dates: list[date]) -> N
     db.add_all(
         _one_off_instances(bill, [d for d in dates if d not in live_dates], taken)
     )
-    kept = {i.due_date for i in remaining if not i.is_deleted}
+    kept = {i.due_date for i in remaining if i.hidden != Hidden.user}
     bill.start_period = min(kept | wanted).strftime("%Y-%m")
 
 
@@ -119,7 +125,7 @@ def _apply_day_change(db: Session, bill: BillTemplate) -> None:
     for inst in unpaid:
         if inst.slot >= len(days):
             db.delete(inst)
-        elif not inst.is_deleted:
+        elif inst.hidden != Hidden.user:
             inst.due_date = _due_date_for_period(inst.period, days[inst.slot])
 
 
@@ -127,7 +133,7 @@ def _live_instance(db: Session, instance_id: int, user_id: int) -> PaymentInstan
     """A payment of the caller's that exists and wasn't deleted (a deleted one is
     gone as far as the API is concerned, so it is a 404, not editable)."""
     instance = db.get(PaymentInstance, instance_id)
-    if not instance or instance.is_deleted:
+    if not instance or instance.hidden is not None:
         raise HTTPException(status_code=404, detail="Payment instance not found")
     if instance.template.user_id != user_id:
         raise HTTPException(status_code=404, detail="Payment instance not found")
@@ -177,8 +183,26 @@ def _to_out(inst: PaymentInstance, today: date) -> PaymentInstanceOut:
             "category": CategoryOut.model_validate(inst.template.category),
             "email_sent_at": inst.email_sent_at,
             "is_last": is_last_instance(inst.template, inst.period),
+            "bill_status": inst.template.status,
         }
     )
+
+
+def _has_paid_history(db: Session, bill_ids: list[int]) -> set[int]:
+    """Ids among `bill_ids` with a paid payment the user can still see. A payment the
+    user deleted is gone from Payments, trend, export and backup, so it is no history.
+    """
+    rows = (
+        db.query(PaymentInstance.bill_id)
+        .filter(
+            PaymentInstance.bill_id.in_(bill_ids),
+            PaymentInstance.status == PaymentStatus.paid,
+            PaymentInstance.hidden.is_(None),
+        )
+        .distinct()
+        .all()
+    )
+    return {bill_id for (bill_id,) in rows}
 
 
 @router.get("", response_model=list[BillTemplateOut])
@@ -189,8 +213,12 @@ def list_bills(
 ):
     q = db.query(BillTemplate).filter(BillTemplate.user_id == me.id)
     if not include_archived:
-        q = q.filter(BillTemplate.is_archived.is_(False))
-    return q.order_by(BillTemplate.name).all()
+        q = q.filter(BillTemplate.status != BillStatus.paused)
+    bills = q.order_by(BillTemplate.name).all()
+    with_history = _has_paid_history(db, [b.id for b in bills])
+    for b in bills:
+        b.has_paid_history = b.id in with_history
+    return bills
 
 
 @router.post("", response_model=BillTemplateOut, status_code=status.HTTP_201_CREATED)
@@ -228,7 +256,7 @@ def create_bill(
         data["draft_dates"] = [d.isoformat() for d in body.dates]
     # A draft: payments appear only once the user activates the bill.
     bill = BillTemplate(
-        **data, user_id=me.id, start_period=start_period, is_activated=False
+        **data, user_id=me.id, start_period=start_period, status=BillStatus.draft
     )
     db.add(bill)
     db.commit()
@@ -247,7 +275,7 @@ def activate_bill(
     bill = db.get(BillTemplate, bill_id)
     if not bill or bill.user_id != me.id:
         raise HTTPException(status_code=404, detail="Bill not found")
-    if bill.is_archived:
+    if bill.status == BillStatus.paused:
         raise HTTPException(status_code=409, detail="Resume the bill first")
 
     current_period = now_for(me).strftime("%Y-%m")
@@ -257,13 +285,17 @@ def activate_bill(
     # (SQLite serializes the writers), the other gets 409 instead of a duplicate-key 500.
     claimed = (
         db.query(BillTemplate)
-        .filter(BillTemplate.id == bill.id, BillTemplate.is_activated.is_(False))
-        .update({"is_activated": True, "draft_dates": None}, synchronize_session=False)
+        .filter(BillTemplate.id == bill.id, BillTemplate.status == BillStatus.draft)
+        .update(
+            {"status": BillStatus.active, "draft_dates": None},
+            synchronize_session=False,
+        )
     )
     if not claimed:
         raise HTTPException(status_code=409, detail="Bill is already activated")
     db.refresh(bill)
-    if bill.frequency == BF.monthly and start_period < current_period:
+    # <=: a bill starting this month is live at once, not only after the next sync.
+    if bill.frequency in (BF.monthly, BF.annual) and start_period <= current_period:
         backfill_template_instances(db, bill, start_period, current_period)
     elif dates:
         # Explicit dates (any months): one payment each.
@@ -307,7 +339,7 @@ def list_payments(
         .filter(
             BillTemplate.user_id == me.id,
             PaymentInstance.period == month,
-            PaymentInstance.is_deleted.is_(False),
+            PaymentInstance.hidden.is_(None),
         )
         .order_by(PaymentInstance.due_date)
         .all()
@@ -420,6 +452,10 @@ def revert_payment(
         raise HTTPException(status_code=400, detail="Payment is not marked as paid")
 
     today = today_for(me)
+    # A paused bill keeps its paid history as it is: reverting would put an unpaid
+    # payment back on a bill that is not supposed to have any.
+    if instance.template.status == BillStatus.paused:
+        raise HTTPException(status_code=409, detail="Resume the bill first")
     instance.status = (
         PaymentStatus.overdue if instance.due_date < today else PaymentStatus.upcoming
     )
@@ -445,15 +481,15 @@ def delete_payment(
     if template.user_id != me.id:
         raise HTTPException(status_code=404, detail="Payment instance not found")
 
-    instance.is_deleted = True
+    instance.hidden = Hidden.user
 
     if delete_future:
         db.query(PaymentInstance).filter(
             PaymentInstance.bill_id == instance.bill_id,
             PaymentInstance.due_date > instance.due_date,
             PaymentInstance.status != PaymentStatus.paid,
-            PaymentInstance.is_deleted.is_(False),
-        ).update({"is_deleted": True}, synchronize_session=False)
+            PaymentInstance.hidden.is_(None),
+        ).update({"hidden": Hidden.user}, synchronize_session=False)
 
     db.commit()
 
@@ -487,7 +523,8 @@ def has_deleted_future(
         db.query(PaymentInstance)
         .filter(
             PaymentInstance.bill_id == bill_id,
-            PaymentInstance.is_deleted.is_(True),
+            # Only the user's own deletions; ones hidden by pausing come back with Resume.
+            PaymentInstance.hidden == Hidden.user,
             PaymentInstance.period >= current_period,
         )
         .first()
@@ -530,7 +567,7 @@ def update_bill(
     if dates is not None and bill.frequency != BF.one_off:
         raise HTTPException(status_code=422, detail="dates are only for one_off bills")
 
-    if not bill.is_activated:
+    if bill.status == BillStatus.draft:
         # Draft: no payments exist, so only the stored template changes.
         if due_month is not None and not dates:
             now = now_for(me)
@@ -597,7 +634,7 @@ def update_bill(
                 PaymentInstance.bill_id == bill.id,
                 PaymentInstance.period >= current_period,
                 PaymentInstance.status != PaymentStatus.paid,
-                PaymentInstance.is_deleted.is_(False),
+                PaymentInstance.hidden.is_(None),
             )
             .all()
         )
@@ -619,13 +656,13 @@ def update_bill(
             db.query(PaymentInstance)
             .filter(
                 PaymentInstance.bill_id == bill.id,
-                PaymentInstance.is_deleted.is_(True),
+                PaymentInstance.hidden == Hidden.user,
                 PaymentInstance.period >= current_period,
             )
             .all()
         )
         for inst in tombstones:
-            inst.is_deleted = False
+            inst.hidden = None
             if inst.status == PaymentStatus.paid:
                 continue  # paid history comes back as it was, never reset to upcoming
             inst.amount = bill.amount
@@ -642,7 +679,7 @@ def update_bill(
 
 
 @router.delete("/{bill_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_draft_bill(
+def delete_bill(
     bill_id: int,
     db: Session = Depends(get_db),
     me: User = Depends(current_user),
@@ -650,9 +687,12 @@ def delete_draft_bill(
     bill = db.get(BillTemplate, bill_id)
     if not bill or bill.user_id != me.id:
         raise HTTPException(status_code=404, detail="Bill not found")
-    # Only drafts: they have no payment history, so removing them loses nothing.
-    if bill.is_activated:
-        raise HTTPException(status_code=409, detail="Only draft bills can be deleted")
+    # Nothing to lose, no history to cascade into: see BillTemplate.can_delete.
+    bill.has_paid_history = bool(_has_paid_history(db, [bill.id]))
+    if not bill.can_delete:
+        raise HTTPException(
+            status_code=409, detail="Only a draft or a paused bill with nothing paid"
+        )
     db.delete(bill)
     db.commit()
 
@@ -668,17 +708,17 @@ def archive_bill(
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill.user_id != me.id:
         raise HTTPException(status_code=404, detail="Bill not found")
-    bill.is_archived = True
+    if bill.status == BillStatus.draft:
+        raise HTTPException(status_code=409, detail="A draft has nothing to pause")
+    bill.status = BillStatus.paused
     # Hide what is still unpaid from this month on; paid and past payments stay as history.
     current_period = today_for(me).strftime("%Y-%m")
     db.query(PaymentInstance).filter(
         PaymentInstance.bill_id == bill.id,
         PaymentInstance.period >= current_period,
         PaymentInstance.status != PaymentStatus.paid,
-        PaymentInstance.is_deleted.is_(False),
-    ).update(
-        {"is_deleted": True, "deleted_by_archive": True}, synchronize_session=False
-    )
+        PaymentInstance.hidden.is_(None),
+    ).update({"hidden": Hidden.paused}, synchronize_session=False)
     db.commit()
 
 
@@ -693,17 +733,17 @@ def unarchive_bill(
         raise HTTPException(status_code=404, detail="Bill not found")
     if bill.user_id != me.id:
         raise HTTPException(status_code=404, detail="Bill not found")
-    bill.is_archived = False
+    if bill.status != BillStatus.paused:
+        return
+    bill.status = BillStatus.active
     current_period = today_for(me).strftime("%Y-%m")
     # A last-payment month already in the past would leave the restored bill idle.
     if bill.end_period and bill.end_period < current_period:
         bill.end_period = None
-    # Bring back only what archiving hid; payments the user deleted by hand stay deleted.
+    # Bring back only what pausing hid; payments the user deleted by hand stay deleted.
     db.query(PaymentInstance).filter(
         PaymentInstance.bill_id == bill.id,
-        PaymentInstance.deleted_by_archive.is_(True),
+        PaymentInstance.hidden == Hidden.paused,
         PaymentInstance.period >= current_period,
-    ).update(
-        {"is_deleted": False, "deleted_by_archive": False}, synchronize_session=False
-    )
+    ).update({"hidden": None}, synchronize_session=False)
     db.commit()

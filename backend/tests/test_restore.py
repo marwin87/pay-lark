@@ -58,7 +58,7 @@ def _upload(client, token, payload):
     )
 
 
-def _make_backup(templates, instances, schema_version: int = 3):
+def _make_backup(templates, instances, schema_version: int = 9):
     return {
         "schema_version": schema_version,
         "exported_by": "test@example.com",
@@ -197,7 +197,7 @@ def test_restore_replaces_existing_data(client):
                 "currency": _BILL["currency"],
                 "due_day": _BILL["due_day"],
                 "notes": None,
-                "is_archived": False,
+                "status": "active",
                 "start_period": None,
                 "created_at": "2026-01-01T00:00:00+00:00",
             }
@@ -307,47 +307,6 @@ def test_round_trip_field_level(client):
         ), f"Instance mismatch: period={b['period']}"
 
 
-def test_v2_backup_defaults_reminder_fields(client):
-    """A v2-format backup (no reminder fields in instance dicts) restores with reminder flags = False."""
-    tok = register_and_login(client, "v2@test.com")
-
-    r = client.post(
-        "/bills",
-        json={**_BILL_ALPHA, "category_id": category_id(client, tok)},
-        headers=auth(tok),
-    )
-    assert r.status_code == 201
-    template_id = r.json()["id"]
-
-    template_dict = {
-        "id": template_id,
-        "name": _BILL_ALPHA["name"],
-        "category": _BILL_ALPHA["category"],
-        "frequency": _BILL_ALPHA["frequency"],
-        "amount": _BILL_ALPHA["amount"],
-        "currency": _BILL_ALPHA["currency"],
-        "due_day": _BILL_ALPHA["due_day"],
-        "notes": None,
-        "is_archived": False,
-        "start_period": None,
-        "created_at": "2026-01-01T00:00:00+00:00",
-    }
-    instance_dict = _make_instance_dict(
-        template_id, "2026-01", include_reminder_fields=False
-    )
-    payload = _make_backup([template_dict], [instance_dict], schema_version=2)
-
-    r = _upload(client, tok, payload)
-    assert r.status_code == 200
-    assert r.json()["restored_instances"] == 1
-
-    after = client.get("/export/json", headers=auth(tok)).json()
-    assert len(after["payment_instances"]) == 1
-    inst = after["payment_instances"][0]
-    assert inst["reminder_sent_upcoming"] is False
-    assert inst["reminder_sent_overdue"] is False
-
-
 def test_restore_cross_user_import(client):
     """User B can upload a backup created by user A; data lands under B's account, A's data untouched."""
     tok_a = register_and_login(client, "cross_a@test.com")
@@ -383,50 +342,6 @@ def test_restore_cross_user_import(client):
     assert backup_b_after["exported_by"] == "cross_b@test.com"
 
 
-def test_v3_backup_preserves_reminder_flags(client):
-    """A v3 backup with reminder_sent_upcoming=True preserves the flag through restore."""
-    tok = register_and_login(client, "v3@test.com")
-
-    r = client.post(
-        "/bills",
-        json={**_BILL_ALPHA, "category_id": category_id(client, tok)},
-        headers=auth(tok),
-    )
-    assert r.status_code == 201
-    template_id = r.json()["id"]
-
-    template_dict = {
-        "id": template_id,
-        "name": _BILL_ALPHA["name"],
-        "category": _BILL_ALPHA["category"],
-        "frequency": _BILL_ALPHA["frequency"],
-        "amount": _BILL_ALPHA["amount"],
-        "currency": _BILL_ALPHA["currency"],
-        "due_day": _BILL_ALPHA["due_day"],
-        "notes": None,
-        "is_archived": False,
-        "start_period": None,
-        "created_at": "2026-01-01T00:00:00+00:00",
-    }
-    instance_dict = _make_instance_dict(
-        template_id,
-        "2026-01",
-        reminder_sent_upcoming=True,
-        reminder_sent_overdue=False,
-    )
-    v3_payload = _make_backup([template_dict], [instance_dict])
-    v3_payload["schema_version"] = 3
-
-    r = _upload(client, tok, v3_payload)
-    assert r.status_code == 200
-
-    after = client.get("/export/json", headers=auth(tok)).json()
-    assert len(after["payment_instances"]) == 1
-    inst = after["payment_instances"][0]
-    assert inst["reminder_sent_upcoming"] is True
-    assert inst["reminder_sent_overdue"] is False
-
-
 def test_v4_backup_round_trips_categories(client):
     """v4 backup includes the categories array; restore recreates them and remaps
     each bill's category_id to the newly-inserted category correctly."""
@@ -446,7 +361,7 @@ def test_v4_backup_round_trips_categories(client):
     assert r.status_code == 201
 
     backup = client.get("/export/json", headers=auth(tok)).json()
-    assert backup["schema_version"] == 8
+    assert backup["schema_version"] == 9
     assert any(c["name"] == "Hobbies" for c in backup["categories"])
 
     r = _upload(client, tok, backup)
@@ -459,39 +374,6 @@ def test_v4_backup_round_trips_categories(client):
         c for c in after["categories"] if c["id"] == restored_bill["category_id"]
     )
     assert restored_category["name"] == "Hobbies"
-
-
-def test_legacy_restore_falls_back_to_other_for_unknown_category_slug(client):
-    """A v2/v3 backup whose category string matches none of the user's current
-    categories falls back to their 'other' category instead of failing."""
-    tok = register_and_login(client, "legacy_fallback@test.com")
-
-    template_dict = {
-        "id": 1,
-        "name": "Mystery Bill",
-        "category": "no_such_category",
-        "frequency": "monthly",
-        "amount": 10.0,
-        "currency": "PLN",
-        "due_day": 1,
-        "notes": None,
-        "is_archived": False,
-        "start_period": None,
-        "created_at": "2026-01-01T00:00:00+00:00",
-    }
-    payload = _make_backup([template_dict], [], schema_version=3)
-
-    r = _upload(client, tok, payload)
-    assert r.status_code == 200
-
-    bills = client.get("/bills", headers=auth(tok)).json()
-    assert len(bills) == 1
-    assert bills[0]["category"]["slug"] == "other"
-
-
-# ---------------------------------------------------------------------------
-# POST /export/restore — error paths (lines 182–198 of export.py)
-# ---------------------------------------------------------------------------
 
 
 def test_restore_invalid_json_returns_422(client):
@@ -582,7 +464,7 @@ def test_export_includes_telegram_credentials_in_plaintext(client):
 def test_restore_applies_telegram_credentials(client):
     tok = register_and_login(client, "tgres@test.com")
     payload = {
-        **_make_backup([], [], 4),
+        **_make_backup([], [], 9),
         "telegram": {"bot_token": _TG_TOKEN, "chat_id": "77"},
     }
     assert _upload(client, tok, payload).status_code == 200
@@ -599,7 +481,7 @@ def test_restore_applies_telegram_credentials(client):
 def test_restore_without_telegram_keeps_current_credentials(client):
     tok = register_and_login(client, "tgkeep@test.com")
     _set_telegram(client, tok)
-    assert _upload(client, tok, _make_backup([], [], 4)).status_code == 200
+    assert _upload(client, tok, _make_backup([], [], 9)).status_code == 200
     me = client.get("/auth/me", headers=auth(tok)).json()
     assert me["telegram_bot_token_set"] is True and me["telegram_chat_id"] == "42"
 
@@ -607,7 +489,7 @@ def test_restore_without_telegram_keeps_current_credentials(client):
 def test_restore_rejects_malformed_telegram_section(client):
     tok = register_and_login(client, "tgbad@test.com")
     payload = {
-        **_make_backup([], [], 4),
+        **_make_backup([], [], 9),
         "telegram": {"bot_token": "nope", "chat_id": "x"},
     }
     assert _upload(client, tok, payload).status_code == 422
@@ -623,7 +505,7 @@ def test_snapshot_never_stores_bot_token(client, db_session):
         json={**_BILL, "category_id": category_id(client, tok)},
         headers=auth(tok),
     )
-    assert _upload(client, tok, _make_backup([], [], 4)).status_code == 200
+    assert _upload(client, tok, _make_backup([], [], 9)).status_code == 200
 
     snap = db_session.query(RestoreSnapshot).one()
     assert _TG_TOKEN not in json.dumps(snap.payload)
@@ -667,7 +549,7 @@ def test_export_includes_both_schedules_and_browser_flag(client):
 def test_restore_applies_each_schedule_independently(client):
     tok = register_and_login(client, "nsres@test.com")
     payload = {
-        **_make_backup([], [], 4),
+        **_make_backup([], [], 9),
         "notifications": {
             "email": _SCHED,
             "telegram": {**_SCHED, "enabled": True, "send_minute": 780},
@@ -689,7 +571,7 @@ def test_restore_applies_each_schedule_independently(client):
 def test_restore_without_notifications_keeps_current_settings(client):
     tok = register_and_login(client, "nskeep@test.com")
     client.patch("/auth/me", json={"reminder_send_minute": 90}, headers=auth(tok))
-    assert _upload(client, tok, _make_backup([], [], 3)).status_code == 200
+    assert _upload(client, tok, _make_backup([], [], 9)).status_code == 200
     assert (
         client.get("/auth/me", headers=auth(tok)).json()["reminder_send_minute"] == 90
     )
@@ -698,7 +580,7 @@ def test_restore_without_notifications_keeps_current_settings(client):
 def test_restore_rejects_out_of_range_send_minute(client):
     tok = register_and_login(client, "nsbad@test.com")
     payload = {
-        **_make_backup([], [], 4),
+        **_make_backup([], [], 9),
         "notifications": {"email": {**_SCHED, "send_minute": 5000}},
     }
     assert _upload(client, tok, payload).status_code == 422
@@ -712,7 +594,7 @@ def test_snapshot_restore_reverts_notification_schedule(client):
         headers=auth(tok),
     )
     client.patch("/auth/me", json={"reminder_send_minute": 90}, headers=auth(tok))
-    payload = {**_make_backup([], [], 4), "notifications": {"email": _SCHED}}
+    payload = {**_make_backup([], [], 9), "notifications": {"email": _SCHED}}
     assert _upload(client, tok, payload).status_code == 200
     assert (
         client.get("/auth/me", headers=auth(tok)).json()["reminder_send_minute"] == 600
@@ -753,38 +635,6 @@ def test_end_period_export_restore_and_snapshot(client):
     assert _upload(client, tok, legacy).status_code == 200
     assert _upload(client, tok, backup).status_code == 200
     assert client.get("/bills", headers=auth(tok)).json()[0]["end_period"] == "2099-06"
-
-
-def test_legacy_frequencies_map_to_monthly_interval(client):
-    """Pre-v6 backups: quarterly -> monthly/3, every_2_months -> monthly/2."""
-    tok = register_and_login(client, "legacy_freq@test.com")
-    templates = [
-        {
-            **_BILL,
-            "id": 1,
-            "name": "Q",
-            "frequency": "quarterly",
-            "is_archived": False,
-            "start_period": "2026-01",
-            "created_at": "2026-01-01T00:00:00+00:00",
-        },
-        {
-            **_BILL2,
-            "id": 2,
-            "name": "B",
-            "frequency": "every_2_months",
-            "is_archived": False,
-            "start_period": "2026-01",
-            "created_at": "2026-01-01T00:00:00+00:00",
-        },
-    ]
-    r = _upload(client, tok, _make_backup(templates, [], schema_version=5))
-    assert r.status_code == 200, r.text
-    got = {
-        t["name"]: (t["frequency"], t["interval"])
-        for t in client.get("/export/json", headers=auth(tok)).json()["bill_templates"]
-    }
-    assert got == {"Q": ("monthly", 3), "B": ("monthly", 2)}
 
 
 def test_amount_override_export_restore_and_snapshot(client):
@@ -870,7 +720,7 @@ def test_multi_day_bill_round_trips_through_backup(client):
     sync_payments(client, tok)
 
     backup = client.get("/export/json", headers=auth(tok)).json()
-    assert backup["schema_version"] == 8
+    assert backup["schema_version"] == 9
     assert backup["bill_templates"][0]["due_days"] == [3, 10, 17]
     slots = sorted(i["slot"] for i in backup["payment_instances"])
     assert slots == [0, 1, 2]
@@ -881,27 +731,9 @@ def test_multi_day_bill_round_trips_through_backup(client):
     assert sorted(i["slot"] for i in after["payment_instances"]) == [0, 1, 2]
 
 
-def test_v7_backup_without_slot_restores_as_single_slot(client):
-    """Backups from before multi-day bills carry neither due_days nor slot."""
-    tok = register_and_login(client, "v7_restore@test.com")
-    template = {
-        "id": 1,
-        "name": "Old bill",
-        "category": "utilities",
-        "frequency": "monthly",
-        "amount": 50.0,
-        "currency": "PLN",
-        "due_day": 5,
-        "notes": None,
-        "is_archived": False,
-        "start_period": "2026-05",
-        "created_at": "2026-01-01T00:00:00+00:00",
-    }
-    backup = _make_backup([template], [_make_instance_dict(1, "2026-05")], 7)
-
-    r = _upload(client, tok, backup)
-
-    assert r.status_code == 200, r.text
-    after = client.get("/export/json", headers=auth(tok)).json()
-    assert after["payment_instances"][0]["slot"] == 0
-    assert after["bill_templates"][0]["due_days"] is None
+@pytest.mark.parametrize("version", [2, 3, 4, 5, 6, 7, 8])
+def test_restore_rejects_older_backup_formats(client, version):
+    tok = register_and_login(client, f"old{version}@test.com")
+    r = _upload(client, tok, _make_backup([], [], version))
+    assert r.status_code == 422
+    assert "schema version" in r.text.lower()

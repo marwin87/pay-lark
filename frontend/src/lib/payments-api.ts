@@ -23,6 +23,7 @@ export interface PaymentInstanceOut {
   is_last: boolean;
   category: Category;
   email_sent_at: string | null;
+  bill_status: "draft" | "active" | "paused";
 }
 
 /** Paid / unpaid totals for one currency in one month (never mixed across currencies). */

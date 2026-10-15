@@ -169,3 +169,66 @@ export async function syncPaymentsViaApi(page: Page): Promise<void> {
     headers: await getCsrfHeader(page),
   });
 }
+
+/**
+ * Creates a bill via the backend API and leaves it a draft (no activation).
+ * `annual` + a `due_month` further ahead than this month gives a bill that starts in
+ * the future, so even once activated it owns no payment yet.
+ */
+export async function createDraftViaApi(
+  page: Page,
+  name: string,
+  opts: { frequency?: 'monthly' | 'annual'; due_month?: number } = {},
+): Promise<number> {
+  const res = await page.request.post(`${API}/bills`, {
+    data: {
+      name,
+      category_id: await categoryIdBySlug(page, 'utilities'),
+      frequency: opts.frequency ?? 'monthly',
+      amount: '25.00',
+      currency: 'PLN',
+      due_day: 10,
+      ...(opts.due_month ? { due_month: opts.due_month } : {}),
+    },
+    headers: { 'Content-Type': 'application/json', ...(await getCsrfHeader(page)) },
+  });
+  if (!res.ok()) {
+    throw new Error(`Create draft failed: ${res.status()} — ${await res.text()}`);
+  }
+  return (await res.json()).id as number;
+}
+
+/** Activates a draft ("Generate payments") via API. */
+export async function activateViaApi(page: Page, id: number): Promise<void> {
+  const res = await page.request.post(`${API}/bills/${id}/activate`, {
+    headers: await getCsrfHeader(page),
+  });
+  if (!res.ok()) {
+    throw new Error(`Activate failed: ${res.status()} — ${await res.text()}`);
+  }
+}
+
+/** Pauses a bill via API. */
+export async function pauseViaApi(page: Page, id: number): Promise<void> {
+  const res = await page.request.post(`${API}/bills/${id}/archive`, {
+    headers: await getCsrfHeader(page),
+  });
+  if (!res.ok()) {
+    throw new Error(`Pause failed: ${res.status()} — ${await res.text()}`);
+  }
+}
+
+/** Marks the first payment listed for this month as paid, via API. Returns its id. */
+export async function payFirstPaymentViaApi(page: Page): Promise<number> {
+  const list = await page.request.get(`${API}/bills/payments`);
+  const [first] = (await list.json()) as Array<{ id: number }>;
+  if (!first) throw new Error('No payment to pay');
+  const res = await page.request.post(`${API}/bills/payments/${first.id}/pay`, {
+    data: {},
+    headers: { 'Content-Type': 'application/json', ...(await getCsrfHeader(page)) },
+  });
+  if (!res.ok()) {
+    throw new Error(`Pay failed: ${res.status()} — ${await res.text()}`);
+  }
+  return first.id;
+}

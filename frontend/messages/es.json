@@ -178,7 +178,9 @@
         "edit": "Editar",
         "pause": "Pausar",
         "resume": "Reanudar",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "deleteHint": "No se pagó nada, por eso se puede eliminar.",
+        "keepHint": "No se puede eliminar: al menos un pago ya está pagado."
     },
     "RestoreDeletedDialog": {
         "title": "¿Restaurar pagos eliminados?",
@@ -284,7 +286,8 @@
         "cancel": "Cancelar",
         "confirm": "Revertir pago",
         "reverting": "Revirtiendo…",
-        "revertFailed": "No se pudo revertir el pago."
+        "revertFailed": "No se pudo revertir el pago.",
+        "billPaused": "Esta factura está en pausa. Reanúdala primero para revertir este pago."
     },
     "MarkPaidDialog": {
         "title": "Marcar como pagado",
@@ -758,7 +761,7 @@
                 "q": "¿Qué significa «Borrador» en una factura?",
                 "s1": "Una factura nueva empieza como <b>{draft}</b>. Aún no tiene pagos, así que se puede revisar y cambiar con calma.",
                 "s2": "Pulsa <b>{generatePayments}</b> y confirma. Los pagos se crean desde el mes de inicio y los nuevos aparecen solos. Después, el mes de inicio de una factura mensual ya no se puede cambiar.",
-                "s3": "Un borrador que no hace falta se puede quitar con <b>{delete}</b>."
+                "s3": "Una factura en la que no se pagó nada (un borrador, o una en pausa sin ningún pago realizado) se puede quitar con <b>{delete}</b>."
             },
             "repeat": {
                 "q": "La factura no es mensual. ¿Qué hacer?",
@@ -774,7 +777,8 @@
                 "q": "¿Cómo se pausa una factura?",
                 "s1": "Abre <b>{bills}</b>.",
                 "s2": "Pulsa <b>{pause}</b> junto a la factura y confirma.",
-                "s3": "No llegarán nuevos pagos ni recordatorios. Lo que ya se pagó sigue en el historial."
+                "s3": "No llegarán nuevos pagos ni recordatorios. Lo que ya se pagó sigue en el historial.",
+                "s4": "¿No se pagó nada? Entonces junto a la factura aparece <b>{delete}</b>. Una factura con un pago ya pagado solo se puede pausar."
             },
             "resume": {
                 "q": "¿Cómo se recupera una factura pausada?",
@@ -807,7 +811,8 @@
             "revert": {
                 "q": "Una factura se marcó como pagada por error",
                 "s1": "Abre <b>{payments}</b> y busca la factura.",
-                "s2": "Pulsa <b>{revert}</b>. La factura vuelve a estar sin pagar."
+                "s2": "Pulsa <b>{revert}</b>. La factura vuelve a estar sin pagar.",
+                "s3": "¿Factura en pausa? Reanúdala primero (mira cómo se recupera una factura en pausa)."
             },
             "deletePayment": {
                 "q": "¿Cómo se quita un solo pago?",
@@ -843,7 +848,7 @@
                 "q": "¿Cómo se recuperan los datos desde una copia?",
                 "s1": "Abre <b>{settings}</b> → <b>{tabBackup}</b>.",
                 "s2": "Pulsar <b>{restore}</b> y elegir el archivo de copia.",
-                "s3": "Mirar la comparación y confirmar. Ojo: esto reemplaza los datos actuales.",
+                "s3": "Mirar la comparación y confirmar. Ojo: esto reemplaza los datos actuales. Las copias de seguridad de versiones anteriores de la app no se pueden restaurar.",
                 "s4": "¿Arrepentimiento? Justo después de restaurar se pueden recuperar los datos anteriores en la misma página."
             },
             "categories": {
@@ -872,11 +877,11 @@
         "searchPlaceholder": "Buscar en la ayuda…",
         "noResults": "No se encontró nada. Prueba con otras palabras."
     },
-    "DeleteDraftDialog": {
-        "title": "¿Eliminar el borrador?",
-        "description": "Este borrador se eliminará de forma permanente. No tiene pagos, así que no se pierde ningún historial.",
+    "DeleteBillDialog": {
+        "title": "¿Eliminar la factura?",
+        "description": "Esta factura y sus pagos sin pagar se eliminarán de forma permanente. No se pagó nada, así que no se pierde ningún historial.",
         "cancel": "Cancelar",
-        "delete": "Eliminar borrador",
+        "delete": "Eliminar factura",
         "deleting": "Eliminando…"
     }
 }

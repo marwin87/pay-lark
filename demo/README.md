@@ -15,7 +15,7 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Streaming (Old) | custom | **archived** — still referenced by an active bill |
 | Side Hustle | custom | active |
 
-**34 bill templates** covering all frequencies, plus these edge cases:
+**36 bill templates** covering all frequencies, plus these edge cases:
 
 | Name | Category | Frequency | Amount | Notes |
 |---|---|---|---|---|
@@ -41,8 +41,10 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Piano Lessons *(archived bill)* | Education | Monthly | €40.00 | |
 | Course Instalments | Education | Monthly | €75.00 | **fixed term ending this month** (`inject_last_payment_bill` in `seed.py`): the current month's payment gets the "Last" ribbon |
 | New Apartment Rent, Bike Insurance, Dentist Visits *(drafts)* | Housing, Insurance, Healthcare | Monthly, annual, one-off | €950.00, €85.00, €120.00 | **not activated yet**: no payments, Draft ribbon and Generate payments button on the Bills page (`inject_draft_bills` in `seed.py`) |
+| Magazine Bundle *(draft)* | Subscriptions | Monthly | €14.00 | draft in the Subscriptions category, which holds every lifecycle state: active bills, drafts, paused with payments (Spotify, Cloud Storage 2TB), and the paused bill below (`inject_subscriptions_lifecycle` in `seed.py`) |
+| Audiobook Plan *(paused, no payments)* | Subscriptions | Monthly | €9.50 | paused before its first payment, so the tile offers **Delete** next to Resume |
 
-5 bills are archived in total, spread across 4 categories, so the Archive page (`/dashboard/bills/archived`) has enough entries to exercise its category filter and sort.
+6 bills are archived in total, spread across 4 categories, so the Archive page (`/dashboard/bills/archived`) has enough entries to exercise its category filter and sort.
 
 **80 payment instances** in `seed_data.json` (180 after the seed script adds the generated ones below) covering all statuses:
 - **paid** — historical records with `paid_at` timestamps, across all four combinations of full/partial amount and with/without a note
@@ -91,4 +93,4 @@ Running the script again on the same account **wipes and re-seeds** — the rest
 
 ## Editing the data
 
-All seed data lives in `demo/seed_data.json`. It follows the same backup format used by the app's export/restore feature (`schema_version: 4`), including an explicit `categories` array — bill templates reference categories by `category_id`. Edit the JSON directly and re-run the script to apply changes.
+All seed data lives in `demo/seed_data.json`. It follows the same backup format used by the app's export/restore feature (`schema_version: 9`), including an explicit `categories` array — bill templates reference categories by `category_id`. Edit the JSON directly and re-run the script to apply changes.

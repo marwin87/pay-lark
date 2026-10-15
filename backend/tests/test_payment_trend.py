@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from app.models.bill import PaymentInstance, PaymentStatus
+from app.models.bill import Hidden, PaymentInstance, PaymentStatus
 from app.services.trend import trend_periods
 from tests.conftest import auth, category_id, register_and_login, today_utc
 
@@ -35,7 +35,7 @@ def _inst(db, bill_id, period, status, paid_amount=None, deleted=False):
             amount=100,
             status=status,
             paid_amount=paid_amount,
-            is_deleted=deleted,
+            hidden=Hidden.user if deleted else None,
         )
     )
 

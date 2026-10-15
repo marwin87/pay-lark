@@ -21,9 +21,10 @@ export interface BillTemplateOut {
   start_period: string | null;
   end_period: string | null;
   notes: string | null;
-  is_archived: boolean;
-  /** false = draft: no payments exist until activateBill. */
-  is_activated: boolean;
+  /** draft: no payments exist until activateBill. paused: nothing new, unpaid ones hidden. */
+  status: "draft" | "active" | "paused";
+  /** Draft, or paused with nothing paid: the only bills deleteBill accepts. */
+  can_delete: boolean;
   created_at: string;
 }
 
@@ -81,7 +82,7 @@ export function unarchiveBill(id: number): Promise<void> {
   return apiFetch<void>(`/bills/${id}/unarchive`, { method: "POST" });
 }
 
-export function deleteDraftBill(id: number): Promise<void> {
+export function deleteBill(id: number): Promise<void> {
   return apiFetch<void>(`/bills/${id}`, { method: "DELETE" });
 }
 

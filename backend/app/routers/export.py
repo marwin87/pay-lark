@@ -88,7 +88,7 @@ def export_json(
     me: User = Depends(current_user),
 ):
     payload = {
-        "schema_version": 8,
+        "schema_version": 9,
         "exported_by": me.email,
         "exported_at": datetime.now(timezone.utc).isoformat(),
         **_build_backup_arrays(db, me.id, sections),
@@ -129,7 +129,7 @@ def export_summary(
         db.query(PaymentInstance)
         .filter(
             PaymentInstance.bill_id.in_(template_ids),
-            PaymentInstance.is_deleted.is_(False),
+            PaymentInstance.hidden.is_(None),
         )
         .count()
         if template_ids
@@ -160,7 +160,7 @@ def restore_json(
         raise HTTPException(status_code=422, detail="Invalid backup file")
     version = raw.get("schema_version")
     # isinstance first: an unhashable value (list/dict) can't even be looked up in a set
-    if not isinstance(version, int) or version not in {2, 3, 4, 5, 6, 7, 8}:
+    if not isinstance(version, int) or version != 9:
         raise HTTPException(status_code=422, detail="Unsupported schema version")
 
     try:
@@ -185,7 +185,7 @@ def restore_json(
     )
     if has_existing_bills and backup.bill_templates is not None:
         snapshot_payload = {
-            "schema_version": 8,
+            "schema_version": 9,
             **_build_backup_arrays(db, me.id),
         }
         db.query(RestoreSnapshot).filter(RestoreSnapshot.user_id == me.id).delete(

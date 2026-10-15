@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 9,
   "bill_templates": [
     {
       "id": 1,
@@ -10,9 +10,9 @@
       "currency": "EUR",
       "due_day": 1,
       "notes": "Bank transfer to landlord",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 2,
@@ -24,9 +24,9 @@
       "currency": "PLN",
       "due_day": 15,
       "notes": "City council payment",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 3,
@@ -38,9 +38,9 @@
       "currency": "EUR",
       "due_day": 15,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 4,
@@ -51,9 +51,9 @@
       "currency": "EUR",
       "due_day": 5,
       "notes": "Fiber 500 Mbps",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 5,
@@ -64,9 +64,9 @@
       "currency": "EUR",
       "due_day": 20,
       "notes": "Direct debit",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 6,
@@ -77,9 +77,9 @@
       "currency": "GBP",
       "due_day": 1,
       "notes": "Policy no. 789012",
-      "is_archived": false,
       "start_period": "2026-03",
-      "created_at": "2026-03-01T08:00:00+00:00"
+      "created_at": "2026-03-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 7,
@@ -90,9 +90,9 @@
       "currency": "EUR",
       "due_day": 1,
       "notes": "Policy no. A123456",
-      "is_archived": false,
       "start_period": "2026-08",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 8,
@@ -103,9 +103,9 @@
       "currency": "USD",
       "due_day": 22,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-03",
-      "created_at": "2026-03-01T08:00:00+00:00"
+      "created_at": "2026-03-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 9,
@@ -116,9 +116,9 @@
       "currency": "USD",
       "due_day": 15,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-09",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 10,
@@ -129,9 +129,9 @@
       "currency": "USD",
       "due_day": 18,
       "notes": "Family plan",
-      "is_archived": true,
       "start_period": "2026-05",
-      "created_at": "2026-05-01T08:00:00+00:00"
+      "created_at": "2026-05-01T08:00:00+00:00",
+      "status": "paused"
     },
     {
       "id": 11,
@@ -142,9 +142,9 @@
       "currency": "EUR",
       "due_day": 25,
       "notes": "Local cinema membership",
-      "is_archived": false,
       "start_period": "2026-04",
-      "created_at": "2026-04-01T08:00:00+00:00"
+      "created_at": "2026-04-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 12,
@@ -155,9 +155,9 @@
       "currency": "PLN",
       "due_day": 1,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 13,
@@ -168,9 +168,9 @@
       "currency": "EUR",
       "due_day": 15,
       "notes": "Summer tyre swap",
-      "is_archived": false,
       "start_period": "2026-06",
-      "created_at": "2026-06-01T08:00:00+00:00"
+      "created_at": "2026-06-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 14,
@@ -181,9 +181,9 @@
       "currency": "EUR",
       "due_day": 1,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 15,
@@ -194,9 +194,9 @@
       "currency": "EUR",
       "due_day": 10,
       "notes": "Annual dental appointment",
-      "is_archived": false,
       "start_period": "2026-09",
-      "created_at": "2026-06-01T08:00:00+00:00"
+      "created_at": "2026-06-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 16,
@@ -207,9 +207,9 @@
       "currency": "USD",
       "due_day": 1,
       "notes": "Advanced Python for backend devs",
-      "is_archived": false,
       "start_period": "2026-07",
-      "created_at": "2026-06-01T08:00:00+00:00"
+      "created_at": "2026-06-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 17,
@@ -220,9 +220,9 @@
       "currency": "PLN",
       "due_day": 3,
       "notes": null,
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 18,
@@ -233,9 +233,9 @@
       "currency": "EUR",
       "due_day": 5,
       "notes": "Covers vet visits and emergencies",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 19,
@@ -246,9 +246,9 @@
       "currency": "EUR",
       "due_day": 1,
       "notes": "Local food bank",
-      "is_archived": false,
       "start_period": "2026-12",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 20,
@@ -259,9 +259,9 @@
       "currency": "USD",
       "due_day": 12,
       "notes": "Kept it for the offline downloads",
-      "is_archived": false,
       "start_period": "2026-02",
-      "created_at": "2026-02-01T08:00:00+00:00"
+      "created_at": "2026-02-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 21,
@@ -272,9 +272,9 @@
       "currency": "PLN",
       "due_day": 1,
       "notes": "Hot desk, 2 days/week",
-      "is_archived": false,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 22,
@@ -285,10 +285,10 @@
       "currency": "EUR",
       "due_day": 10,
       "notes": "Ends in December",
-      "is_archived": false,
       "start_period": "2026-01",
       "end_period": "2026-12",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 23,
@@ -299,9 +299,9 @@
       "currency": "EUR",
       "due_day": 5,
       "notes": "Cancelled after moving",
-      "is_archived": true,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "paused"
     },
     {
       "id": 24,
@@ -312,9 +312,9 @@
       "currency": "USD",
       "due_day": 8,
       "notes": "Switched to the free tier",
-      "is_archived": true,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "paused"
     },
     {
       "id": 25,
@@ -325,9 +325,9 @@
       "currency": "CHF",
       "due_day": 1,
       "notes": "Lease ended, car returned",
-      "is_archived": true,
       "start_period": "2026-01",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "paused"
     },
     {
       "id": 26,
@@ -338,9 +338,9 @@
       "currency": "PLN",
       "due_day": 10,
       "notes": "Kid stopped lessons",
-      "is_archived": true,
       "start_period": "2026-02",
-      "created_at": "2026-02-01T08:00:00+00:00"
+      "created_at": "2026-02-01T08:00:00+00:00",
+      "status": "paused"
     },
     {
       "id": 27,
@@ -351,10 +351,10 @@
       "currency": "EUR",
       "due_day": 10,
       "notes": "6 instalments, fully paid - no further payments generated",
-      "is_archived": false,
       "start_period": "2026-01",
       "end_period": "2026-06",
-      "created_at": "2026-01-01T08:00:00+00:00"
+      "created_at": "2026-01-01T08:00:00+00:00",
+      "status": "active"
     },
     {
       "id": 28,
@@ -365,10 +365,10 @@
       "currency": "PLN",
       "due_day": 12,
       "notes": "Fixed term: last instalment Dec 2026",
-      "is_archived": false,
       "start_period": "2026-04",
       "end_period": "2026-12",
-      "created_at": "2026-04-01T08:00:00+00:00"
+      "created_at": "2026-04-01T08:00:00+00:00",
+      "status": "active"
     }
   ],
   "payment_instances": [
@@ -479,7 +479,7 @@
       "status": "paid",
       "paid_at": "2026-03-14T11:00:00+00:00",
       "paid_amount": 78.5,
-      "notes": "Lower than usual \u2014 mild winter",
+      "notes": "Lower than usual — mild winter",
       "created_at": "2026-03-01T08:00:00+00:00",
       "reminder_sent_upcoming": true,
       "reminder_sent_overdue": false

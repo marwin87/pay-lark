@@ -104,7 +104,7 @@ household finance manager does not need to check the dashboard proactively.
 
 - FR-005: User can pause a bill template (hidden from active view; existing payment
   history preserved). Priority: must-have
-  > Socratic: Pause (stored as `is_archived`) preferred over hard delete — prevents accidental financial history
+  > Socratic: Pause (stored as `status = paused`) preferred over hard delete — prevents accidental financial history
   > loss. Archived templates' instances remain accessible via export.
 
 ### Payment Instances
@@ -132,8 +132,8 @@ household finance manager does not need to check the dashboard proactively.
   > template or losing its payment history.
 
 - FR-021: User can delete a payment instance with a confirmation dialog. Deletion is
-  permanent from the user's perspective but implemented as a soft-delete (`is_deleted`
-  flag) so the row acts as a tombstone and the seeder never regenerates the entry.
+  permanent from the user's perspective but implemented as a soft-delete (`hidden = user`
+  on the payment) so the row acts as a tombstone and the seeder never regenerates the entry.
   Only the selected instance is affected — the bill template and all other instances
   are untouched. Priority: must-have
   > Hard-delete + regeneration-prevention via template-level flags was attempted and

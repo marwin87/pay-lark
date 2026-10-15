@@ -7,7 +7,7 @@ Notable changes, release by release.
 ### Features
 
 - New bills start as drafts; “Generate payments” activates them
-- Draft bills can be deleted
+- Bills with nothing paid (drafts, paused ones) can be deleted
 - Ribbons mark drafts, paused bills, overdue, due-today and last payments
 - Upcoming payments show days left
 - Payment popups are tinted by payment status
@@ -15,10 +15,13 @@ Notable changes, release by release.
 - Help explains draft bills and “Generate payments”
 - “Get started” card moved to the Dashboard
 - Dashboard currency switch adapts to screen width and remembers your choice
+- Backups made by older versions can no longer be restored
 
 ### Fixes
 
 - “Get started” card no longer hidden on new accounts
+- Editing a paused bill no longer brings its payments back
+- A paid payment of a paused bill can be reverted only after the bill is resumed
 - UI adjustments
 
 ## v1.4.0 — 14-10-2026

@@ -30,7 +30,7 @@ def _upload(client, token, payload):
     )
 
 
-def _make_backup(templates, instances, schema_version: int = 3):
+def _make_backup(templates, instances, schema_version: int = 9):
     return {
         "schema_version": schema_version,
         "exported_by": "test@example.com",

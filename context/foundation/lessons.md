@@ -28,7 +28,7 @@
 
 ## Soft-delete is the correct tombstone for idempotent instance generation
 
-**Rule:** When a `PaymentInstance` is deleted by the user, set `is_deleted = True` rather than hard-deleting the row. Never use template-level flags (archived, custom columns) to prevent instance regeneration as a side-effect of a payment action.
+**Rule:** When a `PaymentInstance` is deleted by the user, set `hidden = Hidden.user` (it was `is_deleted`) rather than hard-deleting the row. Never use template-level flags (archived, custom columns) to prevent instance regeneration as a side-effect of a payment action.
 
 **Why:** `ensure_current_period_instances` is idempotent — it skips a period if any row already exists for `(bill_id, period)`. A soft-deleted row satisfies this check automatically, making it a zero-cost tombstone. Hard-deleting the row removes the tombstone and the seeder regenerates the entry on the next page load. The alternative (setting `deleted_from_period` on `BillTemplate`) was implemented, shipped, and then reverted: it coupled instance lifecycle to template state, introduced a "reactivate" concept with no natural UX, and made a simple delete action require reasoning about two models simultaneously.
 

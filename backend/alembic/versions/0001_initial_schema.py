@@ -214,9 +214,10 @@ def upgrade() -> None:
         sa.Column("due_day", sa.Integer(), nullable=True),
         sa.Column("due_days", sa.JSON(), nullable=True),
         sa.Column("notes", sa.Text(), nullable=True),
-        sa.Column("is_archived", sa.Boolean(), nullable=False),
+        sa.Column("status", sa.String(length=10), nullable=False),
         sa.Column("start_period", sa.String(length=7), nullable=True),
         sa.Column("end_period", sa.String(length=7), nullable=True),
+        sa.Column("draft_dates", sa.JSON(), nullable=True),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
@@ -238,10 +239,7 @@ def upgrade() -> None:
         sa.Column("paid_amount", sa.Numeric(precision=12, scale=2), nullable=True),
         sa.Column("amount_override", sa.Numeric(precision=12, scale=2), nullable=True),
         sa.Column("notes", sa.Text(), nullable=True),
-        sa.Column("is_deleted", sa.Boolean(), server_default="false", nullable=False),
-        sa.Column(
-            "deleted_by_archive", sa.Boolean(), server_default="false", nullable=False
-        ),
+        sa.Column("hidden", sa.String(length=10), nullable=True),
         sa.Column(
             "reminder_sent_upcoming",
             sa.Boolean(),
