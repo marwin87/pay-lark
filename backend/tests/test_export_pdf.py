@@ -1,7 +1,5 @@
 """Integration tests for GET /export/pdf."""
 
-from datetime import date
-
 from app.core.i18n import BRAND, LOCALES
 from tests.conftest import auth, category_id, register_and_login, today_utc
 

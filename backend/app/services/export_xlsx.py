@@ -147,7 +147,9 @@ def build_xlsx(
 ) -> io.BytesIO:
     selected_keys = set(me.export_fields)
     selected_columns = [
-        col for key, col in zip(_COLUMN_KEYS, _COLUMNS) if key in selected_keys
+        col
+        for key, col in zip(_COLUMN_KEYS, _COLUMNS, strict=True)
+        if key in selected_keys
     ]
 
     by_month = _rows_by_month(db, me, lang, year)

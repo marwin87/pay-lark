@@ -1,5 +1,5 @@
-from datetime import date
 from calendar import monthrange
+from datetime import date
 
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session

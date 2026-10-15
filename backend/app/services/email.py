@@ -1,8 +1,8 @@
 import html
-from html import escape as _escape
 import re
 from datetime import date
 from decimal import Decimal
+from html import escape as _escape
 from typing import Any
 
 from app.core.i18n import resolve_locale, t

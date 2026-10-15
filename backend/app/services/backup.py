@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from typing import Literal
 
@@ -104,7 +104,7 @@ def _schedule_out(user: User, ch: Channel) -> dict:
         "send_minute": getattr(user, ch.send_minute),
         "monthly_summary_enabled": getattr(user, ch.summary_enabled),
     }
-    for field, (_, user_attr, _) in zip(_WINDOW_FIELDS, ch.windows):
+    for field, (_, user_attr, _) in zip(_WINDOW_FIELDS, ch.windows, strict=True):
         out[field] = getattr(user, user_attr)
     return out
 
@@ -113,7 +113,7 @@ def _apply_schedule(user: User, ch: Channel, s: BackupChannelSchedule) -> None:
     setattr(user, ch.enabled, s.enabled)
     setattr(user, ch.send_minute, s.send_minute)
     setattr(user, ch.summary_enabled, s.monthly_summary_enabled)
-    for field, (_, user_attr, _) in zip(_WINDOW_FIELDS, ch.windows):
+    for field, (_, user_attr, _) in zip(_WINDOW_FIELDS, ch.windows, strict=True):
         setattr(user, user_attr, getattr(s, field))
 
 
@@ -407,7 +407,7 @@ def _active_snapshot(db: Session, user_id: int) -> RestoreSnapshot | None:
     """The user's snapshot if one exists and is still within the retention
     window. Shared by /last-snapshot and /restore-snapshot so they can't
     drift on what counts as "expired"."""
-    cutoff = datetime.now(timezone.utc) - timedelta(
+    cutoff = datetime.now(UTC) - timedelta(
         days=settings.restore_snapshot_retention_days
     )
     return (

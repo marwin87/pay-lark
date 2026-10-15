@@ -31,6 +31,14 @@ repos:
         files: ^backend/
         stages: [ pre-commit ]
 
+      - id: ruff
+        name: ruff
+        entry: bash -c 'if [ "$(uname)" = "Darwin" ]; then arch -arm64 uv run --project backend ruff check --fix "$@"; else uv run --project backend ruff check --fix "$@"; fi' --
+        language: system
+        types: [ python ]
+        files: ^backend/
+        stages: [ pre-commit ]
+
       - id: mypy
         name: mypy
         entry: bash -c 'if [ "$(uname)" = "Darwin" ]; then arch -arm64 uv run --directory backend mypy app; else uv run --directory backend mypy app; fi'

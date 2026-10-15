@@ -1,7 +1,7 @@
 """'Today', the month and overdue follow the user's own time zone, not the server's."""
 
 import io
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -11,7 +11,7 @@ from tests.conftest import auth, category_id, register_and_login
 
 # 23:30 UTC on 10 March 2026 is already the 11th in Auckland (UTC+13, daylight time)
 # and still the 10th in Los Angeles (UTC-7) and UTC.
-_CLOCK = datetime(2026, 3, 10, 23, 30, tzinfo=timezone.utc)
+_CLOCK = datetime(2026, 3, 10, 23, 30, tzinfo=UTC)
 
 
 @pytest.fixture()
@@ -76,7 +76,7 @@ def test_overdue_is_relative_to_the_users_today(client, pin):
 
 
 def test_default_month_follows_the_users_zone(client, pin):
-    pin(datetime(2026, 3, 31, 23, 30, tzinfo=timezone.utc))
+    pin(datetime(2026, 3, 31, 23, 30, tzinfo=UTC))
     utc = _user(client, "m-utc@test.com", "UTC")
     nz = _user(client, "m-nz@test.com", "Pacific/Auckland")
     for token in (utc, nz):
@@ -91,7 +91,7 @@ def test_default_month_follows_the_users_zone(client, pin):
 
 
 def test_new_bill_starts_in_the_users_current_month(client, pin):
-    pin(datetime(2026, 3, 31, 23, 30, tzinfo=timezone.utc))
+    pin(datetime(2026, 3, 31, 23, 30, tzinfo=UTC))
     utc = _user(client, "s-utc@test.com", "UTC")
     nz = _user(client, "s-nz@test.com", "Pacific/Auckland")
     assert _bill(client, utc)["start_period"] == "2026-03"
@@ -128,7 +128,7 @@ def test_picked_payment_date_is_noon_in_the_users_zone(client, pin):
     assert r.status_code == 200
     paid = datetime.fromisoformat(r.json()["paid_at"])
     # noon on 5 March in Auckland (UTC+13) is 23:00 UTC on the 4th
-    assert paid == datetime(2026, 3, 4, 23, 0, tzinfo=timezone.utc)
+    assert paid == datetime(2026, 3, 4, 23, 0, tzinfo=UTC)
     local = paid.astimezone(ZoneInfo("Pacific/Auckland"))
     assert (local.date().isoformat(), local.hour) == ("2026-03-05", 12)
 
@@ -150,7 +150,7 @@ def test_export_shows_the_paid_date_in_the_users_zone(client, pin):
 
 
 def test_export_default_year_and_backup_name_follow_the_users_zone(client, pin):
-    pin(datetime(2025, 12, 31, 23, 30, tzinfo=timezone.utc))
+    pin(datetime(2025, 12, 31, 23, 30, tzinfo=UTC))
     utc = _user(client, "y-utc@test.com", "UTC")
     nz = _user(client, "y-nz@test.com", "Pacific/Auckland")
 

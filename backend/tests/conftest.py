@@ -2,7 +2,7 @@
 
 import os
 import tempfile
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
 # Settings() runs at import time and warns on the weak default secret when ../.env isn't
 # found (cwd-relative, e.g. PyCharm running from the repo root).
@@ -16,17 +16,16 @@ os.environ["DATABASE_URL"] = f"sqlite:///{tempfile.mkdtemp()}/test.db"
 
 # Import models before app to (a) register them in Base.metadata for create_all
 # and (b) avoid shadowing the `app` FastAPI instance with the `app` package name.
-import app.models.bill  # noqa: F401
-import app.models.category  # noqa: F401
-import app.models.reset_token  # noqa: F401
-import app.models.restore_snapshot  # noqa: F401
-import app.models.user  # noqa: F401
-
 import bcrypt
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 
+import app.models.bill  # noqa: F401
+import app.models.category  # noqa: F401
+import app.models.reset_token  # noqa: F401
+import app.models.restore_snapshot  # noqa: F401
+import app.models.user  # noqa: F401
 from app.core import rate_limit
 from app.core.database import Base, engine, get_db
 from app.main import app
@@ -34,7 +33,7 @@ from app.main import app
 
 def today_utc() -> date:
     """Today as the app computes it: users default to UTC, never the machine's zone."""
-    return datetime.now(timezone.utc).date()
+    return datetime.now(UTC).date()
 
 
 @pytest.fixture(scope="session", autouse=True)

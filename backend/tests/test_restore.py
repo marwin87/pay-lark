@@ -290,7 +290,7 @@ def test_round_trip_field_level(client):
 
     before_templates = sorted(backup["bill_templates"], key=lambda t: t["name"])
     after_templates = sorted(after["bill_templates"], key=lambda t: t["name"])
-    for b, a in zip(before_templates, after_templates):
+    for b, a in zip(before_templates, after_templates, strict=True):
         assert _norm_template(b) == _norm_template(a), f"Template mismatch: {b['name']}"
 
     before_instances = sorted(
@@ -301,7 +301,7 @@ def test_round_trip_field_level(client):
         after["payment_instances"],
         key=lambda i: (i["period"], i["amount"], i["status"]),
     )
-    for b, a in zip(before_instances, after_instances):
+    for b, a in zip(before_instances, after_instances, strict=True):
         assert _norm_instance(b) == _norm_instance(
             a
         ), f"Instance mismatch: period={b['period']}"

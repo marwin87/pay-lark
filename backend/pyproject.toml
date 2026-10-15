@@ -34,6 +34,7 @@ dev = [
     "httpx>=0.28",
     "types-openpyxl>=3.1.5.20260827",
     "httpx2>=2.13.1",
+    "ruff>=0.17.0",
 ]
 
 [tool.pytest.ini_options]
@@ -45,3 +46,10 @@ omit = ["alembic/*", "tests/*"]
 [[tool.mypy.overrides]]
 module = "apscheduler.*"
 ignore_missing_imports = true
+
+[tool.ruff]
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501", "B008"]  # E501: black owns line length; B008: FastAPI Depends()

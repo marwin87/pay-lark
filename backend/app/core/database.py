@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, create_engine, event
 from sqlalchemy.engine import Dialect
@@ -19,10 +19,10 @@ class UTCDateTime(TypeDecorator[datetime]):
             return None
         if value.tzinfo is None:
             raise ValueError("naive datetime; use a timezone-aware value")
-        return value.astimezone(timezone.utc).replace(tzinfo=None)
+        return value.astimezone(UTC).replace(tzinfo=None)
 
     def process_result_value(self, value: datetime | None, dialect: Dialect):
-        return None if value is None else value.replace(tzinfo=timezone.utc)
+        return None if value is None else value.replace(tzinfo=UTC)
 
 
 # check_same_thread: FastAPI runs sync endpoints on a thread pool.

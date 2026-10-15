@@ -1,6 +1,6 @@
 """Tests for GET /bills/{id}/has-deleted-future and PATCH recreate_deleted_future."""
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
 import pytest
 from fastapi.testclient import TestClient
@@ -345,7 +345,7 @@ def test_patch_restore_keeps_a_paid_payment_paid(client_db):
         amount="120.00",
     )
     inst.paid_amount = "99.00"
-    inst.paid_at = datetime(2026, 1, 5, 12, tzinfo=timezone.utc)
+    inst.paid_at = datetime(2026, 1, 5, 12, tzinfo=UTC)
     db.commit()
 
     r = client.patch(

@@ -163,6 +163,7 @@ def test_export_json_scoped(client):
 
 def test_export_xlsx_scoped(client):
     import io
+
     import openpyxl
 
     tok_a = register_and_login(client, "a@test.com")

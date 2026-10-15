@@ -1,14 +1,8 @@
 """Unit tests for app/services/reminder_job.py."""
 
-from app.services.notify import NotificationError
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from unittest.mock import patch
-
-
-def _today_utc() -> date:
-    return datetime.now(timezone.utc).date()
-
 
 import app.models.bill  # noqa: F401 — register models
 import app.models.category  # noqa: F401
@@ -23,12 +17,17 @@ from app.models.bill import (
 from app.models.category import Category
 from app.models.user import User
 from app.services.categories import seed_default_categories
+from app.services.notify import NotificationError
 from app.services.reminder_job import (
     send_catchup_reminders,
     send_daily_reminders,
     send_monthly_summary_for_user,
     send_reminders_for_user,
 )
+
+
+def _today_utc() -> date:
+    return datetime.now(UTC).date()
 
 
 def _make_user(
@@ -335,7 +334,7 @@ def test_smtp_exception_does_not_flip_flag(
 
 
 def _make_paid_instance(db, bill_id: int, due_date: date, **kwargs) -> PaymentInstance:
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     inst = PaymentInstance(
         bill_id=bill_id,
@@ -344,7 +343,7 @@ def _make_paid_instance(db, bill_id: int, due_date: date, **kwargs) -> PaymentIn
         amount=Decimal("99.99"),
         paid_amount=Decimal("99.99"),
         status=PaymentStatus.paid,
-        paid_at=datetime.now(timezone.utc),
+        paid_at=datetime.now(UTC),
         **kwargs,
     )
     db.add(inst)
@@ -428,7 +427,7 @@ def test_monthly_summary_idempotency_via_last_sent_flag(
 ):
     """Scheduler skips user whose monthly_summary_last_sent matches current month."""
     import calendar
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     today = _today_utc()
     current_month = today.strftime("%Y-%m")
@@ -453,7 +452,7 @@ def test_monthly_summary_idempotency_via_last_sent_flag(
                 fake_today.day,
                 8,
                 0,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             ),
         ),
     ):
@@ -469,7 +468,7 @@ def test_monthly_summary_sent_and_flag_updated_on_last_day(
 ):
     """Scheduler sends summary and sets flag when last_sent is None."""
     import calendar
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     today = _today_utc()
     last_day = calendar.monthrange(today.year, today.month)[1]
@@ -494,7 +493,7 @@ def test_monthly_summary_sent_and_flag_updated_on_last_day(
                 fake_today.day,
                 8,
                 0,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             ),
         ),
     ):
@@ -555,7 +554,7 @@ def test_master_toggle_off_skips_monthly_summary_scheduler(
 ):
     """Monthly summary scheduler respects email_reminders_enabled=False."""
     import calendar
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     today = _today_utc()
     last_day = calendar.monthrange(today.year, today.month)[1]
@@ -579,7 +578,7 @@ def test_master_toggle_off_skips_monthly_summary_scheduler(
                 fake_today.day,
                 8,
                 0,
-                tzinfo=timezone.utc,
+                tzinfo=UTC,
             ),
         ),
     ):

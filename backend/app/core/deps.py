@@ -34,7 +34,7 @@ def current_user(
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-        )
+        ) from None
     user = db.get(User, int(user_id))
     if not user or not user.is_active:
         raise HTTPException(

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import bcrypt
 from jose import jwt
@@ -27,9 +27,7 @@ DUMMY_PASSWORD_HASH = hash_password("not-a-real-password")
 
 
 def create_access_token(subject: str, token_version: int) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(
-        minutes=settings.access_token_expire_minutes
-    )
+    expire = datetime.now(UTC) + timedelta(minutes=settings.access_token_expire_minutes)
     return jwt.encode(
         {
             "sub": subject,

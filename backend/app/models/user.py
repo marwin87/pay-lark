@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import JSON, Boolean, Index, Integer, String, func
@@ -132,7 +132,7 @@ class User(Base):
         String(512), nullable=True, default=None
     )
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )
 
     @property

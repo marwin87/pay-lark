@@ -1,10 +1,8 @@
 import hashlib
 import logging
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Literal
-
-_logger = logging.getLogger(__name__)
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
@@ -14,16 +12,15 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.core.deps import current_user
 from app.core.i18n import BRAND
-from app.core.tz import is_valid_tz, today_for
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
     create_access_token,
     hash_password,
     verify_password,
 )
+from app.core.tz import is_valid_tz, today_for
 from app.models.reset_token import PasswordResetToken
 from app.models.user import User
-from app.services.categories import seed_default_categories
 from app.schemas.auth import (
     ChangeEmailRequest,
     ChangePasswordRequest,
@@ -41,6 +38,7 @@ from app.schemas.auth import (
     UserProfileOut,
     UserProfileUpdate,
 )
+from app.services.categories import seed_default_categories
 from app.services.email import send_password_reset_email
 from app.services.notify import NotificationError, encrypt_secret, telegram_url
 from app.services.notify import send as notify_send
@@ -52,6 +50,8 @@ from app.services.reminder_job import (
     send_monthly_summary_for_user,
     send_reminders_for_user,
 )
+
+_logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -308,11 +308,11 @@ def share_month(
     if any(_is_blocked_domain(e) for e in body.emails):
         raise HTTPException(status_code=400, detail="Recipient domain not allowed")
     # ponytail: per-process memory, resets on restart; move to DB/redis if multi-worker
-    cutoff = datetime.now(timezone.utc) - timedelta(hours=1)
+    cutoff = datetime.now(UTC) - timedelta(hours=1)
     recent = [ts for ts in _share_sent.get(user.id, []) if ts > cutoff]
     if len(recent) + len(body.emails) > _SHARE_LIMIT:
         raise HTTPException(status_code=429, detail="Too many shares, try later")
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     _share_sent[user.id] = recent + [now] * len(body.emails)
     results = [
         send_monthly_summary_for_user(db, user, body.month, EMAIL, e)
@@ -324,7 +324,7 @@ def share_month(
 
 @router.get("/server-time", response_model=ServerTimeOut)
 def server_time(_: User = Depends(current_user)):
-    return ServerTimeOut(server_time=datetime.now(timezone.utc))
+    return ServerTimeOut(server_time=datetime.now(UTC))
 
 
 @router.patch("/change-email", response_model=UserProfileOut)
@@ -357,7 +357,9 @@ def send_telegram_test(user: User = Depends(current_user)):
     try:
         notify_send(url, BRAND["name"], "✅ Telegram notifications are working.")
     except NotificationError:
-        raise HTTPException(status_code=502, detail="Telegram delivery failed")
+        raise HTTPException(
+            status_code=502, detail="Telegram delivery failed"
+        ) from None
     return MessageResponse(message="sent")
 
 
@@ -385,7 +387,7 @@ def forgot_password(
     token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
 
     if settings.password_reset_token_expire_minutes > 0:
-        expires_at = datetime.now(timezone.utc) + timedelta(
+        expires_at = datetime.now(UTC) + timedelta(
             minutes=settings.password_reset_token_expire_minutes
         )
     else:
@@ -441,7 +443,7 @@ def reset_password(
     if not token_row:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
 
-    if token_row.expires_at and token_row.expires_at < datetime.now(timezone.utc):
+    if token_row.expires_at and token_row.expires_at < datetime.now(UTC):
         db.delete(token_row)
         db.commit()
         raise HTTPException(status_code=400, detail="Reset token has expired")

@@ -1,7 +1,7 @@
 """Integration tests for the restore safety-net: snapshot-on-restore and cleanup job."""
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.orm import sessionmaker
 
@@ -128,7 +128,7 @@ def test_cleanup_removes_stale_snapshots_keeps_fresh(client, client_db):
     old_snapshot = (
         db.query(RestoreSnapshot).filter(RestoreSnapshot.user_id == old_user_id).one()
     )
-    old_snapshot.created_at = datetime.now(timezone.utc) - timedelta(days=30)
+    old_snapshot.created_at = datetime.now(UTC) - timedelta(days=30)
     old_user_snapshot_id = old_snapshot.user_id
     db.commit()
 
@@ -275,7 +275,7 @@ def test_last_snapshot_404_when_past_retention_window(client, client_db):
 
     _, db = client_db
     snapshot = db.query(RestoreSnapshot).one()
-    snapshot.created_at = datetime.now(timezone.utc) - timedelta(days=8)
+    snapshot.created_at = datetime.now(UTC) - timedelta(days=8)
     db.commit()
 
     r = client.get("/export/last-snapshot", headers=auth(tok))
@@ -297,7 +297,7 @@ def test_restore_from_snapshot_404_when_past_retention_window(client, client_db)
 
     _, db = client_db
     snapshot = db.query(RestoreSnapshot).one()
-    snapshot.created_at = datetime.now(timezone.utc) - timedelta(days=8)
+    snapshot.created_at = datetime.now(UTC) - timedelta(days=8)
     db.commit()
 
     r = client.post("/export/restore-snapshot", headers=auth(tok))

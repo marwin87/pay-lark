@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
@@ -19,5 +19,5 @@ class RestoreSnapshot(Base):
     )
     payload: Mapped[dict] = mapped_column(JSON, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )

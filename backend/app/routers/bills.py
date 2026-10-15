@@ -1,4 +1,4 @@
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import date, datetime, time, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, selectinload
@@ -16,7 +16,6 @@ from app.models.bill import (
 from app.models.category import Category
 from app.models.user import User
 from app.schemas.bill import (
-    check_interval,
     BillTemplateCreate,
     BillTemplateOut,
     BillTemplateUpdate,
@@ -25,6 +24,7 @@ from app.schemas.bill import (
     PaymentInstanceOut,
     PaymentInstanceUpdate,
     TrendPointOut,
+    check_interval,
 )
 from app.schemas.category import CategoryOut
 from app.services.recurrence import (
@@ -589,7 +589,7 @@ def update_bill(
         try:
             check_interval(bill.frequency, bill.interval)
         except ValueError as e:
-            raise HTTPException(status_code=422, detail=str(e))
+            raise HTTPException(status_code=422, detail=str(e)) from e
         db.commit()
         db.refresh(bill)
         return bill
@@ -611,7 +611,7 @@ def update_bill(
     try:
         check_interval(bill.frequency, bill.interval)
     except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=str(e)) from e
 
     if bill.end_period:
         # Unpaid instances seeded past the new end are system-made: hard delete, so they

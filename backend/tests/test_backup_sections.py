@@ -5,7 +5,6 @@ import json
 import pytest
 
 from app.services.categories import CATEGORY_COLORS
-
 from tests.conftest import auth, category_id, register_and_login
 
 _ALL = [

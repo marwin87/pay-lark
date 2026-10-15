@@ -1,6 +1,6 @@
 """Unit tests for app/services/email.py — mocks notify.send (Apprise)."""
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
 from unittest.mock import patch
 
@@ -114,7 +114,7 @@ _PAID_ROW = {
     "amount": Decimal("99.99"),
     "paid_amount": Decimal("99.99"),
     "currency": "PLN",
-    "paid_at": datetime(2026, 6, 10, 12, 0, tzinfo=timezone.utc),
+    "paid_at": datetime(2026, 6, 10, 12, 0, tzinfo=UTC),
 }
 
 _UNPAID_ROW = {

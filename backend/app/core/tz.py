@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from typing import Protocol
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -21,7 +21,7 @@ class _HasTimezone(Protocol):
 
 def _utcnow() -> datetime:
     """The one clock the helpers below read, so tests can pin it."""
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def user_tz(user: _HasTimezone) -> ZoneInfo:

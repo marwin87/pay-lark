@@ -7,15 +7,15 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-logging.getLogger("app").setLevel(logging.INFO)
-
 from app.core.config import settings
 from app.core.database import SessionLocal
-from app.core.i18n import BRAND
 from app.core.deps import csrf_token_valid
+from app.core.i18n import BRAND
 from app.routers import auth, bills, categories, export
 from app.services.reminder_job import send_catchup_reminders, send_daily_reminders
 from app.services.snapshot_cleanup import cleanup_old_snapshots
+
+logging.getLogger("app").setLevel(logging.INFO)
 
 # Pre-session endpoints: no cookie session exists yet, so CSRF (which protects
 # an existing session from being abused) doesn't apply.

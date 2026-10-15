@@ -30,7 +30,6 @@ def _bill(client, token, **overrides) -> dict:
 
 def test_create_monthly_bill_with_past_due_month_seeds_history(client):
     """Monthly bill with due_month 3 months in the past → backfill creates past instances."""
-    from datetime import date
 
     today = today_utc()
     if today.month <= 3:
@@ -54,7 +53,6 @@ def test_create_monthly_bill_with_past_due_month_seeds_history(client):
 
 def test_create_monthly_bill_with_current_month_does_not_backfill(client):
     """Monthly bill with due_month == current month → no backfill (start_period == current)."""
-    from datetime import date
 
     today = today_utc()
     token = register_and_login(client, "no_backfill@test.com")
@@ -75,7 +73,6 @@ def test_create_monthly_bill_with_current_month_does_not_backfill(client):
 
 def test_create_annual_bill_with_future_due_month_sets_next_year(client):
     """Annual bill with due_month > current month → start_period uses current year."""
-    from datetime import date
 
     today = today_utc()
     if today.month >= 12:
@@ -99,7 +96,6 @@ def test_create_annual_bill_with_future_due_month_sets_next_year(client):
 
 def test_create_annual_bill_with_past_due_month_sets_next_year(client):
     """Annual bill with due_month < current month → start_period bumped to next year."""
-    from datetime import date
 
     today = today_utc()
     if today.month <= 1:
@@ -124,7 +120,6 @@ def test_create_annual_bill_with_past_due_month_sets_next_year(client):
 def test_create_one_off_bill_with_past_due_month_stays_current_year(client):
     """One-off bill with due_month < current month → stays this year (never repeats,
     so unlike annual it must not roll forward to next year)."""
-    from datetime import date
 
     today = today_utc()
     if today.month <= 1:
@@ -146,7 +141,6 @@ def test_create_one_off_bill_with_past_due_month_stays_current_year(client):
 def test_create_one_off_bill_with_past_due_month_generates_overdue_instance(client):
     """A one-off bill must generate its single payment instance immediately,
     shown as overdue when its due date has already passed."""
-    from datetime import date
 
     today = today_utc()
     if today.month <= 1:

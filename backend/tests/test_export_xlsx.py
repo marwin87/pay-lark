@@ -2,7 +2,7 @@
 full-year backfill, and language translation."""
 
 import io
-from datetime import date, timedelta
+from datetime import timedelta
 
 import openpyxl
 

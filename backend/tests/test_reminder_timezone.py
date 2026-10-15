@@ -1,7 +1,7 @@
 """The reminder scheduler works in each user's own time zone: send time, 'today' for
 the reminder windows, the monthly-summary day and month."""
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
 from unittest.mock import patch
 
@@ -24,7 +24,7 @@ from tests.test_reminder_job import (
 
 
 def _utc(*args) -> datetime:
-    return datetime(*args, tzinfo=timezone.utc)
+    return datetime(*args, tzinfo=UTC)
 
 
 @pytest.fixture()

@@ -15,6 +15,9 @@ Notable changes, release by release.
 - Help explains draft bills and “Generate payments”
 - “Get started” card moved to the Dashboard
 - Dashboard currency switch adapts to screen width and remembers your choice
+
+### Breaking changes
+
 - Backups made by older versions can no longer be restored
 
 ### Fixes

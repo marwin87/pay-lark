@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
+    JSON,
     Boolean,
     Date,
     ForeignKey,
     Integer,
-    JSON,
     Numeric,
     String,
     Text,
@@ -25,25 +25,25 @@ if TYPE_CHECKING:
     from app.models.user import User
 
 
-class BillFrequency(str, Enum):
+class BillFrequency(StrEnum):
     monthly = "monthly"
     annual = "annual"
     one_off = "one_off"
 
 
-class PaymentStatus(str, Enum):
+class PaymentStatus(StrEnum):
     upcoming = "upcoming"
     overdue = "overdue"
     paid = "paid"
 
 
-class BillStatus(str, Enum):
+class BillStatus(StrEnum):
     draft = "draft"  # no payments until activated; can be deleted
     active = "active"
     paused = "paused"  # nothing new is generated; its unpaid payments are hidden
 
 
-class Hidden(str, Enum):
+class Hidden(StrEnum):
     """Why a payment is not shown. A visible payment has `hidden = None`."""
 
     user = "user"  # the user deleted it (kept as a tombstone so it is not regenerated)
@@ -88,12 +88,12 @@ class BillTemplate(Base):
     draft_dates: Mapped[list[str] | None] = mapped_column(JSON)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )
 
     user: Mapped[User] = relationship(back_populates="bills")
     category: Mapped[Category] = relationship()
-    instances: Mapped[list["PaymentInstance"]] = relationship(
+    instances: Mapped[list[PaymentInstance]] = relationship(
         back_populates="template", cascade="all, delete-orphan"
     )
 
@@ -200,10 +200,10 @@ class PaymentInstance(Base):
         UTCDateTime, nullable=True, default=None
     )
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )
 
-    template: Mapped["BillTemplate"] = relationship(back_populates="instances")
+    template: Mapped[BillTemplate] = relationship(back_populates="instances")
 
     def status_on(self, today: date) -> PaymentStatus:
         """Status as shown to the user: an unpaid payment follows its due date,

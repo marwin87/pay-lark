@@ -1,6 +1,6 @@
 """Tests for POST /bills/payments/{id}/pay — the `paid_at` date override."""
 
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 
 from fastapi.testclient import TestClient
 
@@ -42,7 +42,7 @@ def test_mark_paid_without_date_uses_today(client_db):
     assert r.status_code == 200
     # The API stamps paid_at in UTC, so compare against the UTC date, not the
     # machine's local one (they differ for a few hours around midnight).
-    assert r.json()["paid_at"].startswith(datetime.now(timezone.utc).date().isoformat())
+    assert r.json()["paid_at"].startswith(datetime.now(UTC).date().isoformat())
 
 
 def test_mark_paid_with_past_date_is_recorded(client_db):
@@ -62,7 +62,7 @@ def test_mark_paid_with_past_date_is_recorded(client_db):
 
 
 def _utc_today() -> date:
-    return datetime.now(timezone.utc).date()
+    return datetime.now(UTC).date()
 
 
 def test_mark_paid_accepts_tomorrow_for_clients_ahead_of_utc(client_db):
@@ -171,7 +171,7 @@ def test_unpaid_amount_override_is_per_payment_and_survives_bill_edit(client_db)
 
     # Template is untouched, and a later template price change does not
     # replace this payment's amount.
-    assert client.get(f"/bills", headers=auth(token)).json()[0]["amount"] == "120.00"
+    assert client.get("/bills", headers=auth(token)).json()[0]["amount"] == "120.00"
     r = client.patch(
         f"/bills/{bill_id}", json={"amount": "200.00"}, headers=auth(token)
     )

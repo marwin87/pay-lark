@@ -40,7 +40,9 @@ def build_pdf(
 ) -> bytes:
     selected_keys = set(me.pdf_fields)
     keys = [k for k in _COLUMN_KEYS if k in selected_keys]
-    columns = [c for k, c in zip(_COLUMN_KEYS, _COLUMNS) if k in selected_keys]
+    columns = [
+        c for k, c in zip(_COLUMN_KEYS, _COLUMNS, strict=True) if k in selected_keys
+    ]
     headers = [t(lang, f"SettingsPage.excelExport.fields.{k}") for k in keys]
     by_month = _rows_by_month(db, me, lang, year)
 
@@ -62,7 +64,7 @@ def build_pdf(
         """Fit each column to its widest content (header or cell) plus padding;
         if the table is wider than the page, shrink only the widest columns."""
         natural = []
-        for h, col in zip(headers, columns):
+        for h, col in zip(headers, columns, strict=True):
             pdf.set_font("DejaVu", "B", 8)
             w = pdf.get_string_width(h)
             pdf.set_font("DejaVu", "", 8)
@@ -100,12 +102,12 @@ def build_pdf(
         )
         pdf.set_font("DejaVu", "B", 8)
         pdf.set_fill_color(*_PDF_HEADER_FILL)
-        for h, w in zip(headers, widths):
+        for h, w in zip(headers, widths, strict=True):
             pdf.cell(w, 7, h, border=1, fill=True)
         pdf.ln()
         pdf.set_font("DejaVu", "", 8)
         for row in rows:
-            for key, col, w in zip(keys, columns, widths):
+            for key, col, w in zip(keys, columns, widths, strict=True):
                 text = str(row[col] if row[col] is not None else "")
                 pdf.set_fill_color(255, 255, 255)
                 pdf.set_text_color(0, 0, 0)

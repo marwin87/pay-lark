@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def cleanup_old_snapshots(SessionLocal: sessionmaker) -> None:
-    cutoff = datetime.now(timezone.utc) - timedelta(
+    cutoff = datetime.now(UTC) - timedelta(
         days=settings.restore_snapshot_retention_days
     )
     db: Session = SessionLocal()

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from sqlalchemy import ForeignKey, String, UUID
+from sqlalchemy import UUID, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base, UTCDateTime
@@ -23,5 +23,5 @@ class PasswordResetToken(Base):
     )
     expires_at: Mapped[datetime | None] = mapped_column(UTCDateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )

@@ -1,6 +1,6 @@
 """Tests for logout token revocation and CSRF double-submit protection."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from jose import jwt
 
@@ -93,7 +93,7 @@ def _token_with_claims(**overrides) -> str:
     payload = {
         "sub": "1",
         "ver": 0,
-        "exp": datetime.now(timezone.utc) + timedelta(minutes=5),
+        "exp": datetime.now(UTC) + timedelta(minutes=5),
         "iss": "pay-tracker",
         "aud": "pay-tracker-app",
     }
@@ -120,7 +120,7 @@ def test_token_missing_audience_is_rejected(client):
     payload = {
         "sub": "1",
         "ver": 0,
-        "exp": datetime.now(timezone.utc) + timedelta(minutes=5),
+        "exp": datetime.now(UTC) + timedelta(minutes=5),
         "iss": "pay-tracker",
     }
     bad_token = jwt.encode(

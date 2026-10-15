@@ -75,7 +75,7 @@ def test_archive_hides_unpaid_from_this_month_but_keeps_history(client_db):
     bill_id = _bill(client, token)
     past_unpaid = _inst(db, bill_id, -1, status=PaymentStatus.overdue)
     paid_now = _inst(db, bill_id, 0, status=PaymentStatus.paid)
-    next_unpaid = _inst(db, bill_id, 1)
+    _inst(db, bill_id, 1)
 
     _archive(client, token, bill_id)
 

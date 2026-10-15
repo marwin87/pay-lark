@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import Response, StreamingResponse
@@ -90,7 +90,7 @@ def export_json(
     payload = {
         "schema_version": 9,
         "exported_by": me.email,
-        "exported_at": datetime.now(timezone.utc).isoformat(),
+        "exported_at": datetime.now(UTC).isoformat(),
         **_build_backup_arrays(db, me.id, sections),
     }
     # Not in _build_backup_arrays: that also feeds the DB-stored restore snapshot,
@@ -154,7 +154,7 @@ def restore_json(
     try:
         raw = json.loads(content)
     except json.JSONDecodeError:
-        raise HTTPException(status_code=422, detail="Invalid backup file")
+        raise HTTPException(status_code=422, detail="Invalid backup file") from None
 
     if not isinstance(raw, dict):
         raise HTTPException(status_code=422, detail="Invalid backup file")
@@ -166,7 +166,7 @@ def restore_json(
     try:
         backup = BackupPayload.model_validate(raw)
     except ValidationError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=str(e)) from e
 
     template_ids_in_backup = {t.id for t in backup.bill_templates or []}
     orphaned = [

@@ -8,7 +8,7 @@ Research: context/changes/testing-recurrence-unit/research.md
 """
 
 import types
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
@@ -110,7 +110,7 @@ def _stub(
         interval=interval,
         start_period=start_period,
         end_period=None,
-        created_at=created_at or datetime(2026, 1, 1, tzinfo=timezone.utc),
+        created_at=created_at or datetime(2026, 1, 1, tzinfo=UTC),
     )
 
 
@@ -162,7 +162,7 @@ def test_bill_active_in_period_created_at_fallback() -> None:
     template = _stub(
         BillFrequency.monthly,
         start_period=None,
-        created_at=datetime(2026, 1, 15, tzinfo=timezone.utc),
+        created_at=datetime(2026, 1, 15, tzinfo=UTC),
         interval=3,
     )
     # +3 months from anchor "2026-01" → active

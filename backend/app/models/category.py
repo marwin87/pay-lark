@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
@@ -31,7 +31,7 @@ class Category(Base):
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(
-        UTCDateTime, default=lambda: datetime.now(timezone.utc)
+        UTCDateTime, default=lambda: datetime.now(UTC)
     )
 
     user: Mapped[User] = relationship(back_populates="categories")

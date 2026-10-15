@@ -1,15 +1,15 @@
 import calendar
 import logging
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from sqlalchemy import or_, true
 from sqlalchemy.orm import Session, selectinload, sessionmaker
 
+from app.core import tz
 from app.core.config import settings
 from app.core.i18n import t
-from app.core import tz
 from app.core.tz import user_tz
 from app.models.bill import BillStatus, BillTemplate, PaymentInstance, PaymentStatus
 from app.models.user import User
@@ -312,7 +312,6 @@ def _run_jobs(SessionLocal: sessionmaker, now_utc: datetime, *, exact: bool) -> 
             # succeeds. Note: the query-then-flag pattern is not atomic; two
             # concurrent scheduler runs could both see last_sent unset and both
             # send. Acceptable at household scale given the per-minute cadence.
-            last_sent_col = getattr(User, ch.summary_last_sent)
             summary_users = (
                 db.query(User)
                 .filter(
@@ -429,7 +428,7 @@ def _send_and_flag(
 
     setattr(instance, flag_attr, True)
     if channel is EMAIL:
-        instance.email_sent_at = datetime.now(timezone.utc)
+        instance.email_sent_at = datetime.now(UTC)
     try:
         db.commit()
     except Exception as commit_exc:

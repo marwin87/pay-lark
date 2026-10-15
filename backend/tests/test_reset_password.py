@@ -1,14 +1,14 @@
 """Integration tests for forgot-password / reset-password / smtp-status endpoints."""
 
 import hashlib
-from app.services.notify import NotificationError
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.models.reset_token import PasswordResetToken
+from app.services.notify import NotificationError
 from tests.conftest import register_and_login
 
 
@@ -133,7 +133,7 @@ def test_reset_password_expired_token_returns_400(client_db):
     known_raw = "expired-raw-token-for-testing-99"
     row = db.query(PasswordResetToken).one()
     row.token_hash = _token_hash(known_raw)
-    row.expires_at = datetime.now(timezone.utc) - timedelta(hours=2)
+    row.expires_at = datetime.now(UTC) - timedelta(hours=2)
     db.commit()
 
     r = client.post(

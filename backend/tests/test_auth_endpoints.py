@@ -1,6 +1,7 @@
 """Tests for auth endpoints: GET /me, PATCH /me, PATCH /change-password,
 PATCH /change-email, and 401 enforcement on protected routes."""
 
+from datetime import UTC
 from unittest.mock import patch
 
 import pytest
@@ -381,9 +382,9 @@ def test_send_monthly_summary_now_does_not_set_flag(client_db):
     assert r.status_code == 200
     assert r.json()["sent"] is True
 
-    from datetime import datetime, timezone
+    from datetime import datetime
 
-    current_month = datetime.now(timezone.utc).strftime("%Y-%m")
+    current_month = datetime.now(UTC).strftime("%Y-%m")
     db.expire_all()
     user = db.query(User).filter(User.email == "summary_flag@test.com").first()
     assert user.monthly_summary_last_sent != current_month
