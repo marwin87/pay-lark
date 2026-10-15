@@ -129,7 +129,8 @@
         "resumeError": "Impossible de reprendre la facture.",
         "hidePaused": "Masquer en pause",
         "allPaused": "Toutes les factures sont en pause",
-        "allPausedHelp": "Les factures en pause ne génèrent ni paiements ni rappels. Affichez-les pour en reprendre une, ou ajoutez une nouvelle facture."
+        "allPausedHelp": "Les factures en pause ne génèrent ni paiements ni rappels. Affichez-les pour en reprendre une, ou ajoutez une nouvelle facture.",
+        "billDeleted": "« {name} » supprimé"
     },
     "BillTemplateForm": {
         "nameLabel": "Nom",
@@ -176,7 +177,8 @@
         "close": "Fermer",
         "edit": "Modifier",
         "pause": "Mettre en pause",
-        "resume": "Reprendre"
+        "resume": "Reprendre",
+        "delete": "Supprimer"
     },
     "RestoreDeletedDialog": {
         "title": "Restaurer les paiements supprimés ?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "Que signifie « Brouillon » sur une facture ?",
                 "s1": "Une nouvelle facture démarre en <b>{draft}</b>. Elle n’a pas encore de paiements, on peut donc la vérifier et la modifier librement.",
-                "s2": "Appuyez sur <b>{generatePayments}</b> et confirmez. Les paiements sont créés à partir du mois de début et les suivants apparaissent automatiquement. Ensuite, le mois de début d’une facture mensuelle ne peut plus être modifié."
+                "s2": "Appuyez sur <b>{generatePayments}</b> et confirmez. Les paiements sont créés à partir du mois de début et les suivants apparaissent automatiquement. Ensuite, le mois de début d’une facture mensuelle ne peut plus être modifié.",
+                "s3": "Un brouillon inutile peut être retiré avec <b>{delete}</b>."
             },
             "repeat": {
                 "q": "La facture n’est pas mensuelle. Que faire ?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Rechercher dans l’aide…",
         "noResults": "Rien trouvé. Essayez d’autres mots."
+    },
+    "DeleteDraftDialog": {
+        "title": "Supprimer le brouillon ?",
+        "description": "Ce brouillon sera supprimé définitivement. Il n’a aucun paiement, donc aucun historique n’est perdu.",
+        "cancel": "Annuler",
+        "delete": "Supprimer le brouillon",
+        "deleting": "Suppression…"
     }
 }

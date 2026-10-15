@@ -10,6 +10,7 @@ import {
   createBill,
   updateBill,
   archiveBill,
+  deleteDraftBill,
   unarchiveBill,
   activateBill,
   hasDeletedFuture,
@@ -29,6 +30,7 @@ import {
 import BillTemplateForm from "@/components/bills/BillTemplateForm";
 import BillTemplateRow from "@/components/bills/BillTemplateRow";
 import PauseConfirmDialog from "@/components/bills/PauseConfirmDialog";
+import DeleteDraftDialog from "@/components/bills/DeleteDraftDialog";
 import ActivateConfirmDialog from "@/components/bills/ActivateConfirmDialog";
 import ResumeConfirmDialog from "@/components/bills/ResumeConfirmDialog";
 import RestoreDeletedDialog from "@/components/bills/RestoreDeletedDialog";
@@ -55,6 +57,8 @@ export default function BillsPage() {
   // "Paused" in the UI == `is_archived` in the API.
   const [pauseTarget, setPauseTarget] = useState<BillTemplateOut | null>(null);
   const [pausing, setPausing] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<BillTemplateOut | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [resumeTarget, setResumeTarget] = useState<BillTemplateOut | null>(null);
   const [resuming, setResuming] = useState(false);
   const [activateTarget, setActivateTarget] = useState<BillTemplateOut | null>(null);
@@ -227,6 +231,19 @@ export default function BillsPage() {
     }
   }
 
+  async function handleDeleteConfirm() {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    try {
+      await deleteDraftBill(deleteTarget.id);
+      showToast(t("billDeleted", { name: toastName(deleteTarget.name) }));
+      setDeleteTarget(null);
+      setRefreshKey((k) => k + 1);
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   async function handleResumeConfirm() {
     if (!resumeTarget || resuming) return;
     setResuming(true);
@@ -267,6 +284,14 @@ export default function BillsPage() {
         />
       )}
 
+      {deleteTarget && (
+        <DeleteDraftDialog
+          billName={deleteTarget.name}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteTarget(null)}
+          deleting={deleting}
+        />
+      )}
       {activateTarget && (
         <ActivateConfirmDialog
           billName={activateTarget.name}
@@ -472,6 +497,7 @@ export default function BillsPage() {
                         onEditToggle={() => toggleExpand(tmpl.id)}
                         onSave={(data) => handleUpdate(tmpl.id, data)}
                         onPause={() => setPauseTarget(tmpl)}
+                        onDelete={() => setDeleteTarget(tmpl)}
                         onResume={() => setResumeTarget(tmpl)}
                         onActivate={() => setActivateTarget(tmpl)}
                       />

@@ -3,6 +3,7 @@
 import {
   Pencil,
   Pause,
+  Trash2,
   Play,
   Rocket,
   ChevronUp,
@@ -25,6 +26,7 @@ interface Props {
   onPause: () => void;
   onResume: () => void;
   onActivate: () => void;
+  onDelete: () => void;
 }
 
 export function formatDueLabel(template: BillTemplateOut, locale: string): string | null {
@@ -78,6 +80,7 @@ export default function BillTemplateRow({
   onPause,
   onResume,
   onActivate,
+  onDelete,
 }: Props) {
   const t = useTranslations("BillTemplateRow");
   const tPage = useTranslations("BillsPage");
@@ -154,45 +157,54 @@ export default function BillTemplateRow({
         </div>
 
         {/* Actions */}
-        <div className="shrink-0">
-          <div className="flex items-center justify-end gap-3 sm:gap-1">
-            <button
-              onClick={onEditToggle}
-              aria-label={isExpanded ? t("close") : t("edit")}
-              className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
-            >
-              {isExpanded ? <ChevronUp className="h-5 w-5 sm:h-[15px] sm:w-[15px]" /> : <Pencil className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />}
-              <span>{isExpanded ? t("close") : t("edit")}</span>
-            </button>
+        <div className="sm:shrink-0">
+          <div className="flex items-center justify-end gap-2 sm:gap-1">
             {isDraft && !template.is_archived && (
               <button
                 onClick={onActivate}
                 aria-label={t("generatePayments")}
-                className="flex items-center gap-1.5 rounded-xl border border-transparent bg-emerald-600 px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 "
+                className="flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-transparent bg-emerald-600 px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-emerald-700 "
               >
-                <Rocket className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />
-                <span>{t("generatePayments")}</span>
+                <Rocket className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span className="truncate">{t("generatePayments")}</span>
               </button>
             )}
             {template.is_archived ? (
               <button
                 onClick={onResume}
                 aria-label={t("resume")}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
               >
-                <Play className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />
-                <span>{t("resume")}</span>
+                <Play className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span className="truncate">{t("resume")}</span>
+              </button>
+            ) : isDraft ? (
+              <button
+                onClick={onDelete}
+                aria-label={t("delete")}
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-red-800 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+              >
+                <Trash2 className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span className="truncate">{t("delete")}</span>
               </button>
             ) : (
               <button
                 onClick={onPause}
                 aria-label={t("pause")}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-amber-800 dark:hover:bg-amber-900/20 dark:hover:text-amber-400"
+                className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-400 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500 dark:hover:border-amber-800 dark:hover:bg-amber-900/20 dark:hover:text-amber-400"
               >
-                <Pause className="h-5 w-5 sm:h-[15px] sm:w-[15px]" />
-                <span>{t("pause")}</span>
+                <Pause className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />
+                <span className="truncate">{t("pause")}</span>
               </button>
             )}
+            <button
+              onClick={onEditToggle}
+              aria-label={isExpanded ? t("close") : t("edit")}
+              className="flex h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 sm:h-auto sm:flex-none sm:justify-start sm:rounded-lg sm:px-2.5 sm:py-1.5 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+            >
+              {isExpanded ? <ChevronUp className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" /> : <Pencil className="shrink-0 h-5 w-5 sm:h-[15px] sm:w-[15px]" />}
+              <span className="truncate">{isExpanded ? t("close") : t("edit")}</span>
+            </button>
           </div>
         </div>
       </div>

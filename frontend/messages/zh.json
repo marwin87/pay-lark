@@ -129,7 +129,8 @@
         "resumeError": "恢复账单失败。",
         "hidePaused": "隐藏已暂停",
         "allPaused": "所有账单都已暂停",
-        "allPausedHelp": "已暂停的账单不会生成付款或提醒。显示它们即可恢复，或添加新账单。"
+        "allPausedHelp": "已暂停的账单不会生成付款或提醒。显示它们即可恢复，或添加新账单。",
+        "billDeleted": "已删除“{name}”"
     },
     "BillTemplateForm": {
         "nameLabel": "名称",
@@ -176,7 +177,8 @@
         "close": "关闭",
         "edit": "编辑",
         "pause": "暂停",
-        "resume": "恢复"
+        "resume": "恢复",
+        "delete": "删除"
     },
     "RestoreDeletedDialog": {
         "title": "恢复已删除的付款记录？",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "账单上的“草稿”是什么意思？",
                 "s1": "新账单先是<b>{draft}</b>，还没有付款记录，可以放心检查和修改。",
-                "s2": "点击<b>{generatePayments}</b>并确认。付款会从起始月份开始生成，之后的会自动出现。此后，月度账单的起始月份不能再修改。"
+                "s2": "点击<b>{generatePayments}</b>并确认。付款会从起始月份开始生成，之后的会自动出现。此后，月度账单的起始月份不能再修改。",
+                "s3": "不需要的草稿可以用<b>{delete}</b>删除。"
             },
             "repeat": {
                 "q": "账单不是每月的，怎么办？",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "搜索帮助…",
         "noResults": "没有找到。换个词试试。"
+    },
+    "DeleteDraftDialog": {
+        "title": "删除草稿？",
+        "description": "此草稿将被永久删除。它没有付款记录，因此不会丢失任何历史。",
+        "cancel": "取消",
+        "delete": "删除草稿",
+        "deleting": "删除中…"
     }
 }

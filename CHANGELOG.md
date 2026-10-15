@@ -7,6 +7,7 @@ Notable changes, release by release.
 ### Features
 
 - New bills start as drafts; “Generate payments” activates them
+- Draft bills can be deleted
 - Ribbons mark drafts, paused bills, overdue, due-today and last payments
 - Upcoming payments show days left
 - Payment popups are tinted by payment status

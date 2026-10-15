@@ -129,7 +129,8 @@
         "resumeError": "Nie udało się wznowić rachunku.",
         "hidePaused": "Ukryj wstrzymane",
         "allPaused": "Wszystkie rachunki są wstrzymane",
-        "allPausedHelp": "Wstrzymane rachunki nie tworzą płatności ani przypomnień. Pokaż je, żeby wznowić któryś, albo dodaj nowy rachunek."
+        "allPausedHelp": "Wstrzymane rachunki nie tworzą płatności ani przypomnień. Pokaż je, żeby wznowić któryś, albo dodaj nowy rachunek.",
+        "billDeleted": "Usunięto „{name}”"
     },
     "BillTemplateForm": {
         "nameLabel": "Nazwa",
@@ -176,7 +177,8 @@
         "close": "Zamknij",
         "edit": "Edytuj",
         "pause": "Wstrzymaj",
-        "resume": "Wznów"
+        "resume": "Wznów",
+        "delete": "Usuń"
     },
     "RestoreDeletedDialog": {
         "title": "Przywrócić usunięte płatności?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "Co oznacza „Szkic” przy rachunku?",
                 "s1": "Nowy rachunek zaczyna jako <b>{draft}</b>. Nie ma jeszcze płatności, więc można go spokojnie sprawdzić i zmienić.",
-                "s2": "Naciśnij <b>{generatePayments}</b> i potwierdź. Płatności powstaną od miesiąca startowego, a kolejne pojawią się automatycznie. Potem miesiąca startowego rachunku miesięcznego nie da się już zmienić."
+                "s2": "Naciśnij <b>{generatePayments}</b> i potwierdź. Płatności powstaną od miesiąca startowego, a kolejne pojawią się automatycznie. Potem miesiąca startowego rachunku miesięcznego nie da się już zmienić.",
+                "s3": "Niepotrzebny szkic można usunąć przyciskiem <b>{delete}</b>."
             },
             "repeat": {
                 "q": "Rachunek nie powtarza się co miesiąc. Co robić?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Szukaj w pomocy…",
         "noResults": "Nic nie znaleziono. Warto spróbować innych słów."
+    },
+    "DeleteDraftDialog": {
+        "title": "Usunąć szkic?",
+        "description": "Szkic zostanie trwale usunięty. Nie ma płatności, więc żadna historia nie zostanie utracona.",
+        "cancel": "Anuluj",
+        "delete": "Usuń szkic",
+        "deleting": "Usuwanie…"
     }
 }

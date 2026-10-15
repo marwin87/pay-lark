@@ -114,3 +114,19 @@ def test_draft_can_be_paused_and_resumed_and_stays_a_draft(client):
         client.post(f"/bills/{bill['id']}/activate", headers=auth(tok)).status_code
         == 200
     )
+
+
+def test_draft_can_be_deleted(client):
+    tok = register_and_login(client, "d-del@test.com")
+    bill = _draft(client, tok)
+    r = client.delete(f"/bills/{bill['id']}", headers=auth(tok))
+    assert r.status_code == 204
+    assert client.get("/bills", headers=auth(tok)).json() == []
+
+
+def test_activated_bill_cannot_be_deleted(client):
+    tok = register_and_login(client, "d-del2@test.com")
+    bill = _draft(client, tok)
+    client.post(f"/bills/{bill['id']}/activate", headers=auth(tok))
+    r = client.delete(f"/bills/{bill['id']}", headers=auth(tok))
+    assert r.status_code == 409

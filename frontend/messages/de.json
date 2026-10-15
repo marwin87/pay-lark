@@ -129,7 +129,8 @@
         "resumeError": "Rechnung konnte nicht fortgesetzt werden.",
         "hidePaused": "Pausierte ausblenden",
         "allPaused": "Alle Rechnungen sind pausiert",
-        "allPausedHelp": "Pausierte Rechnungen erzeugen keine Zahlungen oder Erinnerungen. Zeige sie an, um eine fortzusetzen, oder füge eine neue Rechnung hinzu."
+        "allPausedHelp": "Pausierte Rechnungen erzeugen keine Zahlungen oder Erinnerungen. Zeige sie an, um eine fortzusetzen, oder füge eine neue Rechnung hinzu.",
+        "billDeleted": "„{name}“ gelöscht"
     },
     "BillTemplateForm": {
         "nameLabel": "Name",
@@ -176,7 +177,8 @@
         "close": "Schließen",
         "edit": "Bearbeiten",
         "pause": "Pausieren",
-        "resume": "Fortsetzen"
+        "resume": "Fortsetzen",
+        "delete": "Löschen"
     },
     "RestoreDeletedDialog": {
         "title": "Gelöschte Zahlungen wiederherstellen?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "Was bedeutet „Entwurf“ bei einer Rechnung?",
                 "s1": "Eine neue Rechnung startet als <b>{draft}</b>. Sie hat noch keine Zahlungen und kann in Ruhe geprüft und geändert werden.",
-                "s2": "<b>{generatePayments}</b> drücken und bestätigen. Die Zahlungen werden ab dem Startmonat angelegt, neue kommen automatisch dazu. Danach lässt sich der Startmonat einer monatlichen Rechnung nicht mehr ändern."
+                "s2": "<b>{generatePayments}</b> drücken und bestätigen. Die Zahlungen werden ab dem Startmonat angelegt, neue kommen automatisch dazu. Danach lässt sich der Startmonat einer monatlichen Rechnung nicht mehr ändern.",
+                "s3": "Ein nicht benötigter Entwurf kann mit <b>{delete}</b> entfernt werden."
             },
             "repeat": {
                 "q": "Die Rechnung kommt nicht monatlich. Was tun?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "In der Hilfe suchen …",
         "noResults": "Nichts gefunden. Versuche andere Wörter."
+    },
+    "DeleteDraftDialog": {
+        "title": "Entwurf löschen?",
+        "description": "Dieser Entwurf wird dauerhaft entfernt. Er hat keine Zahlungen, es geht also kein Verlauf verloren.",
+        "cancel": "Abbrechen",
+        "delete": "Entwurf löschen",
+        "deleting": "Wird gelöscht…"
     }
 }

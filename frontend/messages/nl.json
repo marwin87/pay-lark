@@ -129,7 +129,8 @@
         "resumeError": "Rekening hervatten mislukt.",
         "hidePaused": "Verberg gepauzeerd",
         "allPaused": "Alle rekeningen zijn gepauzeerd",
-        "allPausedHelp": "Gepauzeerde rekeningen maken geen betalingen of herinneringen aan. Toon ze om er een te hervatten, of voeg een nieuwe rekening toe."
+        "allPausedHelp": "Gepauzeerde rekeningen maken geen betalingen of herinneringen aan. Toon ze om er een te hervatten, of voeg een nieuwe rekening toe.",
+        "billDeleted": "“{name}” verwijderd"
     },
     "BillTemplateForm": {
         "nameLabel": "Naam",
@@ -176,7 +177,8 @@
         "close": "Sluiten",
         "edit": "Bewerken",
         "pause": "Pauzeren",
-        "resume": "Hervatten"
+        "resume": "Hervatten",
+        "delete": "Verwijderen"
     },
     "RestoreDeletedDialog": {
         "title": "Verwijderde betalingen herstellen?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "Wat betekent “Concept” bij een rekening?",
                 "s1": "Een nieuwe rekening start als <b>{draft}</b>. Ze heeft nog geen betalingen, dus je kunt haar rustig controleren en aanpassen.",
-                "s2": "Druk op <b>{generatePayments}</b> en bevestig. De betalingen worden vanaf de startmaand aangemaakt en nieuwe verschijnen vanzelf. Daarna kan de startmaand van een maandelijkse rekening niet meer worden gewijzigd."
+                "s2": "Druk op <b>{generatePayments}</b> en bevestig. De betalingen worden vanaf de startmaand aangemaakt en nieuwe verschijnen vanzelf. Daarna kan de startmaand van een maandelijkse rekening niet meer worden gewijzigd.",
+                "s3": "Een concept dat niet nodig is, kan met <b>{delete}</b> worden verwijderd."
             },
             "repeat": {
                 "q": "De rekening is niet maandelijks. Wat nu?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Zoeken in help…",
         "noResults": "Niets gevonden. Probeer andere woorden."
+    },
+    "DeleteDraftDialog": {
+        "title": "Concept verwijderen?",
+        "description": "Dit concept wordt definitief verwijderd. Het heeft geen betalingen, dus er gaat geen geschiedenis verloren.",
+        "cancel": "Annuleren",
+        "delete": "Concept verwijderen",
+        "deleting": "Verwijderen…"
     }
 }

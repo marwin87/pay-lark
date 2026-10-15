@@ -129,7 +129,8 @@
         "resumeError": "No se pudo reanudar la factura.",
         "hidePaused": "Ocultar en pausa",
         "allPaused": "Todas las facturas están en pausa",
-        "allPausedHelp": "Las facturas en pausa no generan pagos ni recordatorios. Muéstralas para reanudar una o añade una factura nueva."
+        "allPausedHelp": "Las facturas en pausa no generan pagos ni recordatorios. Muéstralas para reanudar una o añade una factura nueva.",
+        "billDeleted": "«{name}» eliminado"
     },
     "BillTemplateForm": {
         "nameLabel": "Nombre",
@@ -176,7 +177,8 @@
         "close": "Cerrar",
         "edit": "Editar",
         "pause": "Pausar",
-        "resume": "Reanudar"
+        "resume": "Reanudar",
+        "delete": "Eliminar"
     },
     "RestoreDeletedDialog": {
         "title": "¿Restaurar pagos eliminados?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "¿Qué significa «Borrador» en una factura?",
                 "s1": "Una factura nueva empieza como <b>{draft}</b>. Aún no tiene pagos, así que se puede revisar y cambiar con calma.",
-                "s2": "Pulsa <b>{generatePayments}</b> y confirma. Los pagos se crean desde el mes de inicio y los nuevos aparecen solos. Después, el mes de inicio de una factura mensual ya no se puede cambiar."
+                "s2": "Pulsa <b>{generatePayments}</b> y confirma. Los pagos se crean desde el mes de inicio y los nuevos aparecen solos. Después, el mes de inicio de una factura mensual ya no se puede cambiar.",
+                "s3": "Un borrador que no hace falta se puede quitar con <b>{delete}</b>."
             },
             "repeat": {
                 "q": "La factura no es mensual. ¿Qué hacer?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Buscar en la ayuda…",
         "noResults": "No se encontró nada. Prueba con otras palabras."
+    },
+    "DeleteDraftDialog": {
+        "title": "¿Eliminar el borrador?",
+        "description": "Este borrador se eliminará de forma permanente. No tiene pagos, así que no se pierde ningún historial.",
+        "cancel": "Cancelar",
+        "delete": "Eliminar borrador",
+        "deleting": "Eliminando…"
     }
 }

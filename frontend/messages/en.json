@@ -129,7 +129,8 @@
         "resumeError": "Failed to resume bill.",
         "hidePaused": "Hide paused",
         "allPaused": "All bills are paused",
-        "allPausedHelp": "Paused bills create no payments or reminders. Show them to resume one, or add a new bill."
+        "allPausedHelp": "Paused bills create no payments or reminders. Show them to resume one, or add a new bill.",
+        "billDeleted": "“{name}” deleted"
     },
     "BillTemplateForm": {
         "nameLabel": "Name",
@@ -176,7 +177,8 @@
         "close": "Close",
         "edit": "Edit",
         "pause": "Pause",
-        "resume": "Resume"
+        "resume": "Resume",
+        "delete": "Delete"
     },
     "RestoreDeletedDialog": {
         "title": "Restore deleted payments?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "What does “Draft” on a bill mean?",
                 "s1": "A new bill starts as a <b>{draft}</b>. It has no payments yet, so it can be checked and changed freely.",
-                "s2": "Press <b>{generatePayments}</b> and confirm. Payments are created from the starting month on and new ones appear automatically. After that, a monthly bill’s starting month can no longer be changed."
+                "s2": "Press <b>{generatePayments}</b> and confirm. Payments are created from the starting month on and new ones appear automatically. After that, a monthly bill’s starting month can no longer be changed.",
+                "s3": "A draft that is not needed can be removed with <b>{delete}</b>."
             },
             "repeat": {
                 "q": "The bill is not monthly. What now?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Search help…",
         "noResults": "Nothing found. Try other words."
+    },
+    "DeleteDraftDialog": {
+        "title": "Delete draft?",
+        "description": "This draft will be removed permanently. It has no payments, so no history is lost.",
+        "cancel": "Cancel",
+        "delete": "Delete draft",
+        "deleting": "Deleting…"
     }
 }

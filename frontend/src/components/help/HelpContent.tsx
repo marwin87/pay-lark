@@ -47,6 +47,7 @@ export default function HelpContent({ scroll = false, onDone }: { scroll?: boole
     draft: tRow("draft"),
     generatePayments: tRow("generatePayments"),
     pause: tRow("pause"),
+    delete: tRow("delete"),
     resume: tRow("resume"),
     markPaid: tPay("markAsPaid"),
     revert: tPay("revert"),

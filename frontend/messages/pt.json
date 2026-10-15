@@ -129,7 +129,8 @@
         "resumeError": "Não foi possível retomar a conta.",
         "hidePaused": "Ocultar em pausa",
         "allPaused": "Todas as contas estão em pausa",
-        "allPausedHelp": "As contas em pausa não geram pagamentos nem lembretes. Mostre-as para retomar uma ou adicione uma nova conta."
+        "allPausedHelp": "As contas em pausa não geram pagamentos nem lembretes. Mostre-as para retomar uma ou adicione uma nova conta.",
+        "billDeleted": "“{name}” excluída"
     },
     "BillTemplateForm": {
         "nameLabel": "Nome",
@@ -176,7 +177,8 @@
         "close": "Fechar",
         "edit": "Editar",
         "pause": "Pausar",
-        "resume": "Retomar"
+        "resume": "Retomar",
+        "delete": "Excluir"
     },
     "RestoreDeletedDialog": {
         "title": "Restaurar pagamentos eliminados?",
@@ -755,7 +757,8 @@
             "draft": {
                 "q": "O que significa «Rascunho» numa conta?",
                 "s1": "Uma conta nova começa como <b>{draft}</b>. Ainda não tem pagamentos, por isso pode verificá-la e alterá-la à vontade.",
-                "s2": "Carregue em <b>{generatePayments}</b> e confirme. Os pagamentos são criados a partir do mês inicial e os novos aparecem sozinhos. Depois, o mês inicial de uma conta mensal já não pode ser alterado."
+                "s2": "Carregue em <b>{generatePayments}</b> e confirme. Os pagamentos são criados a partir do mês inicial e os novos aparecem sozinhos. Depois, o mês inicial de uma conta mensal já não pode ser alterado.",
+                "s3": "Um rascunho desnecessário pode ser removido com <b>{delete}</b>."
             },
             "repeat": {
                 "q": "A fatura não é mensal. E agora?",
@@ -868,5 +871,12 @@
         },
         "searchPlaceholder": "Pesquisar na ajuda…",
         "noResults": "Nada encontrado. Tente outras palavras."
+    },
+    "DeleteDraftDialog": {
+        "title": "Excluir o rascunho?",
+        "description": "Este rascunho será removido permanentemente. Não tem pagamentos, por isso nenhum histórico é perdido.",
+        "cancel": "Cancelar",
+        "delete": "Excluir rascunho",
+        "deleting": "Excluindo…"
     }
 }

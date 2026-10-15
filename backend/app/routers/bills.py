@@ -641,6 +641,22 @@ def update_bill(
     return bill
 
 
+@router.delete("/{bill_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_draft_bill(
+    bill_id: int,
+    db: Session = Depends(get_db),
+    me: User = Depends(current_user),
+):
+    bill = db.get(BillTemplate, bill_id)
+    if not bill or bill.user_id != me.id:
+        raise HTTPException(status_code=404, detail="Bill not found")
+    # Only drafts: they have no payment history, so removing them loses nothing.
+    if bill.is_activated:
+        raise HTTPException(status_code=409, detail="Only draft bills can be deleted")
+    db.delete(bill)
+    db.commit()
+
+
 @router.post("/{bill_id}/archive", status_code=status.HTTP_204_NO_CONTENT)
 def archive_bill(
     bill_id: int,
