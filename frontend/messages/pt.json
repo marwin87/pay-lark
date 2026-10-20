@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Categorias",
-            "description": "Adicionar categorias próprias ou mudar o nome e a cor das predefinidas.",
+            "description": "Adicionar, mudar o nome e a cor ou eliminar as categorias que agrupam as contas. Uma categoria usada por uma conta é arquivada em vez de eliminada e pode ser restaurada.",
             "loadError": "Não foi possível carregar as categorias. Tente novamente.",
             "nameRequired": "O nome é obrigatório.",
             "namePlaceholder": "p. ex. Passatempos",
-            "defaultBadge": "predefinida",
             "archivedBadge": "arquivada",
             "edit": "Editar",
+            "archive": "Arquivar",
             "unarchive": "Desarquivar",
             "addNew": "Adicionar categoria",
             "newColorsLabel": "Novas cores",
@@ -884,5 +884,14 @@
         "cancel": "Cancelar",
         "delete": "Excluir conta",
         "deleting": "Excluindo…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Eliminar a categoria?",
+        "deleteDescription": "A categoria será eliminada permanentemente. Nenhuma conta a usa.",
+        "deleteConfirm": "Eliminar categoria",
+        "archiveTitle": "Arquivar a categoria?",
+        "archiveDescription": "Uma conta usa esta categoria, por isso não pode ser eliminada. Ficará oculta nas contas novas e pode ser restaurada a qualquer momento.",
+        "archiveConfirm": "Arquivar categoria",
+        "cancel": "Cancelar"
     }
 }

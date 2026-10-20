@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "类别",
-            "description": "添加自定义类别，或重命名和重新着色默认类别。",
+            "description": "添加、重命名、重新着色或删除用于分组账单的类别。被账单使用的类别会被归档而不是删除，并可恢复。",
             "loadError": "类别加载失败，请重试。",
             "nameRequired": "名称为必填项。",
             "namePlaceholder": "例如：爱好",
-            "defaultBadge": "默认",
             "archivedBadge": "已归档",
             "edit": "编辑",
+            "archive": "归档",
             "unarchive": "取消归档",
             "addNew": "添加类别",
             "newColorsLabel": "新颜色",
@@ -884,5 +884,14 @@
         "cancel": "取消",
         "delete": "删除账单",
         "deleting": "删除中…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "删除类别？",
+        "deleteDescription": "该类别将被永久删除。没有账单使用它。",
+        "deleteConfirm": "删除类别",
+        "archiveTitle": "归档类别？",
+        "archiveDescription": "有账单正在使用此类别，因此无法删除。它将不再出现在新账单中，并可随时恢复。",
+        "archiveConfirm": "归档类别",
+        "cancel": "取消"
     }
 }

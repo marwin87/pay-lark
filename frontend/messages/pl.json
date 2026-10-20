@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Kategorie",
-            "description": "Dodawaj własne kategorie albo zmieniaj nazwę i kolor domyślnych.",
+            "description": "Dodawaj, zmieniaj nazwę i kolor lub usuwaj kategorie, według których grupowane są rachunki. Kategoria używana przez rachunek jest archiwizowana zamiast usuwana i można ją przywrócić.",
             "loadError": "Nie udało się wczytać kategorii. Spróbuj ponownie.",
             "nameRequired": "Nazwa jest wymagana.",
             "namePlaceholder": "np. Hobby",
-            "defaultBadge": "domyślna",
             "archivedBadge": "zarchiwizowana",
             "edit": "Edytuj",
+            "archive": "Archiwizuj",
             "unarchive": "Przywróć",
             "addNew": "Dodaj kategorię",
             "newColorsLabel": "Nowe kolory",
@@ -884,5 +884,14 @@
         "cancel": "Anuluj",
         "delete": "Usuń rachunek",
         "deleting": "Usuwanie…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Usunąć kategorię?",
+        "deleteDescription": "Kategoria zostanie trwale usunięta. Żaden rachunek jej nie używa.",
+        "deleteConfirm": "Usuń kategorię",
+        "archiveTitle": "Zarchiwizować kategorię?",
+        "archiveDescription": "Kategoria jest używana przez rachunek, więc nie można jej usunąć. Zniknie z listy przy nowych rachunkach i w każdej chwili można ją przywrócić.",
+        "archiveConfirm": "Archiwizuj kategorię",
+        "cancel": "Anuluj"
     }
 }

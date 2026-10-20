@@ -35,7 +35,16 @@ def list_categories(
     q = db.query(Category).filter(Category.user_id == me.id)
     if not include_archived:
         q = q.filter(Category.is_archived.is_(False))
-    return q.order_by(Category.sort_order).all()
+    used = {
+        cid
+        for (cid,) in db.query(BillTemplate.category_id)
+        .filter(BillTemplate.user_id == me.id)
+        .distinct()
+    }
+    return [
+        CategoryOut.model_validate(c).model_copy(update={"in_use": c.id in used})
+        for c in q.order_by(Category.sort_order).all()
+    ]
 
 
 @router.post("", response_model=CategoryOut, status_code=status.HTTP_201_CREATED)

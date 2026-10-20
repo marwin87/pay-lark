@@ -30,15 +30,24 @@ test('create, rename and delete an unused custom category in Settings', async ({
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByText(name, { exact: true })).toBeVisible();
 
-  // Step: rename — a new category gets the highest sort_order, so its row is last
-  await page.getByRole('button', { name: 'Edit', exact: true }).last().click();
+  // Step: rename — categories are listed A-Z and "E2E…" sorts before every default, so its row is first
+  await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
   await page.getByRole('textbox').last().fill(renamed);
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByText(renamed, { exact: true })).toBeVisible();
   await expect(page.getByText(name, { exact: true })).not.toBeVisible();
 
   // Step: delete — no bill uses it, so it is removed for good
-  await page.getByRole('button', { name: 'Delete', exact: true }).last().click();
+  await page.getByRole('button', { name: 'Delete', exact: true }).first().click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.getByText(renamed, { exact: true })).toBeVisible(); // Cancel keeps it
+
+  await page.getByRole('button', { name: 'Delete', exact: true }).first().click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Delete category', exact: true }).click();
+  await expect(page.getByRole('dialog')).not.toBeVisible();
   await expect(page.getByText(renamed, { exact: true })).not.toBeVisible();
 
   // Assert: persisted server-side
@@ -61,7 +70,18 @@ test('deleting a category used by a bill archives it instead', async ({ page }) 
 
   await page.goto('/dashboard/settings');
   await page.getByRole('tab', { name: 'Categories', exact: true }).click();
-  await page.getByRole('button', { name: 'Delete', exact: true }).last().click();
+
+  // A category a bill uses offers Archive (visible label), not Delete; unused ones offer Delete
+  await expect(page.getByRole('button', { name: 'Archive', exact: true })).toHaveCount(1);
+  await expect(page.getByText('Archive', { exact: true })).toBeVisible();
+  await expect(page.getByText('Delete', { exact: true }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'Archive', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(page.getByText('archived', { exact: true })).not.toBeVisible(); // Cancel archives nothing
+  await page.getByRole('button', { name: 'Archive', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Archive category', exact: true }).click();
+  await expect(page.getByRole('dialog')).not.toBeVisible();
 
   // Kept, flagged as archived, and can be restored
   await expect(page.getByText(name, { exact: true })).toBeVisible();

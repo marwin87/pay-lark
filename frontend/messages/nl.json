@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Categorieën",
-            "description": "Eigen categorieën toevoegen of de standaardcategorieën hernoemen en opnieuw kleuren.",
+            "description": "Categorieën waarmee rekeningen worden gegroepeerd toevoegen, hernoemen, opnieuw kleuren of verwijderen. Een categorie die een rekening gebruikt, wordt gearchiveerd in plaats van verwijderd en kan worden hersteld.",
             "loadError": "Categorieën konden niet worden geladen. Probeer het opnieuw.",
             "nameRequired": "Naam is verplicht.",
             "namePlaceholder": "bijv. Hobby's",
-            "defaultBadge": "standaard",
             "archivedBadge": "gearchiveerd",
             "edit": "Bewerken",
+            "archive": "Archiveren",
             "unarchive": "Dearchiveren",
             "addNew": "Categorie toevoegen",
             "newColorsLabel": "Nieuwe kleuren",
@@ -884,5 +884,14 @@
         "cancel": "Annuleren",
         "delete": "Rekening verwijderen",
         "deleting": "Verwijderen…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Categorie verwijderen?",
+        "deleteDescription": "De categorie wordt definitief verwijderd. Geen enkele rekening gebruikt haar.",
+        "deleteConfirm": "Categorie verwijderen",
+        "archiveTitle": "Categorie archiveren?",
+        "archiveDescription": "Een rekening gebruikt deze categorie, dus ze kan niet worden verwijderd. Ze wordt verborgen bij nieuwe rekeningen en kan altijd worden hersteld.",
+        "archiveConfirm": "Categorie archiveren",
+        "cancel": "Annuleren"
     }
 }

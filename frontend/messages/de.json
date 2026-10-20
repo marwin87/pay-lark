@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Kategorien",
-            "description": "Eigene Kategorien hinzufügen oder die Standardkategorien umbenennen und umfärben.",
+            "description": "Kategorien, nach denen Rechnungen gruppiert werden, hinzufügen, umbenennen, umfärben oder entfernen. Eine Kategorie, die eine Rechnung verwendet, wird archiviert statt gelöscht und lässt sich wiederherstellen.",
             "loadError": "Kategorien konnten nicht geladen werden. Bitte erneut versuchen.",
             "nameRequired": "Name ist erforderlich.",
             "namePlaceholder": "z. B. Hobbys",
-            "defaultBadge": "Standard",
             "archivedBadge": "archiviert",
             "edit": "Bearbeiten",
+            "archive": "Archivieren",
             "unarchive": "Wiederherstellen",
             "addNew": "Kategorie hinzufügen",
             "newColorsLabel": "Neue Farben",
@@ -884,5 +884,14 @@
         "cancel": "Abbrechen",
         "delete": "Rechnung löschen",
         "deleting": "Wird gelöscht…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Kategorie löschen?",
+        "deleteDescription": "Die Kategorie wird dauerhaft gelöscht. Keine Rechnung verwendet sie.",
+        "deleteConfirm": "Kategorie löschen",
+        "archiveTitle": "Kategorie archivieren?",
+        "archiveDescription": "Eine Rechnung verwendet diese Kategorie, daher kann sie nicht gelöscht werden. Sie wird bei neuen Rechnungen ausgeblendet und kann jederzeit wiederhergestellt werden.",
+        "archiveConfirm": "Kategorie archivieren",
+        "cancel": "Abbrechen"
     }
 }

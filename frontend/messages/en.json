@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Categories",
-            "description": "Add custom categories or rename and recolor the defaults.",
+            "description": "Add, rename, recolor or remove the categories your bills are grouped by. A category that a bill uses is archived instead of deleted, and can be restored.",
             "loadError": "Couldn't load categories. Please try again.",
             "nameRequired": "Name is required.",
             "namePlaceholder": "e.g. Hobbies",
-            "defaultBadge": "default",
             "archivedBadge": "archived",
             "edit": "Edit",
+            "archive": "Archive",
             "unarchive": "Unarchive",
             "addNew": "Add category",
             "newColorsLabel": "New colors",
@@ -884,5 +884,14 @@
         "cancel": "Cancel",
         "delete": "Delete bill",
         "deleting": "Deleting…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Delete category?",
+        "deleteDescription": "The category will be removed permanently. No bill uses it.",
+        "deleteConfirm": "Delete category",
+        "archiveTitle": "Archive category?",
+        "archiveDescription": "A bill uses this category, so it can’t be deleted. It will be hidden from new bills and can be restored any time.",
+        "archiveConfirm": "Archive category",
+        "cancel": "Cancel"
     }
 }

@@ -248,3 +248,30 @@ def test_category_delete_other_user_returns_404(client):
         ).status_code
         == 404
     )
+
+
+def test_listing_flags_categories_used_by_a_bill(client):
+    tok = register_and_login(client, "in_use@test.com")
+    cats = client.get("/categories", headers=auth(tok)).json()
+    assert not any(c["in_use"] for c in cats)
+
+    other = next(c for c in cats if c["slug"] == "other")
+    client.post(
+        "/bills",
+        json={
+            "name": "Misc",
+            "category_id": other["id"],
+            "frequency": "monthly",
+            "amount": "10.00",
+            "currency": "PLN",
+            "due_day": 1,
+        },
+        headers=auth(tok),
+    )
+
+    used = [
+        c["slug"]
+        for c in client.get("/categories", headers=auth(tok)).json()
+        if c["in_use"]
+    ]
+    assert used == ["other"]

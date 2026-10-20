@@ -8,6 +8,7 @@ export interface Category {
   sort_order: number;
   is_default: boolean;
   is_archived: boolean;
+  in_use?: boolean; // a bill uses it: can only be archived (set by the list endpoint)
 }
 
 export interface CategoryCreate {

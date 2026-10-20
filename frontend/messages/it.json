@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Categorie",
-            "description": "Aggiungere categorie personalizzate o rinominare e ricolorare quelle predefinite.",
+            "description": "Aggiungere, rinominare, ricolorare o eliminare le categorie che raggruppano le fatture. Una categoria usata da una fattura viene archiviata invece di essere eliminata e può essere ripristinata.",
             "loadError": "Impossibile caricare le categorie. Riprova.",
             "nameRequired": "Il nome è obbligatorio.",
             "namePlaceholder": "es. Hobby",
-            "defaultBadge": "predefinita",
             "archivedBadge": "archiviata",
             "edit": "Modifica",
+            "archive": "Archivia",
             "unarchive": "Ripristina dall'archivio",
             "addNew": "Aggiungi categoria",
             "newColorsLabel": "Nuovi colori",
@@ -884,5 +884,14 @@
         "cancel": "Annulla",
         "delete": "Elimina bolletta",
         "deleting": "Eliminazione…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Eliminare la categoria?",
+        "deleteDescription": "La categoria verrà eliminata definitivamente. Nessuna fattura la usa.",
+        "deleteConfirm": "Elimina categoria",
+        "archiveTitle": "Archiviare la categoria?",
+        "archiveDescription": "Una fattura usa questa categoria, quindi non può essere eliminata. Sarà nascosta per le nuove fatture e potrà essere ripristinata in qualsiasi momento.",
+        "archiveConfirm": "Archivia categoria",
+        "cancel": "Annulla"
     }
 }

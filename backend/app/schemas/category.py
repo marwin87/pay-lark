@@ -13,6 +13,8 @@ class CategoryOut(BaseModel):
     sort_order: int
     is_default: bool
     is_archived: bool
+    # A bill uses it, so it can only be archived. Filled in by GET /categories.
+    in_use: bool = False
 
 
 # Mirrors the DB column, String(50).

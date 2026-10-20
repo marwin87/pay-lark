@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Catégories",
-            "description": "Ajouter des catégories personnalisées ou renommer et recolorer celles par défaut.",
+            "description": "Ajouter, renommer, recolorer ou supprimer les catégories qui regroupent vos factures. Une catégorie utilisée par une facture est archivée au lieu d'être supprimée, et peut être restaurée.",
             "loadError": "Impossible de charger les catégories. Veuillez réessayer.",
             "nameRequired": "Le nom est obligatoire.",
             "namePlaceholder": "ex. Loisirs",
-            "defaultBadge": "par défaut",
             "archivedBadge": "archivée",
             "edit": "Modifier",
+            "archive": "Archiver",
             "unarchive": "Désarchiver",
             "addNew": "Ajouter une catégorie",
             "newColorsLabel": "Nouvelles couleurs",
@@ -884,5 +884,14 @@
         "cancel": "Annuler",
         "delete": "Supprimer la facture",
         "deleting": "Suppression…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "Supprimer la catégorie ?",
+        "deleteDescription": "La catégorie sera supprimée définitivement. Aucune facture ne l’utilise.",
+        "deleteConfirm": "Supprimer la catégorie",
+        "archiveTitle": "Archiver la catégorie ?",
+        "archiveDescription": "Une facture utilise cette catégorie, elle ne peut donc pas être supprimée. Elle sera masquée pour les nouvelles factures et pourra être restaurée à tout moment.",
+        "archiveConfirm": "Archiver la catégorie",
+        "cancel": "Annuler"
     }
 }

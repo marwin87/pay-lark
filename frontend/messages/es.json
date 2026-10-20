@@ -564,13 +564,13 @@
         },
         "categories": {
             "title": "Categorías",
-            "description": "Añadir categorías propias o renombrar y recolorear las predeterminadas.",
+            "description": "Añadir, renombrar, recolorear o eliminar las categorías con las que se agrupan las facturas. Una categoría que usa una factura se archiva en lugar de eliminarse y se puede restaurar.",
             "loadError": "No se pudieron cargar las categorías. Inténtalo de nuevo.",
             "nameRequired": "El nombre es obligatorio.",
             "namePlaceholder": "p. ej. Aficiones",
-            "defaultBadge": "predeterminada",
             "archivedBadge": "archivada",
             "edit": "Editar",
+            "archive": "Archivar",
             "unarchive": "Desarchivar",
             "addNew": "Añadir categoría",
             "newColorsLabel": "Colores nuevos",
@@ -884,5 +884,14 @@
         "cancel": "Cancelar",
         "delete": "Eliminar factura",
         "deleting": "Eliminando…"
+    },
+    "CategoryConfirmDialog": {
+        "deleteTitle": "¿Eliminar la categoría?",
+        "deleteDescription": "La categoría se eliminará de forma permanente. Ninguna factura la usa.",
+        "deleteConfirm": "Eliminar categoría",
+        "archiveTitle": "¿Archivar la categoría?",
+        "archiveDescription": "Una factura usa esta categoría, así que no se puede eliminar. Se ocultará en las facturas nuevas y se puede restaurar en cualquier momento.",
+        "archiveConfirm": "Archivar categoría",
+        "cancel": "Cancelar"
     }
 }

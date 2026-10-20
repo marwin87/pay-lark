@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tag, Pencil, Plus, FolderOpen, Trash2 } from "lucide-react";
+import { Tag, Pencil, Plus, ArchiveRestore, Archive, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ApiError } from "@/lib/api";
 import {
@@ -17,14 +17,20 @@ import {
   CATEGORY_COLORS,
   CATEGORY_COLOR_SWATCH,
   categoryLabel,
+  sortCategoriesByLabel,
 } from "@/lib/categories";
 import { btnSaveClass, btnCancelClass } from "@/components/ui/formButtonClasses";
 import { ColorPicker } from "@/components/ui/CategoryColorPicker";
 import { Tile } from "./Tile";
+import CategoryConfirmDialog from "./CategoryConfirmDialog";
 import { useToast } from "@/context/toast-context";
 
 const inputClass =
   "w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-100 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:focus:border-green-600 dark:focus:ring-green-900/40";
+
+const rowBtnClass =
+  "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-sm font-medium shadow-sm transition-all dark:border-slate-700 dark:bg-slate-800 sm:px-2.5";
+const rowIconClass = "shrink-0 h-[15px] w-[15px]";
 
 export function CategoriesTile({
   t,
@@ -47,6 +53,8 @@ export function CategoriesTile({
   const [editName, setEditName] = useState("");
   const [editColor, setEditColor] = useState<string>(CATEGORY_COLORS[0]);
   const [saving, setSaving] = useState(false);
+  const [confirming, setConfirming] = useState<{ cat: Category; mode: "delete" | "archive" } | null>(null);
+  const [removing, setRemoving] = useState(false);
   const [rowError, setRowError] = useState<string | null>(null);
 
   function reload() {
@@ -141,16 +149,32 @@ export function CategoriesTile({
     }
   }
 
-  // Delete when unused; the API answers 409 when bills use it, so archive instead.
+  async function confirmRemove() {
+    if (!confirming) return;
+    setRemoving(true);
+    await remove(confirming.cat);
+    setRemoving(false);
+    setConfirming(null);
+  }
+
+  async function archive(cat: Category) {
+    await archiveCategory(cat.id);
+    showToast(tc("categoryInUseArchived"));
+  }
+
+  // Archive when a bill uses it, else delete (a 409 means a bill started using it meanwhile).
   async function remove(cat: Category) {
     try {
-      try {
-        await deleteCategory(cat.id);
-        showToast(tc("categoryDeleted"));
-      } catch (err) {
-        if (!(err instanceof ApiError) || err.status !== 409) throw err;
-        await archiveCategory(cat.id);
-        showToast(tc("categoryInUseArchived"));
+      if (cat.in_use) {
+        await archive(cat);
+      } else {
+        try {
+          await deleteCategory(cat.id);
+          showToast(tc("categoryDeleted"));
+        } catch (err) {
+          if (!(err instanceof ApiError) || err.status !== 409) throw err;
+          await archive(cat);
+        }
       }
       reload();
     } catch (err) {
@@ -176,8 +200,7 @@ export function CategoriesTile({
 
       {!loading && !error && (
         <div className="space-y-2">
-          {categories
-            .sort((a, b) => a.sort_order - b.sort_order)
+          {sortCategoriesByLabel(categories, "az", tCategories)
             .map((cat) =>
               editingId === cat.id ? (
                 <div
@@ -230,29 +253,46 @@ export function CategoriesTile({
                   <span className="flex-1 min-w-0 truncate text-sm text-slate-700 dark:text-slate-200">
                     {categoryLabel(cat, tCategories)}
                   </span>
-                  {cat.is_default && (
-                    <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
-                      {tc("categories.defaultBadge")}
-                    </span>
-                  )}
                   {cat.is_archived && (
                     <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
                       {tc("categories.archivedBadge")}
                     </span>
                   )}
+                  {cat.is_archived ? (
+                    <button
+                      onClick={() => restore(cat)}
+                      aria-label={tc("categories.unarchive")}
+                      className={`${rowBtnClass} text-slate-500 hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400`}
+                    >
+                      <ArchiveRestore className={rowIconClass} />
+                      <span className="hidden sm:inline">{tc("categories.unarchive")}</span>
+                    </button>
+                  ) : cat.in_use ? (
+                    <button
+                      onClick={() => setConfirming({ cat, mode: "archive" })}
+                      aria-label={tc("categories.archive")}
+                      className={`${rowBtnClass} text-slate-400 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 dark:text-slate-500 dark:hover:border-amber-800 dark:hover:bg-amber-900/20 dark:hover:text-amber-400`}
+                    >
+                      <Archive className={rowIconClass} />
+                      <span className="hidden sm:inline">{tc("categories.archive")}</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setConfirming({ cat, mode: "delete" })}
+                      aria-label={tc("categories.delete")}
+                      className={`${rowBtnClass} text-slate-400 hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:text-slate-500 dark:hover:border-red-800 dark:hover:bg-red-900/20 dark:hover:text-red-400`}
+                    >
+                      <Trash2 className={rowIconClass} />
+                      <span className="hidden sm:inline">{tc("categories.delete")}</span>
+                    </button>
+                  )}
                   <button
                     onClick={() => startEdit(cat)}
                     aria-label={tc("categories.edit")}
-                    className="shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
+                    className={`${rowBtnClass} text-slate-500 hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400`}
                   >
-                    <Pencil size={14} />
-                  </button>
-                  <button
-                    onClick={() => (cat.is_archived ? restore(cat) : remove(cat))}
-                    aria-label={cat.is_archived ? tc("categories.unarchive") : tc("categories.delete")}
-                    className="shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
-                  >
-                    {cat.is_archived ? <FolderOpen size={14} /> : <Trash2 size={14} />}
+                    <Pencil className={rowIconClass} />
+                    <span className="hidden sm:inline">{tc("categories.edit")}</span>
                   </button>
                 </div>
               ),
@@ -303,6 +343,15 @@ export function CategoriesTile({
             </button>
           )}
         </div>
+      )}
+      {confirming && (
+        <CategoryConfirmDialog
+          mode={confirming.mode}
+          name={categoryLabel(confirming.cat, tCategories)}
+          onConfirm={confirmRemove}
+          onCancel={() => setConfirming(null)}
+          busy={removing}
+        />
       )}
     </Tile>
   );

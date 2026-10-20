@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { fetchCategories, createCategory, type Category } from "@/lib/categories-api";
-import { CATEGORY_COLORS, categoryLabel } from "@/lib/categories";
+import { CATEGORY_COLORS, categoryLabel, sortCategoriesByLabel } from "@/lib/categories";
 import { useToast } from "@/context/toast-context";
 import Dropdown from "@/components/ui/Dropdown";
 import { ColorPicker } from "@/components/ui/CategoryColorPicker";
@@ -47,9 +47,11 @@ export default function CategoryCombobox({ id, value, onChange }: Props) {
     };
   }, []);
 
-  const categoryOptions = categories
-    .filter((cat) => !cat.is_archived || cat.id === value)
-    .sort((a, b) => a.sort_order - b.sort_order);
+  const categoryOptions = sortCategoriesByLabel(
+    categories.filter((cat) => !cat.is_archived || cat.id === value),
+    "az",
+    t,
+  );
 
   const options = [
     { value: "", label: "—" },
