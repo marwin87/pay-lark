@@ -34,6 +34,7 @@ DEFAULT_CATEGORIES = (
     {"slug": "healthcare", "name": "Healthcare", "color": "rose"},
     {"slug": "housing", "name": "Housing", "color": "orange"},
     {"slug": "insurance", "name": "Insurance", "color": "slate"},
+    {"slug": "loans", "name": "Loans", "color": "lime"},
     {"slug": "subscriptions", "name": "Subscriptions", "color": "violet"},
     {"slug": "transport", "name": "Transport", "color": "cyan"},
     {"slug": "utilities", "name": "Utilities", "color": "emerald"},

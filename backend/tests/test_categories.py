@@ -3,12 +3,12 @@
 from tests.conftest import auth, register_and_login
 
 
-def test_registration_seeds_nine_default_categories(client):
+def test_registration_seeds_ten_default_categories(client):
     tok = register_and_login(client, "seed@test.com")
     r = client.get("/categories", headers=auth(tok))
     assert r.status_code == 200
     data = r.json()
-    assert len(data) == 9
+    assert len(data) == 10
     assert all(c["is_default"] for c in data)
     slugs = {c["slug"] for c in data}
     assert slugs == {
@@ -17,6 +17,7 @@ def test_registration_seeds_nine_default_categories(client):
         "healthcare",
         "housing",
         "insurance",
+        "loans",
         "subscriptions",
         "transport",
         "utilities",
@@ -34,7 +35,7 @@ def test_create_category(client):
     assert data["name"] == "Hobbies"
     assert data["slug"] is None
     assert data["is_default"] is False
-    assert data["sort_order"] == 9  # appended after the 9 seeded defaults
+    assert data["sort_order"] == 10  # appended after the 10 seeded defaults
 
 
 def test_create_category_invalid_color_returns_422(client):
