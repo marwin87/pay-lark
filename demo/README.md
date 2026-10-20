@@ -8,7 +8,7 @@ This folder contains a seed script that populates Pay Tracker with realistic dem
 
 All notifications are switched off for this account (email, Telegram, browser), so the demo never sends anything even when SMTP is configured. Share by email is switched on, but it only sends when someone clicks Share.
 
-**11 categories** — the 9 defaults every user gets, plus 2 custom ones used to exercise category-specific edge cases:
+**12 categories** — the 10 defaults every user gets, plus 2 custom ones used to exercise category-specific edge cases:
 
 | Category | Type | State |
 |---|---|---|
@@ -31,8 +31,8 @@ All notifications are switched off for this account (email, Telegram, browser), 
 | Old Music App | **Streaming (Old)** *(archived category)* | Monthly | €4.99 | bill stays active — category is what's archived |
 | Coworking Desk | **Side Hustle** *(custom category)* | Monthly | €120.00 | |
 | Newspaper Subscription | Subscriptions | Monthly | €12.00 | with `end_period` 2026-12 (shows the last payment month on the tile) |
-| Laptop Installments | Other | Monthly | €89.99 | **fixed term** (`end_period` 2026-06) — all 6 instalments paid, no further payments generated |
-| Phone Installments | Other | Monthly | 129.00 PLN | **fixed term** (`end_period` 2026-12) — no payments generated after the last month |
+| Laptop Installments | Loans | Monthly | €89.99 | **fixed term** (`end_period` 2026-06) — all 6 instalments paid, no further payments generated |
+| Phone Installments | Loans | Monthly | 129.00 PLN | **fixed term** (`end_period` 2026-12) — no payments generated after the last month |
 | Climbing Gym Entries | Entertainment | Monthly | €12.00 | **several payment days** (3rd, 10th, 17th): one payment tile per day, every month |
 | Concert Tickets | Entertainment | One-off | €65.00 | **several dates in different months**: one payment per date |
 | Yoga Studio Membership *(archived bill)* | Healthcare | Monthly | €60.00 | |

@@ -345,7 +345,7 @@
     {
       "id": 27,
       "name": "Laptop Installments",
-      "category_id": 9,
+      "category_id": 12,
       "frequency": "monthly",
       "amount": 89.99,
       "currency": "EUR",
@@ -359,7 +359,7 @@
     {
       "id": 28,
       "name": "Phone Installments",
-      "category_id": 9,
+      "category_id": 12,
       "frequency": "monthly",
       "amount": 129.0,
       "currency": "PLN",
@@ -1540,11 +1540,20 @@
       "is_archived": false
     },
     {
+      "id": 12,
+      "name": "Loans",
+      "slug": "loans",
+      "color": "lime",
+      "sort_order": 5,
+      "is_default": true,
+      "is_archived": false
+    },
+    {
       "id": 6,
       "name": "Subscriptions",
       "slug": "subscriptions",
       "color": "violet",
-      "sort_order": 5,
+      "sort_order": 6,
       "is_default": true,
       "is_archived": false
     },
@@ -1553,7 +1562,7 @@
       "name": "Transport",
       "slug": "transport",
       "color": "cyan",
-      "sort_order": 6,
+      "sort_order": 7,
       "is_default": true,
       "is_archived": false
     },
@@ -1562,7 +1571,7 @@
       "name": "Utilities",
       "slug": "utilities",
       "color": "emerald",
-      "sort_order": 7,
+      "sort_order": 8,
       "is_default": true,
       "is_archived": false
     },
@@ -1571,7 +1580,7 @@
       "name": "Other",
       "slug": "other",
       "color": "slate-light",
-      "sort_order": 8,
+      "sort_order": 9,
       "is_default": true,
       "is_archived": false
     },
@@ -1580,7 +1589,7 @@
       "name": "Streaming (Old)",
       "slug": null,
       "color": "lime",
-      "sort_order": 9,
+      "sort_order": 10,
       "is_default": false,
       "is_archived": true
     },
@@ -1589,7 +1598,7 @@
       "name": "Side Hustle",
       "slug": null,
       "color": "pink",
-      "sort_order": 10,
+      "sort_order": 11,
       "is_default": false,
       "is_archived": false
     }
