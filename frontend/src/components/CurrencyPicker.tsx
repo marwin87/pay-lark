@@ -7,6 +7,9 @@ import Dropdown from "@/components/ui/Dropdown";
 type CurrencyOption = (typeof PRESET_CURRENCIES)[number] | "custom";
 
 interface Props {
+  id?: string;
+  /** Show only the currency code in the closed trigger (narrow fields). */
+  compact?: boolean;
   value: string;
   onChange: (value: string) => void;
   ariaLabel: string;
@@ -17,6 +20,8 @@ interface Props {
 }
 
 export default function CurrencyPicker({
+  id,
+  compact,
   value,
   onChange,
   ariaLabel,
@@ -42,14 +47,15 @@ export default function CurrencyPicker({
     onChange(v.trim().toUpperCase());
   }
 
-  const options: { value: CurrencyOption; label: string }[] = [
-    ...PRESET_CURRENCIES.map((c) => ({ value: c, label: `${c} — ${CURRENCY_NAMES[c]}` })),
+  const options: { value: CurrencyOption; label: string; short?: string }[] = [
+    ...PRESET_CURRENCIES.map((c) => ({ value: c, label: `${c} — ${CURRENCY_NAMES[c]}`, short: compact ? c : undefined })),
     { value: "custom" as const, label: customOption },
   ];
 
   return (
     <>
       <Dropdown
+        id={id}
         ariaLabel={ariaLabel}
         value={currencyOption}
         onChange={handleOptionChange}

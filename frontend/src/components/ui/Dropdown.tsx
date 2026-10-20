@@ -8,6 +8,8 @@ import { usePopupPosition } from "./usePopupPosition";
 export interface DropdownOption<T extends string> {
   value: T;
   label: ReactNode;
+  /** Shown in the closed trigger instead of `label` (e.g. a currency code for a narrow field). */
+  short?: ReactNode;
 }
 
 const FIELD_TRIGGER_CLASS =
@@ -150,7 +152,7 @@ export default function Dropdown<T extends string>({
         className={`${TRIGGER_VARIANTS[variant]} disabled:cursor-not-allowed disabled:opacity-50`}
       >
         <span className="flex-1 truncate text-left">
-          {selected ? selected.label : placeholder}
+          {selected ? (selected.short ?? selected.label) : placeholder}
         </span>
         <ChevronDown size={variant === "pill-sm" ? 16 : 14} className="shrink-0 text-slate-400 dark:text-slate-500" />
       </button>

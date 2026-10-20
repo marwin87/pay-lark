@@ -133,6 +133,18 @@
         "billDeleted": "«{name}» eliminata"
     },
     "BillTemplateForm": {
+        "sectionWhat": "Cosa paghi?",
+        "sectionWhatHint": "Nome, importo e categoria",
+        "sectionWhen": "Quando si paga?",
+        "sectionWhenHint": "Con che frequenza e in quali giorni",
+        "sectionExtras": "Extra",
+        "sectionExtrasHint": "Nulla di tutto questo è obbligatorio",
+        "moreOptions": "Data di fine e note",
+        "summaryTitle": "Riepilogo",
+        "summaryNoName": "Nuova fattura",
+        "summaryDays": "giorno {days}",
+        "summaryNext": "Prossimi pagamenti",
+        "summaryEmpty": "Scegli un giorno di pagamento per vedere i prossimi pagamenti.",
         "nameLabel": "Nome",
         "namePlaceholder": "es. Elettricità",
         "nameRequired": "Il nome è obbligatorio.",
@@ -755,7 +767,7 @@
                 "q": "Come si aggiunge una bolletta?",
                 "s1": "Apri <b>{bills}</b> e premi <b>{newBill}</b>.",
                 "s2": "Scrivere un nome, scegliere una categoria e inserire l’importo.",
-                "s3": "Scegli il giorno di scadenza e ogni quanto si ripete (ogni mese, ogni anno o una volta sola). Poi salva.",
+                "s3": "Scegli il giorno di scadenza e ogni quanto si ripete (ogni mese, ogni anno o una volta sola). Poi salva. Il riepilogo accanto al modulo mostra i prossimi pagamenti, così si può controllare il calendario prima di salvare.",
                 "s4": "Una nuova bolletta resta una bozza finché non premi <b>{generatePayments}</b>."
             },
             "draft": {

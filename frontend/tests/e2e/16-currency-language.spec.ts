@@ -26,7 +26,7 @@ test('default currency change is saved and pre-selected in a new bill', async ({
   // Assert: a new bill form is pre-filled with the saved default currency
   await page.goto('/dashboard/bills');
   await page.getByRole('button', { name: 'New Bill' }).click();
-  await expect(page.getByText('PLN — Polish Złoty')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Currency', exact: true })).toHaveText('PLN');
 });
 
 test('switching language to Polski applies immediately and persists after reload', async ({ page }) => {

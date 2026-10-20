@@ -133,6 +133,18 @@
         "billDeleted": "« {name} » supprimé"
     },
     "BillTemplateForm": {
+        "sectionWhat": "Que payez-vous ?",
+        "sectionWhatHint": "Nom, montant et catégorie",
+        "sectionWhen": "Quand est-ce payé ?",
+        "sectionWhenHint": "À quelle fréquence et quels jours",
+        "sectionExtras": "En plus",
+        "sectionExtrasHint": "Rien de tout cela n’est obligatoire",
+        "moreOptions": "Date de fin et notes",
+        "summaryTitle": "Résumé",
+        "summaryNoName": "Nouvelle facture",
+        "summaryDays": "jour {days}",
+        "summaryNext": "Prochains paiements",
+        "summaryEmpty": "Choisissez un jour de paiement pour voir les prochains paiements.",
         "nameLabel": "Nom",
         "namePlaceholder": "ex. Électricité",
         "nameRequired": "Le nom est obligatoire.",
@@ -755,7 +767,7 @@
                 "q": "Comment ajouter une facture ?",
                 "s1": "Ouvrez <b>{bills}</b> et appuyez sur <b>{newBill}</b>.",
                 "s2": "Saisir un nom, choisir une catégorie et écrire le montant.",
-                "s3": "Choisissez le jour d’échéance et la fréquence (chaque mois, chaque année ou une seule fois). Puis enregistrez.",
+                "s3": "Choisissez le jour d’échéance et la fréquence (chaque mois, chaque année ou une seule fois). Puis enregistrez. Le résumé à côté du formulaire montre les prochains paiements, ce qui permet de vérifier le calendrier avant d’enregistrer.",
                 "s4": "Une nouvelle facture reste un brouillon tant que <b>{generatePayments}</b> n’est pas pressé."
             },
             "draft": {

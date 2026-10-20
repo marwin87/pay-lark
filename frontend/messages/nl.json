@@ -133,6 +133,18 @@
         "billDeleted": "“{name}” verwijderd"
     },
     "BillTemplateForm": {
+        "sectionWhat": "Wat betaal je?",
+        "sectionWhatHint": "Naam, bedrag en categorie",
+        "sectionWhen": "Wanneer betaal je?",
+        "sectionWhenHint": "Hoe vaak en op welke dagen",
+        "sectionExtras": "Extra",
+        "sectionExtrasHint": "Niets hiervan is verplicht",
+        "moreOptions": "Einddatum en notities",
+        "summaryTitle": "Samenvatting",
+        "summaryNoName": "Nieuwe rekening",
+        "summaryDays": "dag {days}",
+        "summaryNext": "Volgende betalingen",
+        "summaryEmpty": "Kies een betaaldag om de volgende betalingen te zien.",
         "nameLabel": "Naam",
         "namePlaceholder": "bijv. Elektriciteit",
         "nameRequired": "Naam is verplicht.",
@@ -755,7 +767,7 @@
                 "q": "Hoe wordt een rekening toegevoegd?",
                 "s1": "Open <b>{bills}</b> en tik op <b>{newBill}</b>.",
                 "s2": "Typ een naam, kies een categorie en vul het bedrag in.",
-                "s3": "Kies de vervaldag en hoe vaak hij terugkomt (elke maand, elk jaar of eenmalig). Sla het daarna op.",
+                "s3": "Kies de vervaldag en hoe vaak hij terugkomt (elke maand, elk jaar of eenmalig). Sla het daarna op. De samenvatting naast het formulier toont de volgende betalingen, zodat het schema vóór het opslaan gecontroleerd kan worden.",
                 "s4": "Een nieuwe rekening blijft een concept tot je op <b>{generatePayments}</b> drukt."
             },
             "draft": {

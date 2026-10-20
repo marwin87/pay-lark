@@ -133,6 +133,18 @@
         "billDeleted": "Usunięto „{name}”"
     },
     "BillTemplateForm": {
+        "sectionWhat": "Co płacisz?",
+        "sectionWhatHint": "Nazwa, kwota i kategoria",
+        "sectionWhen": "Kiedy płacisz?",
+        "sectionWhenHint": "Jak często i w które dni",
+        "sectionExtras": "Dodatkowo",
+        "sectionExtrasHint": "Nic z tego nie jest wymagane",
+        "moreOptions": "Koniec płatności i notatki",
+        "summaryTitle": "Podsumowanie",
+        "summaryNoName": "Nowy rachunek",
+        "summaryDays": "dzień {days}",
+        "summaryNext": "Najbliższe płatności",
+        "summaryEmpty": "Wybierz dzień płatności, by zobaczyć najbliższe płatności.",
         "nameLabel": "Nazwa",
         "namePlaceholder": "np. Prąd",
         "nameRequired": "Nazwa jest wymagana.",
@@ -755,7 +767,7 @@
                 "q": "Jak dodać rachunek?",
                 "s1": "Wejdź w <b>{bills}</b> i naciśnij <b>{newBill}</b>.",
                 "s2": "Wpisz nazwę, wybierz kategorię i wpisz kwotę.",
-                "s3": "Wybierz dzień płatności i jak często wraca (co miesiąc, co rok albo jednorazowo). Potem zapisz.",
+                "s3": "Wybierz dzień płatności i jak często wraca (co miesiąc, co rok albo jednorazowo). Potem zapisz. Podsumowanie obok formularza pokazuje najbliższe płatności, więc harmonogram można sprawdzić przed zapisem.",
                 "s4": "Nowy rachunek jest szkicem, dopóki nie naciśniesz <b>{generatePayments}</b>."
             },
             "draft": {

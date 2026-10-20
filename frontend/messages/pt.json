@@ -133,6 +133,18 @@
         "billDeleted": "“{name}” excluída"
     },
     "BillTemplateForm": {
+        "sectionWhat": "O que paga?",
+        "sectionWhatHint": "Nome, valor e categoria",
+        "sectionWhen": "Quando se paga?",
+        "sectionWhenHint": "Com que frequência e em que dias",
+        "sectionExtras": "Extras",
+        "sectionExtrasHint": "Nada disto é obrigatório",
+        "moreOptions": "Data de fim e notas",
+        "summaryTitle": "Resumo",
+        "summaryNoName": "Nova conta",
+        "summaryDays": "dia {days}",
+        "summaryNext": "Próximos pagamentos",
+        "summaryEmpty": "Escolha um dia de pagamento para ver os próximos pagamentos.",
         "nameLabel": "Nome",
         "namePlaceholder": "p. ex. Eletricidade",
         "nameRequired": "O nome é obrigatório.",
@@ -755,7 +767,7 @@
                 "q": "Como se adiciona uma fatura?",
                 "s1": "Abra <b>{bills}</b> e toque em <b>{newBill}</b>.",
                 "s2": "Escrever um nome, escolher uma categoria e escrever o valor.",
-                "s3": "Escolha o dia de vencimento e de quanto em quanto tempo se repete (todos os meses, todos os anos ou só uma vez). Depois guarde.",
+                "s3": "Escolha o dia de vencimento e de quanto em quanto tempo se repete (todos os meses, todos os anos ou só uma vez). Depois guarde. O resumo ao lado do formulário mostra os próximos pagamentos, para que o calendário possa ser verificado antes de guardar.",
                 "s4": "Uma conta nova fica como rascunho até carregar em <b>{generatePayments}</b>."
             },
             "draft": {

@@ -4,6 +4,8 @@ import { FormEvent, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
 import { todayIn } from "@/lib/today";
+import { useFrequencyLabel } from "@/lib/frequency";
+import { upcomingPayments } from "@/lib/schedule";
 import CategoryCombobox from "./CategoryCombobox";
 import MonthYearPicker from "./MonthYearPicker";
 import CurrencyPicker from "@/components/CurrencyPicker";
@@ -49,11 +51,15 @@ interface Errors {
 const inputClass =
   "w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition-all focus:border-green-500 focus:ring-2 focus:ring-green-100 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:focus:border-green-600 dark:focus:ring-green-900/40";
 
+const sectionClass =
+  "rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800";
+
 const labelClass = "block text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5";
 
 export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDates, defaultCurrency, onSave, onCancel }: Props) {
   const t = useTranslations("BillTemplateForm");
   const tFreq = useTranslations("Frequencies");
+  const frequencyLabel = useFrequencyLabel();
   const locale = useLocale();
   const { decimalSeparator, timeZone } = useAppLocale();
   // "Today" in the profile's zone, the same calendar the backend uses
@@ -86,6 +92,7 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
   const [errors, setErrors] = useState<Errors>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [extrasOpen, setExtrasOpen] = useState(Boolean(initial?.end_period || initial?.notes));
   const [apiError, setApiError] = useState<string | null>(null);
 
   const isRecurring = RECURRING_FREQUENCIES.includes(frequency);
@@ -102,6 +109,18 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
   const effectiveInterval = frequency === "one_off" ? 1 : Math.min(interval, maxInterval);
   const step = effectiveInterval * (frequency === "annual" ? 12 : 1);
   const endHint = endPeriod ? lastPayment(effectiveStart, endPeriod, step) : null;
+
+  const upcoming = upcomingPayments({
+    frequency,
+    stepMonths: step,
+    start: effectiveStart,
+    days: dueDays,
+    dates,
+    end: isRecurring ? endPeriod || null : null,
+    today: todayStr,
+  });
+  const dateFormat = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric" });
+  const sortedDays = [...dueDays].sort((a, b) => a - b);
 
   function validate(fields: {
     name: string;
@@ -161,183 +180,237 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="@container">
       {apiError && (
-        <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+        <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
           {apiError}
         </div>
       )}
 
-      {/* Row 1: Name + Amount */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="bill-name" className={labelClass}>
-            {t("nameLabel")} <span className="text-red-400">*</span>
-          </label>
-          <input
-            id="bill-name"
-            maxLength={255}
-            value={name}
-            onChange={(e) => handleNameChange(e.target.value)}
-            placeholder={t("namePlaceholder")}
-            className={inputClass}
-          />
-          {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
-        </div>
-
-        <div>
-          <label htmlFor="bill-amount" className={labelClass}>{t("amountLabel")}</label>
-          <input
-            id="bill-amount"
-            value={amount}
-            onChange={(e) => handleAmountChange(e.target.value)}
-            placeholder={formatAmount(0, decimalSeparator)}
-            inputMode="decimal"
-            className={inputClass}
-          />
-          {errors.amount && <p className="mt-1 text-xs text-red-500">{errors.amount}</p>}
-          <div className="mt-2">
-            <CurrencyPicker
-              value={currency}
-              onChange={setCurrency}
-              ariaLabel={t("currencyAriaLabel")}
-              customOption={t("customOption")}
-              customCurrencyAriaLabel={t("customCurrencyAriaLabel")}
-              customCurrencyPlaceholder={t("customCurrencyPlaceholder")}
-              inputClassName={inputClass + " mt-2"}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Row 2: Frequency pills */}
-      <div>
-        <label className={labelClass}>
-          {t("frequencyLabel")} <span className="text-red-400">*</span>
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {FREQUENCY_VALUES.map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => handleFrequencyChange(v)}
-              className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-all ${
-                frequency === v
-                  ? "border-green-600 bg-green-50 text-green-700 shadow-sm dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:text-emerald-400"
-              }`}
-            >
-              {tFreq(v)}
-            </button>
-          ))}
-        </div>
-        {frequency !== "one_off" && (
-          <div className="mt-3 flex items-center gap-2">
-            <label htmlFor="bill-interval" className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              {t("intervalLabel")}
-            </label>
-            <Dropdown
-              id="bill-interval"
-              variant="pill"
-              scrollable
-              value={String(effectiveInterval)}
-              onChange={(v) => setIntervalValue(Number(v))}
-              options={Array.from({ length: maxInterval }, (_, i) => ({
-                value: String(i + 1),
-                label: tFreq(frequency === "annual" ? "years" : "months", { count: i + 1 }),
-              }))}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Row 3: when it is paid + optional end month (fixed-term bills) */}
-      <div className={isRecurring ? "grid gap-4 sm:grid-cols-2" : ""}>
+      <div className="grid gap-5 @3xl:grid-cols-[minmax(0,1fr)_17rem] @3xl:items-start">
         <div className="flex flex-col gap-4">
-          {frequency === "one_off" ? (
-            <div>
-              <label className={labelClass}>{t("datesLabel")}</label>
-              <MultiDatePicker value={dates} onChange={setDates} lockedDates={paidDates} />
-            </div>
-          ) : (
-            <>
+          {/* 1. What is paid */}
+          <section className={sectionClass}>
+            <SectionHeader n={1} title={t("sectionWhat")} hint={t("sectionWhatHint")} />
+            <div className="flex flex-col gap-4">
+              <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem_9rem]">
+                <div>
+                  <label htmlFor="bill-name" className={labelClass}>
+                    {t("nameLabel")} <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="bill-name"
+                    maxLength={255}
+                    value={name}
+                    onChange={(e) => handleNameChange(e.target.value)}
+                    placeholder={t("namePlaceholder")}
+                    className={inputClass}
+                  />
+                  {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+                </div>
+
+                <div>
+                  <label htmlFor="bill-amount" className={labelClass}>{t("amountLabel")}</label>
+                  <input
+                    id="bill-amount"
+                    value={amount}
+                    onChange={(e) => handleAmountChange(e.target.value)}
+                    placeholder={formatAmount(0, decimalSeparator)}
+                    inputMode="decimal"
+                    className={inputClass}
+                  />
+                  {errors.amount && <p className="mt-1 text-xs text-red-500">{errors.amount}</p>}
+                </div>
+
+                <div>
+                  <label htmlFor="bill-currency" className={labelClass}>{t("currencyAriaLabel")}</label>
+                  <CurrencyPicker
+                    id="bill-currency"
+                    compact
+                    value={currency}
+                    onChange={setCurrency}
+                    ariaLabel={t("currencyAriaLabel")}
+                    customOption={t("customOption")}
+                    customCurrencyAriaLabel={t("customCurrencyAriaLabel")}
+                    customCurrencyPlaceholder={t("customCurrencyPlaceholder")}
+                    inputClassName={inputClass + " mt-2"}
+                  />
+                </div>
+              </div>
+
               <div>
-                <label htmlFor="bill-start-month" className={labelClass}>
-                  {isRecurring ? t("startMonthLabel") : t("annualMonthLabel")}
+                <label htmlFor="bill-category" className={labelClass}>
+                  {t("categoryLabel")} <span className="text-red-400">*</span>
                 </label>
-                <MonthYearPicker
-                  id="bill-start-month"
-                  value={`${effectiveStart.slice(0, 4)}-${String(startMonth).padStart(2, "0")}`}
-                  clearable={false}
-                  disabled={startLocked}
-                  onChange={(ym) => ym && setDueMonth(String(Number(ym.slice(5, 7))))}
+                <CategoryCombobox
+                  id="bill-category"
+                  value={categoryId}
+                  onChange={handleCategoryChange}
                 />
-                {startLocked && (
-                  <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">{t("startLocked")}</p>
+                {errors.category && <p className="mt-1 text-xs text-red-500">{errors.category}</p>}
+              </div>
+            </div>
+          </section>
+
+          {/* 2. When it is paid */}
+          <section className={sectionClass}>
+            <SectionHeader n={2} title={t("sectionWhen")} hint={t("sectionWhenHint")} />
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className={labelClass}>
+                  {t("frequencyLabel")} <span className="text-red-400">*</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {FREQUENCY_VALUES.map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => handleFrequencyChange(v)}
+                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-all ${
+                        frequency === v
+                          ? "border-green-600 bg-green-50 text-green-700 shadow-sm dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+                          : "border-slate-200 bg-white text-slate-600 hover:border-green-300 hover:bg-green-50 hover:text-green-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-700 dark:hover:text-emerald-400"
+                      }`}
+                    >
+                      {tFreq(v)}
+                    </button>
+                  ))}
+                </div>
+                {frequency !== "one_off" && (
+                  <div className="mt-3 flex items-center gap-2">
+                    <label htmlFor="bill-interval" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                      {t("intervalLabel")}
+                    </label>
+                    <Dropdown
+                      id="bill-interval"
+                      variant="pill"
+                      scrollable
+                      value={String(effectiveInterval)}
+                      onChange={(v) => setIntervalValue(Number(v))}
+                      options={Array.from({ length: maxInterval }, (_, i) => ({
+                        value: String(i + 1),
+                        label: tFreq(frequency === "annual" ? "years" : "months", { count: i + 1 }),
+                      }))}
+                    />
+                  </div>
                 )}
               </div>
-              <div>
-                <label htmlFor="bill-days" className={labelClass}>{t("daysLabel")}</label>
-                <DaysOfMonthPicker
-                  id="bill-days"
-                  value={dueDays}
-                  year={Number(effectiveStart.slice(0, 4))}
-                  month={startMonth}
-                  stepMonths={step}
-                  onChange={setDueDays}
-                />
-                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t("daysHint")}</p>
+
+              {frequency === "one_off" ? (
+                <div>
+                  <label className={labelClass}>{t("datesLabel")}</label>
+                  <MultiDatePicker value={dates} onChange={setDates} lockedDates={paidDates} />
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <label htmlFor="bill-start-month" className={labelClass}>
+                      {isRecurring ? t("startMonthLabel") : t("annualMonthLabel")}
+                    </label>
+                    <MonthYearPicker
+                      id="bill-start-month"
+                      value={`${effectiveStart.slice(0, 4)}-${String(startMonth).padStart(2, "0")}`}
+                      clearable={false}
+                      disabled={startLocked}
+                      onChange={(ym) => ym && setDueMonth(String(Number(ym.slice(5, 7))))}
+                    />
+                    {startLocked && (
+                      <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">{t("startLocked")}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label htmlFor="bill-days" className={labelClass}>{t("daysLabel")}</label>
+                    <DaysOfMonthPicker
+                      id="bill-days"
+                      value={dueDays}
+                      year={Number(effectiveStart.slice(0, 4))}
+                      month={startMonth}
+                      stepMonths={step}
+                      onChange={setDueDays}
+                    />
+                    <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{t("daysHint")}</p>
+                  </div>
+                </>
+              )}
+              {errors.days && <p className="text-xs text-red-500">{errors.days}</p>}
+            </div>
+          </section>
+
+          {/* 3. Optional extras */}
+          <section className={sectionClass}>
+            <SectionHeader n={3} title={t("sectionExtras")} hint={t("sectionExtrasHint")} muted />
+            <details
+              open={extrasOpen}
+              onToggle={(e) => setExtrasOpen(e.currentTarget.open)}
+              className="rounded-xl border border-dashed border-slate-300 px-4 py-2.5 dark:border-slate-600"
+            >
+              <summary className="cursor-pointer text-sm font-medium text-slate-600 dark:text-slate-400">
+                {t("moreOptions")}
+              </summary>
+              <div className="mt-3 flex flex-col gap-4">
+                {isRecurring && (
+                  <div>
+                    <label htmlFor="bill-end-period" className={labelClass}>{t("endPeriodLabel")}</label>
+                    <MonthYearPicker id="bill-end-period" value={endPeriod} min={minEnd} onChange={setEndPeriod} />
+                    {/* Only warn when the cycle skips the chosen month; an aligned pick needs no echo */}
+                    {endHint && !endHint.aligned && (
+                      <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400">
+                        {t("endPeriodAdjusted", {
+                          month: new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
+                            new Date(endHint.year, endHint.month - 1, 1),
+                          ),
+                        })}
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div>
+                  <label htmlFor="bill-notes" className={labelClass}>{t("notesLabel")}</label>
+                  <textarea
+                    id="bill-notes"
+                    maxLength={2000}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    rows={2}
+                    placeholder={t("notesPlaceholder")}
+                    className={inputClass + " resize-none"}
+                  />
+                </div>
               </div>
-            </>
+            </details>
+          </section>
+        </div>
+
+        {/* Live summary: what the choices above lead to */}
+        <section
+          aria-label={t("summaryTitle")}
+          className="rounded-2xl border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-900/20 @3xl:sticky @3xl:top-4"
+        >
+          <p className="text-xs font-bold uppercase tracking-wide text-green-700 dark:text-green-400">{t("summaryTitle")}</p>
+          <p className="mt-1 break-words text-base font-semibold text-slate-800 dark:text-slate-100">
+            {name.trim() || t("summaryNoName")}
+          </p>
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            {amount.trim() || formatAmount(0, decimalSeparator)} {currency}
+          </p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            {frequencyLabel(frequency, effectiveInterval)}
+            {frequency !== "one_off" && sortedDays.length > 0 && ` · ${t("summaryDays", { days: sortedDays.join(", ") })}`}
+          </p>
+          <p className="mt-3 text-xs font-semibold text-slate-500 dark:text-slate-400">{t("summaryNext")}</p>
+          {upcoming.length > 0 ? (
+            <ul className="mt-1 list-disc pl-5 text-sm text-slate-700 dark:text-slate-200">
+              {upcoming.map((d) => (
+                <li key={d}>{dateFormat.format(new Date(Number(d.slice(0, 4)), Number(d.slice(5, 7)) - 1, Number(d.slice(8, 10))))}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t("summaryEmpty")}</p>
           )}
-          {errors.days && <p className="text-xs text-red-500">{errors.days}</p>}
-        </div>
-        {isRecurring && (
-          <div>
-            <label htmlFor="bill-end-period" className={labelClass}>{t("endPeriodLabel")}</label>
-            <MonthYearPicker id="bill-end-period" value={endPeriod} min={minEnd} onChange={setEndPeriod} />
-            {/* Only warn when the cycle skips the chosen month; an aligned pick needs no echo */}
-            {endHint && !endHint.aligned && (
-              <p className="mt-1.5 text-xs text-amber-600 dark:text-amber-400">
-                {t("endPeriodAdjusted", {
-                  month: new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
-                    new Date(endHint.year, endHint.month - 1, 1),
-                  ),
-                })}
-              </p>
-            )}
-          </div>
-        )}
+        </section>
       </div>
 
-      {/* Row 4: Category + Notes */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor="bill-category" className={labelClass}>
-            {t("categoryLabel")} <span className="text-red-400">*</span>
-          </label>
-          <CategoryCombobox
-            id="bill-category"
-            value={categoryId}
-            onChange={handleCategoryChange}
-          />
-          {errors.category && <p className="mt-1 text-xs text-red-500">{errors.category}</p>}
-        </div>
-        <div>
-          <label htmlFor="bill-notes" className={labelClass}>{t("notesLabel")}</label>
-          <textarea
-            id="bill-notes"
-            maxLength={2000}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={2}
-            placeholder={t("notesPlaceholder")}
-            className={inputClass + " resize-none"}
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 dark:border-slate-700">
+      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 mt-5 flex justify-end gap-3 border-t border-slate-200 bg-white py-3 dark:border-slate-700 dark:bg-slate-800 md:static md:bg-transparent md:pb-0 md:dark:bg-transparent">
         <button
           type="button"
           onClick={onCancel}
@@ -354,5 +427,23 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
         </button>
       </div>
     </form>
+  );
+}
+
+function SectionHeader({ n, title, hint, muted }: { n: number; title: string; hint: string; muted?: boolean }) {
+  return (
+    <div className="mb-3 flex items-center gap-3">
+      <span
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
+          muted ? "bg-slate-400 dark:bg-slate-500" : "bg-green-600"
+        }`}
+      >
+        {n}
+      </span>
+      <div>
+        <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">{title}</h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>
+      </div>
+    </div>
   );
 }

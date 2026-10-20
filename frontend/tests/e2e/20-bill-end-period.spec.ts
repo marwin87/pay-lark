@@ -25,6 +25,8 @@ test('paying the last instalment of a fixed-term bill creates no further payment
   await page.getByLabel('Amount').fill('89.99');
   await page.getByLabel('Category').click();
   await page.getByRole('option', { name: 'Utilities' }).click();
+  // The end month lives in the collapsed Extras block
+  await page.getByText('End date and notes', { exact: true }).click();
   // End month via the month/year picker (opens on the current year); shows "---" until set
   const endPicker = page.getByLabel('Last payment month (optional)');
   await expect(endPicker).toHaveText('---');
@@ -79,6 +81,7 @@ test('every-3-months bill warns when the end month is off its schedule', async (
   await page.locator('#bill-interval').click();
   await page.getByRole('option', { name: '3 months' }).click();
 
+  await page.getByText('End date and notes', { exact: true }).click();
   // End = the month after the start (default start = current month) → not on a 3-month cycle
   await page.getByLabel('Last payment month (optional)').click();
   const nextShort = new Intl.DateTimeFormat('en', { month: 'short' }).format(

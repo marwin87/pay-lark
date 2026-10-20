@@ -133,6 +133,18 @@
         "billDeleted": "“{name}” deleted"
     },
     "BillTemplateForm": {
+        "sectionWhat": "What do you pay?",
+        "sectionWhatHint": "Name, amount and category",
+        "sectionWhen": "When is it paid?",
+        "sectionWhenHint": "How often and on which days",
+        "sectionExtras": "Extras",
+        "sectionExtrasHint": "None of this is required",
+        "moreOptions": "End date and notes",
+        "summaryTitle": "Summary",
+        "summaryNoName": "New bill",
+        "summaryDays": "day {days}",
+        "summaryNext": "Next payments",
+        "summaryEmpty": "Pick a payment day to see the next payments.",
         "nameLabel": "Name",
         "namePlaceholder": "e.g. Electricity",
         "nameRequired": "Name is required.",
@@ -755,7 +767,7 @@
                 "q": "How is a bill added?",
                 "s1": "Open <b>{bills}</b> and press <b>{newBill}</b>.",
                 "s2": "Type a name, pick a category and write the amount.",
-                "s3": "Choose the day it is due and how often it comes back (every month, every year or just once). Then save it.",
+                "s3": "Choose the day it is due and how often it comes back (every month, every year or just once). Then save it. The summary next to the form shows the next payments, so the schedule can be checked before saving.",
                 "s4": "A new bill stays a draft until <b>{generatePayments}</b> is pressed."
             },
             "draft": {
