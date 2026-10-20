@@ -55,11 +55,18 @@ export default function TrendChart({ points: initialPoints, currency, month, min
   // The dashboard month changed (nav arrows, swipe, bar click): reset the hover, and bring the
   // window along only when the month fell outside it.
   const [seenMonth, setSeenMonth] = useState(month);
+  const [seenPoints, setSeenPoints] = useState(initialPoints);
   if (seenMonth !== month) {
     setSeenMonth(month);
+    setSeenPoints(initialPoints);
     setActive(null);
     setCache((c) => ({ ...c, [month]: initialPoints }));
     if (!trendPeriods(end).includes(month)) setEnd(month);
+  } else if (seenPoints !== initialPoints) {
+    // The dashboard refetched this month's trend (e.g. a payment changed since the cached
+    // copy was shown): take the fresh data and drop windows fetched earlier, they reload on visit.
+    setSeenPoints(initialPoints);
+    setCache({ [month]: initialPoints });
   }
 
   useEffect(() => {
