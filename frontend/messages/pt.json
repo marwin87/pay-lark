@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Como se adiciona uma fatura?",
                 "s1": "Abra <b>{bills}</b> e toque em <b>{newBill}</b>.",
-                "s2": "Escrever um nome, escolher uma categoria e escrever o valor.",
+                "s2": "Escrever um nome, escolher uma categoria e escrever o valor. Os valores podem ter até duas casas decimais.",
                 "s3": "Escolha o dia de vencimento e de quanto em quanto tempo se repete (todos os meses, todos os anos ou só uma vez). Depois guarde. O resumo ao lado do formulário mostra os próximos pagamentos, para que o calendário possa ser verificado antes de guardar.",
                 "s4": "Uma conta nova fica como rascunho até carregar em <b>{generatePayments}</b>."
             },
@@ -798,11 +798,22 @@
                 "s1": "Abra <b>{bills}</b> e toque em <b>{showPaused}</b>.",
                 "s2": "Toque em <b>{resume}</b> ao lado da fatura. Os novos pagamentos voltam a começar."
             },
+            "dashboard": {
+                "q": "O que mostra a página inicial?",
+                "s1": "A página inicial mostra o mês de relance: o que está pago, o que falta pagar e o que está em atraso.",
+                "s2": "Abaixo estão os gastos por categoria e os últimos 12 meses. Use as setas para mudar de mês e <b>{today}</b> para voltar ao atual.",
+                "s3": "Contas em várias moedas? Mude a moeda acima do resumo. A escolha fica guardada."
+            },
             "seePayments": {
                 "q": "Onde se vê o que há a pagar?",
                 "s1": "Abrir <b>{payments}</b>. Aparecem as faturas de um mês, agrupadas por categoria.",
                 "s2": "Com as setas ao lado do nome do mês muda-se de mês. No telemóvel, tocar no nome do mês para escolher um.",
                 "s3": "Toque em <b>{today}</b> para voltar a este mês."
+            },
+            "statusColors": {
+                "q": "O que significam as cores e as fitas de um pagamento?",
+                "s1": "Um pagamento <b>verde</b> está pago e um <b>vermelho</b> está em atraso. Uma fita marca o que precisa de ação: em atraso ou a vencer hoje.",
+                "s2": "Uma segunda fita, “Último”, marca o último pagamento de uma conta que termina."
             },
             "filters": {
                 "q": "Como se encontra um pagamento?",
@@ -868,7 +879,7 @@
                 "q": "Como se adicionam ou alteram categorias?",
                 "s1": "Abra <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Adicionar categorias próprias ou mudar o nome e a cor das existentes.",
-                "s3": "Uma categoria desnecessária pode ser removida. Se uma fatura ainda a usa, fica só oculta."
+                "s3": "Uma categoria desnecessária pode ser removida após confirmação. Se uma conta ainda a usa, ela é arquivada: oculta para novas contas e restaurável a qualquer momento."
             },
             "language": {
                 "q": "Como se muda o idioma, a moeda ou o fuso horário?",

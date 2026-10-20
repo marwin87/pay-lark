@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Hoe wordt een rekening toegevoegd?",
                 "s1": "Open <b>{bills}</b> en tik op <b>{newBill}</b>.",
-                "s2": "Typ een naam, kies een categorie en vul het bedrag in.",
+                "s2": "Typ een naam, kies een categorie en vul het bedrag in. Bedragen kunnen maximaal twee decimalen hebben.",
                 "s3": "Kies de vervaldag en hoe vaak hij terugkomt (elke maand, elk jaar of eenmalig). Sla het daarna op. De samenvatting naast het formulier toont de volgende betalingen, zodat het schema vóór het opslaan gecontroleerd kan worden.",
                 "s4": "Een nieuwe rekening blijft een concept tot je op <b>{generatePayments}</b> drukt."
             },
@@ -798,11 +798,22 @@
                 "s1": "Open <b>{bills}</b> en tik op <b>{showPaused}</b>.",
                 "s2": "Tik naast de rekening op <b>{resume}</b>. Nieuwe betalingen starten weer."
             },
+            "dashboard": {
+                "q": "Wat toont de startpagina?",
+                "s1": "De startpagina toont de maand in één oogopslag: wat betaald is, wat nog te betalen is en wat te laat is.",
+                "s2": "Daaronder staan de uitgaven per categorie en de laatste 12 maanden. Met de pijlen wissel je van maand, <b>{today}</b> brengt je terug.",
+                "s3": "Rekeningen in meer valuta’s? Wissel de valuta boven het overzicht. De keuze wordt onthouden."
+            },
             "seePayments": {
                 "q": "Waar is te zien wat betaald moet worden?",
                 "s1": "Open <b>{payments}</b>. Daar staan de rekeningen van één maand, gegroepeerd per categorie.",
                 "s2": "Met de pijlen naast de maandnaam gaat men naar een andere maand. Tik op een telefoon op de maandnaam om er een te kiezen.",
                 "s3": "Tik op <b>{today}</b> om terug te gaan naar deze maand."
+            },
+            "statusColors": {
+                "q": "Wat betekenen de kleuren en linten bij een betaling?",
+                "s1": "Een <b>groene</b> betaling is betaald, een <b>rode</b> is te laat. Een lint markeert wat actie vraagt: te laat of vandaag verschuldigd.",
+                "s2": "Een tweede lint, “Laatste”, markeert de laatste betaling van een rekening die eindigt."
             },
             "filters": {
                 "q": "Hoe wordt één betaling gevonden?",
@@ -868,7 +879,7 @@
                 "q": "Hoe worden categorieën toegevoegd of gewijzigd?",
                 "s1": "Open <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Voeg eigen categorieën toe of wijzig naam en kleur van de bestaande.",
-                "s3": "Een categorie die niet nodig is, kan weg. Gebruikt een rekening hem nog, dan wordt hij alleen verborgen."
+                "s3": "Een categorie die niet nodig is kan na bevestiging worden verwijderd. Gebruikt een rekening haar nog, dan wordt ze gearchiveerd: verborgen voor nieuwe rekeningen en altijd te herstellen."
             },
             "language": {
                 "q": "Hoe worden de taal, valuta of tijdzone gewijzigd?",

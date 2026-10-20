@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Jak dodać rachunek?",
                 "s1": "Wejdź w <b>{bills}</b> i naciśnij <b>{newBill}</b>.",
-                "s2": "Wpisz nazwę, wybierz kategorię i wpisz kwotę.",
+                "s2": "Wpisz nazwę, wybierz kategorię i wpisz kwotę. Kwota może mieć do dwóch miejsc po przecinku.",
                 "s3": "Wybierz dzień płatności i jak często wraca (co miesiąc, co rok albo jednorazowo). Potem zapisz. Podsumowanie obok formularza pokazuje najbliższe płatności, więc harmonogram można sprawdzić przed zapisem.",
                 "s4": "Nowy rachunek jest szkicem, dopóki nie naciśniesz <b>{generatePayments}</b>."
             },
@@ -798,11 +798,22 @@
                 "s1": "Wejdź w <b>{bills}</b> i naciśnij <b>{showPaused}</b>.",
                 "s2": "Naciśnij <b>{resume}</b> przy rachunku. Nowe płatności znów będą się pojawiać."
             },
+            "dashboard": {
+                "q": "Co pokazuje strona startowa?",
+                "s1": "Strona startowa pokazuje miesiąc w skrócie: ile jest zapłacone, ile jeszcze do zapłaty i co jest po terminie.",
+                "s2": "Niżej są wydatki według kategorii i ostatnie 12 miesięcy. Strzałkami zmienisz miesiąc, a <b>{today}</b> wraca do bieżącego.",
+                "s3": "Rachunki w kilku walutach? Przełącz walutę nad podsumowaniem. Wybór jest zapamiętywany."
+            },
             "seePayments": {
                 "q": "Gdzie widać, co jest do zapłaty?",
                 "s1": "Wejdź w <b>{payments}</b>. Widać tam rachunki z jednego miesiąca, pogrupowane według kategorii.",
                 "s2": "Strzałki przy nazwie miesiąca przełączają miesiąc. Na telefonie dotknięcie nazwy miesiąca otwiera jego wybór.",
                 "s3": "Naciśnij <b>{today}</b>, żeby wrócić do tego miesiąca."
+            },
+            "statusColors": {
+                "q": "Co oznaczają kolory i wstążki na płatności?",
+                "s1": "<b>Zielona</b> płatność jest zapłacona, <b>czerwona</b> jest po terminie. Wstążka oznacza to, co wymaga działania: zaległość lub termin dzisiaj.",
+                "s2": "Druga wstążka, „Ostatnia”, oznacza ostatnią płatność rachunku, który się kończy."
             },
             "filters": {
                 "q": "Jak znaleźć jedną płatność?",
@@ -868,7 +879,7 @@
                 "q": "Jak dodać lub zmienić kategorie?",
                 "s1": "Wejdź w <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Dodaj własne albo zmień nazwę i kolor istniejących.",
-                "s3": "Niepotrzebną kategorię można usunąć. Jeśli używa jej jakiś rachunek, zostanie tylko ukryta."
+                "s3": "Niepotrzebną kategorię można usunąć po potwierdzeniu. Jeśli używa jej jakiś rachunek, zostanie zarchiwizowana: ukryta przy nowych rachunkach, z możliwością przywrócenia w każdej chwili."
             },
             "language": {
                 "q": "Jak zmienić język, walutę lub strefę czasową?",

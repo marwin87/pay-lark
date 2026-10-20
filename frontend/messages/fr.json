@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Comment ajouter une facture ?",
                 "s1": "Ouvrez <b>{bills}</b> et appuyez sur <b>{newBill}</b>.",
-                "s2": "Saisir un nom, choisir une catégorie et écrire le montant.",
+                "s2": "Saisir un nom, choisir une catégorie et écrire le montant. Les montants peuvent avoir jusqu’à deux décimales.",
                 "s3": "Choisissez le jour d’échéance et la fréquence (chaque mois, chaque année ou une seule fois). Puis enregistrez. Le résumé à côté du formulaire montre les prochains paiements, ce qui permet de vérifier le calendrier avant d’enregistrer.",
                 "s4": "Une nouvelle facture reste un brouillon tant que <b>{generatePayments}</b> n’est pas pressé."
             },
@@ -798,11 +798,22 @@
                 "s1": "Ouvrez <b>{bills}</b> et appuyez sur <b>{showPaused}</b>.",
                 "s2": "Appuyez sur <b>{resume}</b> à côté de la facture. Les nouveaux paiements reprennent."
             },
+            "dashboard": {
+                "q": "Que montre la page d’accueil ?",
+                "s1": "La page d’accueil montre le mois en un coup d’œil : ce qui est payé, ce qui reste à payer et ce qui est en retard.",
+                "s2": "En dessous : les dépenses par catégorie et les 12 derniers mois. Les flèches changent de mois, <b>{today}</b> revient au mois en cours.",
+                "s3": "Des factures dans plusieurs devises ? Changez la devise au-dessus du résumé. Le choix est mémorisé."
+            },
             "seePayments": {
                 "q": "Où voir ce qu’il y a à payer ?",
                 "s1": "Ouvrir <b>{payments}</b>. Les factures d’un mois s’y affichent, groupées par catégorie.",
                 "s2": "Les flèches à côté du nom du mois changent de mois. Sur téléphone, touchez le nom du mois pour en choisir un.",
                 "s3": "Appuyez sur <b>{today}</b> pour revenir à ce mois."
+            },
+            "statusColors": {
+                "q": "Que signifient les couleurs et rubans d’un paiement ?",
+                "s1": "Un paiement <b>vert</b> est payé, un <b>rouge</b> est en retard. Un ruban signale ce qui demande une action : en retard ou à payer aujourd’hui.",
+                "s2": "Un second ruban, « Dernier », marque le dernier paiement d’une facture qui se termine."
             },
             "filters": {
                 "q": "Comment retrouver un paiement ?",
@@ -868,7 +879,7 @@
                 "q": "Comment ajouter ou changer des catégories ?",
                 "s1": "Ouvrez <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Ajouter des catégories personnalisées ou changer le nom et la couleur de celles qui existent.",
-                "s3": "Une catégorie inutile peut être supprimée. Si une facture l’utilise encore, elle est seulement masquée."
+                "s3": "Une catégorie inutile peut être supprimée après confirmation. Si une facture l’utilise encore, elle est archivée : masquée pour les nouvelles factures et restaurable à tout moment."
             },
             "language": {
                 "q": "Comment changer la langue, la devise ou le fuseau horaire ?",

@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "How is a bill added?",
                 "s1": "Open <b>{bills}</b> and press <b>{newBill}</b>.",
-                "s2": "Type a name, pick a category and write the amount.",
+                "s2": "Type a name, pick a category and write the amount. Amounts can have up to two decimal places.",
                 "s3": "Choose the day it is due and how often it comes back (every month, every year or just once). Then save it. The summary next to the form shows the next payments, so the schedule can be checked before saving.",
                 "s4": "A new bill stays a draft until <b>{generatePayments}</b> is pressed."
             },
@@ -798,11 +798,22 @@
                 "s1": "Open <b>{bills}</b> and press <b>{showPaused}</b>.",
                 "s2": "Press <b>{resume}</b> next to the bill. New payments start again."
             },
+            "dashboard": {
+                "q": "What does the start page show?",
+                "s1": "The start page shows the month at a glance: what is paid, what is still to pay and what is overdue.",
+                "s2": "Below it are the spending by category and the last 12 months. Use the arrows to change the month, <b>{today}</b> to come back.",
+                "s3": "Bills in more than one currency? Switch the currency above the summary. The choice is remembered."
+            },
             "seePayments": {
                 "q": "Where is what needs to be paid shown?",
                 "s1": "Open <b>{payments}</b>. It shows the bills of one month, grouped by category.",
                 "s2": "Use the arrows next to the month name to go to another month. On a phone, tap the month name to pick one.",
                 "s3": "Press <b>{today}</b> to come back to this month."
+            },
+            "statusColors": {
+                "q": "What do the colors and ribbons on a payment mean?",
+                "s1": "A <b>green</b> payment is paid, a <b>red</b> one is overdue. A ribbon marks what needs action: overdue, or due today.",
+                "s2": "A second ribbon, “Last”, marks the final payment of a bill that ends."
             },
             "filters": {
                 "q": "How is one payment found?",
@@ -868,7 +879,7 @@
                 "q": "How are categories added or changed?",
                 "s1": "Open <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Add custom ones, or rename and recolor the existing ones.",
-                "s3": "A category that is not needed can be removed. If a bill still uses it, it is only hidden."
+                "s3": "A category that is not needed can be removed after a confirmation. If a bill still uses it, it is archived instead: hidden from new bills and restorable any time."
             },
             "language": {
                 "q": "How are the language, currency or time zone changed?",

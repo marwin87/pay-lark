@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Wie wird eine Rechnung hinzugefügt?",
                 "s1": "Öffne <b>{bills}</b> und tippe auf <b>{newBill}</b>.",
-                "s2": "Einen Namen eingeben, eine Kategorie wählen und den Betrag schreiben.",
+                "s2": "Einen Namen eingeben, eine Kategorie wählen und den Betrag schreiben. Beträge können bis zu zwei Nachkommastellen haben.",
                 "s3": "Den Fälligkeitstag wählen und wie oft sie wiederkommt (jeden Monat, jedes Jahr oder einmalig). Dann speichern. Die Zusammenfassung neben dem Formular zeigt die nächsten Zahlungen, sodass der Zeitplan vor dem Speichern geprüft werden kann.",
                 "s4": "Eine neue Rechnung bleibt ein Entwurf, bis <b>{generatePayments}</b> gedrückt wird."
             },
@@ -798,11 +798,22 @@
                 "s1": "Öffne <b>{bills}</b> und tippe auf <b>{showPaused}</b>.",
                 "s2": "Tippe neben der Rechnung auf <b>{resume}</b>. Neue Zahlungen starten wieder."
             },
+            "dashboard": {
+                "q": "Was zeigt die Startseite?",
+                "s1": "Die Startseite zeigt den Monat auf einen Blick: was bezahlt ist, was noch offen ist und was überfällig ist.",
+                "s2": "Darunter stehen die Ausgaben nach Kategorie und die letzten 12 Monate. Mit den Pfeilen wechselst du den Monat, <b>{today}</b> bringt dich zurück.",
+                "s3": "Rechnungen in mehreren Währungen? Wechsle die Währung über der Übersicht. Die Auswahl wird gemerkt."
+            },
             "seePayments": {
                 "q": "Wo ist zu sehen, was zu zahlen ist?",
                 "s1": "<b>{payments}</b> öffnen. Dort stehen die Rechnungen eines Monats, nach Kategorie gruppiert.",
                 "s2": "Mit den Pfeilen neben dem Monatsnamen wechselt der Monat. Am Handy öffnet ein Tipp auf den Monatsnamen die Auswahl.",
                 "s3": "Tippe auf <b>{today}</b>, um zu diesem Monat zurückzukehren."
+            },
+            "statusColors": {
+                "q": "Was bedeuten die Farben und Bänder bei einer Zahlung?",
+                "s1": "Eine <b>grüne</b> Zahlung ist bezahlt, eine <b>rote</b> überfällig. Ein Band markiert, was Aufmerksamkeit braucht: überfällig oder heute fällig.",
+                "s2": "Ein zweites Band, „Letzte“, markiert die letzte Zahlung einer endenden Rechnung."
             },
             "filters": {
                 "q": "Wie wird eine einzelne Zahlung gefunden?",
@@ -868,7 +879,7 @@
                 "q": "Wie werden Kategorien hinzugefügt oder geändert?",
                 "s1": "Öffne <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Eigene hinzufügen oder Name und Farbe der vorhandenen ändern.",
-                "s3": "Eine nicht mehr nötige Kategorie kann entfernt werden. Wird sie noch von einer Rechnung genutzt, wird sie nur ausgeblendet."
+                "s3": "Eine nicht mehr nötige Kategorie kann nach einer Bestätigung entfernt werden. Wird sie noch von einer Rechnung genutzt, wird sie stattdessen archiviert: für neue Rechnungen ausgeblendet und jederzeit wiederherstellbar."
             },
             "language": {
                 "q": "Wie werden Sprache, Währung oder Zeitzone geändert?",

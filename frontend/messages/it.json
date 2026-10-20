@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "Come si aggiunge una bolletta?",
                 "s1": "Apri <b>{bills}</b> e premi <b>{newBill}</b>.",
-                "s2": "Scrivere un nome, scegliere una categoria e inserire l’importo.",
+                "s2": "Scrivere un nome, scegliere una categoria e inserire l’importo. Gli importi possono avere fino a due decimali.",
                 "s3": "Scegli il giorno di scadenza e ogni quanto si ripete (ogni mese, ogni anno o una volta sola). Poi salva. Il riepilogo accanto al modulo mostra i prossimi pagamenti, così si può controllare il calendario prima di salvare.",
                 "s4": "Una nuova bolletta resta una bozza finché non premi <b>{generatePayments}</b>."
             },
@@ -798,11 +798,22 @@
                 "s1": "Apri <b>{bills}</b> e premi <b>{showPaused}</b>.",
                 "s2": "Premi <b>{resume}</b> accanto alla bolletta. I nuovi pagamenti ricominciano."
             },
+            "dashboard": {
+                "q": "Cosa mostra la pagina iniziale?",
+                "s1": "La pagina iniziale mostra il mese in breve: cosa è pagato, cosa resta da pagare e cosa è scaduto.",
+                "s2": "Sotto ci sono le spese per categoria e gli ultimi 12 mesi. Con le frecce cambi mese, <b>{today}</b> torna a quello attuale.",
+                "s3": "Bollette in più valute? Cambia valuta sopra il riepilogo. La scelta viene ricordata."
+            },
             "seePayments": {
                 "q": "Dove si vede cosa c’è da pagare?",
                 "s1": "Aprire <b>{payments}</b>. Vi compaiono le bollette di un mese, raggruppate per categoria.",
                 "s2": "Con le frecce accanto al nome del mese si cambia mese. Sul telefono, toccare il nome del mese per sceglierne uno.",
                 "s3": "Premi <b>{today}</b> per tornare a questo mese."
+            },
+            "statusColors": {
+                "q": "Cosa significano i colori e i nastri di un pagamento?",
+                "s1": "Un pagamento <b>verde</b> è pagato, uno <b>rosso</b> è scaduto. Un nastro segnala ciò che richiede azione: scaduto o in scadenza oggi.",
+                "s2": "Un secondo nastro, «Ultimo», segna l’ultimo pagamento di una bolletta che termina."
             },
             "filters": {
                 "q": "Come si trova un pagamento?",
@@ -868,7 +879,7 @@
                 "q": "Come si aggiungono o cambiano le categorie?",
                 "s1": "Apri <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Aggiungere categorie personalizzate o cambiare nome e colore di quelle esistenti.",
-                "s3": "Una categoria che non serve si può eliminare. Se una bolletta la usa ancora, viene solo nascosta."
+                "s3": "Una categoria non necessaria si può eliminare dopo conferma. Se una bolletta la usa ancora, viene archiviata: nascosta per le nuove bollette e ripristinabile in qualsiasi momento."
             },
             "language": {
                 "q": "Come si cambiano lingua, valuta o fuso orario?",

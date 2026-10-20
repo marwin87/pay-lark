@@ -766,7 +766,7 @@
             "addBill": {
                 "q": "¿Cómo se añade una factura?",
                 "s1": "Abre <b>{bills}</b> y pulsa <b>{newBill}</b>.",
-                "s2": "Escribir un nombre, elegir una categoría y escribir el importe.",
+                "s2": "Escribir un nombre, elegir una categoría y escribir el importe. Los importes pueden tener hasta dos decimales.",
                 "s3": "Elige el día de vencimiento y cada cuánto se repite (cada mes, cada año o una sola vez). Luego guarda. El resumen junto al formulario muestra los próximos pagos, así se puede comprobar el calendario antes de guardar.",
                 "s4": "Una factura nueva sigue siendo borrador hasta que se pulsa <b>{generatePayments}</b>."
             },
@@ -798,11 +798,22 @@
                 "s1": "Abre <b>{bills}</b> y pulsa <b>{showPaused}</b>.",
                 "s2": "Pulsa <b>{resume}</b> junto a la factura. Los pagos nuevos vuelven a empezar."
             },
+            "dashboard": {
+                "q": "¿Qué muestra la página de inicio?",
+                "s1": "La página de inicio muestra el mes de un vistazo: lo pagado, lo que falta por pagar y lo vencido.",
+                "s2": "Debajo están los gastos por categoría y los últimos 12 meses. Con las flechas cambias de mes y <b>{today}</b> vuelve al actual.",
+                "s3": "¿Facturas en varias monedas? Cambia la moneda sobre el resumen. La elección se recuerda."
+            },
             "seePayments": {
                 "q": "¿Dónde se ve lo que hay que pagar?",
                 "s1": "Abrir <b>{payments}</b>. Allí aparecen las facturas de un mes, agrupadas por categoría.",
                 "s2": "Con las flechas junto al nombre del mes se cambia de mes. En el móvil, tocar el nombre del mes abre la selección.",
                 "s3": "Pulsa <b>{today}</b> para volver a este mes."
+            },
+            "statusColors": {
+                "q": "¿Qué significan los colores y las cintas de un pago?",
+                "s1": "Un pago <b>verde</b> está pagado y uno <b>rojo</b> está vencido. Una cinta marca lo que requiere acción: vencido o con vencimiento hoy.",
+                "s2": "Una segunda cinta, «Último», marca el último pago de una factura que termina."
             },
             "filters": {
                 "q": "¿Cómo se encuentra un pago?",
@@ -868,7 +879,7 @@
                 "q": "¿Cómo se añaden o cambian categorías?",
                 "s1": "Abre <b>{settings}</b> → <b>{tabCategories}</b>.",
                 "s2": "Añadir categorías propias o cambiar el nombre y el color de las existentes.",
-                "s3": "Una categoría innecesaria se puede quitar. Si una factura aún la usa, solo se oculta."
+                "s3": "Una categoría que no hace falta se puede eliminar tras confirmar. Si una factura aún la usa, se archiva: queda oculta para facturas nuevas y se puede restaurar cuando quieras."
             },
             "language": {
                 "q": "¿Cómo se cambia el idioma, la moneda o la zona horaria?",

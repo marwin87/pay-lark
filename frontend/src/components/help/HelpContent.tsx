@@ -8,7 +8,7 @@ import { resetOnboarding } from "@/components/help/OnboardingChecklist";
 
 const SECTIONS = [
   { key: "bills", items: ["addBill", "draft", "repeat", "editBill", "pause", "resume"] },
-  { key: "payments", items: ["seePayments", "filters", "markPaid", "editPayment", "revert", "deletePayment", "export", "share"] },
+  { key: "payments", items: ["dashboard", "seePayments", "statusColors", "filters", "markPaid", "editPayment", "revert", "deletePayment", "export", "share"] },
   { key: "settings", items: ["reminders", "backup", "restore", "categories", "language", "account", "install"] },
 ] as const;
 
