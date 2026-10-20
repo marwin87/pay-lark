@@ -113,3 +113,9 @@ export function trendPeriods(month: string): string[] {
     return `${Math.floor(idx / 12)}-${String((idx % 12) + 1).padStart(2, "0")}`;
   });
 }
+
+/** True for a typed amount that is a non-negative number with at most 2 decimal places. */
+export function isValidAmount(raw: string): boolean {
+  const s = raw.trim().replace(",", ".");
+  return !isNaN(Number(s)) && Number(s) >= 0 && (s.split(".")[1] ?? "").length <= 2;
+}

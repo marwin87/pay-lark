@@ -137,7 +137,7 @@
         "namePlaceholder": "bijv. Elektriciteit",
         "nameRequired": "Naam is verplicht.",
         "amountLabel": "Bedrag",
-        "amountInvalid": "Vul een geldig bedrag in.",
+        "amountInvalid": "Vul een geldig bedrag in (max. 2 decimalen).",
         "currencyAriaLabel": "Valuta",
         "customOption": "Aangepast…",
         "customCurrencyAriaLabel": "Aangepaste valutacode",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Markeer als betaald",
         "editTitle": "Betaling bewerken",
-        "amountInvalid": "Vul een geldig bedrag in.",
+        "amountInvalid": "Vul een geldig bedrag in (max. 2 decimalen).",
         "dueAmountLabel": "Te betalen bedrag",
         "amountHint": "Geldt alleen voor deze betaling. Laat leeg om het bedrag van de rekening te gebruiken.",
         "dueDateLabel": "Vervaldatum",

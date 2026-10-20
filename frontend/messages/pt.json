@@ -137,7 +137,7 @@
         "namePlaceholder": "p. ex. Eletricidade",
         "nameRequired": "O nome é obrigatório.",
         "amountLabel": "Valor",
-        "amountInvalid": "Introduza um valor válido.",
+        "amountInvalid": "Introduza um valor válido (máx. 2 casas decimais).",
         "currencyAriaLabel": "Moeda",
         "customOption": "Personalizada…",
         "customCurrencyAriaLabel": "Código de moeda personalizado",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Marcar como pago",
         "editTitle": "Editar pagamento",
-        "amountInvalid": "Introduza um valor válido.",
+        "amountInvalid": "Introduza um valor válido (máx. 2 casas decimais).",
         "dueAmountLabel": "Valor a pagar",
         "amountHint": "Aplica-se apenas a este pagamento. Deixe vazio para usar o valor da fatura.",
         "dueDateLabel": "Data de vencimento",

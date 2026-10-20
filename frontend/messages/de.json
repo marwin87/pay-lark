@@ -137,7 +137,7 @@
         "namePlaceholder": "z. B. Strom",
         "nameRequired": "Name ist erforderlich.",
         "amountLabel": "Betrag",
-        "amountInvalid": "Bitte einen gültigen Betrag eingeben.",
+        "amountInvalid": "Bitte einen gültigen Betrag eingeben (max. 2 Dezimalstellen).",
         "currencyAriaLabel": "Währung",
         "customOption": "Andere…",
         "customCurrencyAriaLabel": "Benutzerdefinierter Währungscode",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Als bezahlt markieren",
         "editTitle": "Zahlung bearbeiten",
-        "amountInvalid": "Bitte einen gültigen Betrag eingeben.",
+        "amountInvalid": "Bitte einen gültigen Betrag eingeben (max. 2 Dezimalstellen).",
         "dueAmountLabel": "Fälliger Betrag",
         "amountHint": "Gilt nur für diese Zahlung. Leer lassen, um den Betrag der Rechnung zu verwenden.",
         "dueDateLabel": "Fälligkeitsdatum",

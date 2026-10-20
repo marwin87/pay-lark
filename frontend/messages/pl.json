@@ -137,7 +137,7 @@
         "namePlaceholder": "np. Prąd",
         "nameRequired": "Nazwa jest wymagana.",
         "amountLabel": "Kwota",
-        "amountInvalid": "Podaj prawidłową kwotę.",
+        "amountInvalid": "Podaj prawidłową kwotę (maks. 2 miejsca po przecinku).",
         "currencyAriaLabel": "Waluta",
         "customOption": "Inna…",
         "customCurrencyAriaLabel": "Kod waluty niestandardowej",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Oznacz jako opłacone",
         "editTitle": "Edytuj płatność",
-        "amountInvalid": "Podaj prawidłową kwotę.",
+        "amountInvalid": "Podaj prawidłową kwotę (maks. 2 miejsca po przecinku).",
         "dueAmountLabel": "Kwota do zapłaty",
         "amountHint": "Dotyczy tylko tej płatności. Zostaw puste, aby użyć kwoty z rachunku.",
         "dueDateLabel": "Termin płatności",

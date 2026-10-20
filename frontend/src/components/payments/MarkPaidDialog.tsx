@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "@/context/locale-context";
 import { ApiError } from "@/lib/api";
 import { markPaid, updatePayment, type PaymentInstanceOut } from "@/lib/payments-api";
-import { formatAmount } from "@/lib/summary";
+import { formatAmount, isValidAmount } from "@/lib/summary";
 import { todayIn } from "@/lib/today";
 import DatePicker from "@/components/ui/DatePicker";
 import DialogHeader from "@/components/ui/DialogHeader";
@@ -60,8 +60,7 @@ export default function MarkPaidDialog({
   const [error, setError] = useState<string | null>(null);
 
   const amountValid =
-    paidAmount === "" ||
-    (!isNaN(Number(paidAmount.replace(",", "."))) && Number(paidAmount.replace(",", ".")) >= 0);
+    paidAmount === "" || isValidAmount(paidAmount);
   const mounted = useRef(true);
   // Re-arm on mount: React strict mode (dev) runs mount, cleanup, mount, and a
   // cleanup-only effect would leave the ref false, so results would be dropped.

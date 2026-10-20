@@ -137,7 +137,7 @@
         "namePlaceholder": "p. ej. Electricidad",
         "nameRequired": "El nombre es obligatorio.",
         "amountLabel": "Importe",
-        "amountInvalid": "Introduce un importe válido.",
+        "amountInvalid": "Introduce un importe válido (máx. 2 decimales).",
         "currencyAriaLabel": "Moneda",
         "customOption": "Personalizado…",
         "customCurrencyAriaLabel": "Código de moneda personalizado",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Marcar como pagado",
         "editTitle": "Editar pago",
-        "amountInvalid": "Introduce un importe válido.",
+        "amountInvalid": "Introduce un importe válido (máx. 2 decimales).",
         "dueAmountLabel": "Importe a pagar",
         "amountHint": "Solo afecta a este pago. Déjalo vacío para usar el importe de la factura.",
         "dueDateLabel": "Fecha de vencimiento",

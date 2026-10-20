@@ -137,7 +137,7 @@
         "namePlaceholder": "例如：电费",
         "nameRequired": "名称为必填项。",
         "amountLabel": "金额",
-        "amountInvalid": "请输入有效金额。",
+        "amountInvalid": "请输入有效金额（最多两位小数）。",
         "currencyAriaLabel": "货币",
         "customOption": "自定义…",
         "customCurrencyAriaLabel": "自定义货币代码",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "标记为已付款",
         "editTitle": "编辑付款",
-        "amountInvalid": "请输入有效金额。",
+        "amountInvalid": "请输入有效金额（最多两位小数）。",
         "dueAmountLabel": "应付金额",
         "amountHint": "仅适用于本次付款。留空则使用账单金额。",
         "dueDateLabel": "到期日期",

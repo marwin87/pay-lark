@@ -11,7 +11,7 @@ import DaysOfMonthPicker from "@/components/ui/DaysOfMonthPicker";
 import MultiDatePicker from "@/components/ui/MultiDatePicker";
 import Dropdown from "@/components/ui/Dropdown";
 import { LOCALE_DEFAULT_CURRENCY } from "@/lib/currency";
-import { formatAmount } from "@/lib/summary";
+import { formatAmount, isValidAmount } from "@/lib/summary";
 import type { BillFrequency, BillTemplateCreate } from "@/lib/bills-api";
 import { btnSaveClass, btnCancelClass } from "@/components/ui/formButtonClasses";
 
@@ -111,7 +111,7 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
   }): Errors {
     const e: Errors = {};
     if (!fields.name.trim()) e.name = t("nameRequired");
-    if (fields.amount.trim() && isNaN(Number(fields.amount.trim().replace(",", "."))))
+    if (fields.amount.trim() && !isValidAmount(fields.amount))
       e.amount = t("amountInvalid");
     if (!fields.categoryId) e.category = t("categoryRequired");
     if (fields.days === false) e.days = t(frequency === "one_off" ? "datesRequired" : "daysRequired");

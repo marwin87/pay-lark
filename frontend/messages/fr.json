@@ -137,7 +137,7 @@
         "namePlaceholder": "ex. Électricité",
         "nameRequired": "Le nom est obligatoire.",
         "amountLabel": "Montant",
-        "amountInvalid": "Saisissez un montant valide.",
+        "amountInvalid": "Saisissez un montant valide (2 décimales maximum).",
         "currencyAriaLabel": "Devise",
         "customOption": "Personnalisé…",
         "customCurrencyAriaLabel": "Code de devise personnalisé",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Marquer comme payé",
         "editTitle": "Modifier le paiement",
-        "amountInvalid": "Saisissez un montant valide.",
+        "amountInvalid": "Saisissez un montant valide (2 décimales maximum).",
         "dueAmountLabel": "Montant dû",
         "amountHint": "Ne concerne que ce paiement. Laissez vide pour utiliser le montant de la facture.",
         "dueDateLabel": "Date d'échéance",

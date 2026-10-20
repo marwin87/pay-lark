@@ -137,7 +137,7 @@
         "namePlaceholder": "e.g. Electricity",
         "nameRequired": "Name is required.",
         "amountLabel": "Amount",
-        "amountInvalid": "Enter a valid amount.",
+        "amountInvalid": "Enter a valid amount (up to 2 decimal places).",
         "currencyAriaLabel": "Currency",
         "customOption": "Custom…",
         "customCurrencyAriaLabel": "Custom currency code",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Mark as Paid",
         "editTitle": "Edit payment",
-        "amountInvalid": "Enter a valid amount.",
+        "amountInvalid": "Enter a valid amount (up to 2 decimal places).",
         "dueAmountLabel": "Amount due",
         "amountHint": "Applies to this payment only. Leave empty to use the bill's amount.",
         "dueDateLabel": "Due date",

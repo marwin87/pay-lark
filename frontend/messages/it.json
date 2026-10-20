@@ -137,7 +137,7 @@
         "namePlaceholder": "es. Elettricità",
         "nameRequired": "Il nome è obbligatorio.",
         "amountLabel": "Importo",
-        "amountInvalid": "Inserisci un importo valido.",
+        "amountInvalid": "Inserisci un importo valido (max 2 decimali).",
         "currencyAriaLabel": "Valuta",
         "customOption": "Personalizzato…",
         "customCurrencyAriaLabel": "Codice valuta personalizzato",
@@ -292,7 +292,7 @@
     "MarkPaidDialog": {
         "title": "Segna come pagato",
         "editTitle": "Modifica pagamento",
-        "amountInvalid": "Inserisci un importo valido.",
+        "amountInvalid": "Inserisci un importo valido (max 2 decimali).",
         "dueAmountLabel": "Importo dovuto",
         "amountHint": "Vale solo per questo pagamento. Lascia vuoto per usare l'importo della fattura.",
         "dueDateLabel": "Data di scadenza",
