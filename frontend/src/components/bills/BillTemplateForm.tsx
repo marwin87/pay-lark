@@ -410,7 +410,7 @@ export default function BillTemplateForm({ initial, startPeriod, isDraft, paidDa
         </section>
       </div>
 
-      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 mt-5 flex justify-end gap-3 border-t border-slate-200 bg-white py-3 dark:border-slate-700 dark:bg-slate-800 md:static md:bg-transparent md:pb-0 md:dark:bg-transparent">
+      <div className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-10 mt-5 flex justify-end gap-3 border-t border-slate-200 py-3 backdrop-blur-md dark:border-slate-700 md:static md:pb-0 md:backdrop-blur-none">
         <button
           type="button"
           onClick={onCancel}
