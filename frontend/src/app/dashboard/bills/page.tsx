@@ -69,12 +69,13 @@ export default function BillsPage() {
   const [restoring, setRestoring] = useState(false);
   const [categoryFilter, setCategoryFilter] = useSessionSet(VIEW_STATE_KEYS.billsCategories);
   const [searchQuery, setSearchQuery] = useSessionString(VIEW_STATE_KEYS.billsSearch);
-  const [defaultCurrency, setDefaultCurrency] = useState<string | null>(null);
+  // undefined until the profile loads: the new-bill form reads it only on mount, so it waits for it
+  const [defaultCurrency, setDefaultCurrency] = useState<string | null | undefined>(undefined);
   const showToast = useToast();
   const [highlightId, setHighlightId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchMe().then((p) => setDefaultCurrency(p.default_currency)).catch(() => {});
+    fetchMe().then((p) => setDefaultCurrency(p.default_currency)).catch(() => setDefaultCurrency(null));
   }, []);
 
   const pausedCount = templates.filter((tmpl) => tmpl.status === "paused").length;
@@ -409,7 +410,7 @@ export default function BillsPage() {
       )}
 
       {/* Inline create form */}
-      {expandedId === "new" && (
+      {expandedId === "new" && defaultCurrency !== undefined && (
         <div className="mb-4 rounded-xl border border-green-200 bg-white shadow-sm dark:border-green-900 dark:bg-slate-800">
           <div className="rounded-t-xl border-b border-green-100 bg-green-50 px-5 py-3 dark:border-green-900 dark:bg-green-900/20">
             <h2 className="text-sm font-semibold text-green-800 dark:text-green-300">{t("newBill")}</h2>
