@@ -253,11 +253,6 @@ export function CategoriesTile({
                   <span className="flex-1 min-w-0 truncate text-sm text-slate-700 dark:text-slate-200">
                     {categoryLabel(cat, tCategories)}
                   </span>
-                  {cat.is_archived && (
-                    <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
-                      {tc("categories.archivedBadge")}
-                    </span>
-                  )}
                   {cat.is_archived ? (
                     <button
                       onClick={() => restore(cat)}

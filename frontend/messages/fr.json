@@ -580,7 +580,6 @@
             "loadError": "Impossible de charger les catégories. Veuillez réessayer.",
             "nameRequired": "Le nom est obligatoire.",
             "namePlaceholder": "ex. Loisirs",
-            "archivedBadge": "archivée",
             "edit": "Modifier",
             "archive": "Archiver",
             "unarchive": "Désarchiver",

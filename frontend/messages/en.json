@@ -580,7 +580,6 @@
             "loadError": "Couldn't load categories. Please try again.",
             "nameRequired": "Name is required.",
             "namePlaceholder": "e.g. Hobbies",
-            "archivedBadge": "archived",
             "edit": "Edit",
             "archive": "Archive",
             "unarchive": "Unarchive",

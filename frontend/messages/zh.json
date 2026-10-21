@@ -580,7 +580,6 @@
             "loadError": "类别加载失败，请重试。",
             "nameRequired": "名称为必填项。",
             "namePlaceholder": "例如：爱好",
-            "archivedBadge": "已归档",
             "edit": "编辑",
             "archive": "归档",
             "unarchive": "取消归档",

@@ -580,7 +580,6 @@
             "loadError": "No se pudieron cargar las categorías. Inténtalo de nuevo.",
             "nameRequired": "El nombre es obligatorio.",
             "namePlaceholder": "p. ej. Aficiones",
-            "archivedBadge": "archivada",
             "edit": "Editar",
             "archive": "Archivar",
             "unarchive": "Desarchivar",

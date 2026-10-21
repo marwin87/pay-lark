@@ -580,7 +580,6 @@
             "loadError": "Não foi possível carregar as categorias. Tente novamente.",
             "nameRequired": "O nome é obrigatório.",
             "namePlaceholder": "p. ex. Passatempos",
-            "archivedBadge": "arquivada",
             "edit": "Editar",
             "archive": "Arquivar",
             "unarchive": "Desarquivar",
