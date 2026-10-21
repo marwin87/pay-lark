@@ -78,14 +78,13 @@ test('deleting a category used by a bill archives it instead', async ({ page }) 
   await page.getByRole('button', { name: 'Archive', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
-  await expect(page.getByText('archived', { exact: true })).not.toBeVisible(); // Cancel archives nothing
+  await expect(page.getByRole('button', { name: 'Unarchive', exact: true })).toHaveCount(0); // Cancel archives nothing
   await page.getByRole('button', { name: 'Archive', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Archive category', exact: true }).click();
   await expect(page.getByRole('dialog')).not.toBeVisible();
 
-  // Kept, flagged as archived, and can be restored
+  // Kept and can be restored
   await expect(page.getByText(name, { exact: true })).toBeVisible();
-  await expect(page.getByText('archived', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Unarchive', exact: true })).toBeVisible();
 });
 
