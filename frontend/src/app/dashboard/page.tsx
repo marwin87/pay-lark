@@ -14,18 +14,13 @@ import {
   type PaymentInstanceOut,
   type TrendPoint,
 } from "@/lib/payments-api";
-import { fetchMe } from "@/lib/user-api";
 import { getCached, setCached } from "@/lib/page-cache";
 import { btnPrimaryClass } from "@/components/ui/formButtonClasses";
-import { currenciesByVolume, pickCurrency, shiftMonth, summarize } from "@/lib/summary";
+import { currenciesByVolume, shiftMonth, summarize } from "@/lib/summary";
 import MonthSummaryCard, { CARD_CLASS } from "@/components/dashboard/MonthSummaryCard";
-import CategoryDonut from "@/components/dashboard/CategoryDonut";
-import TrendChart from "@/components/dashboard/TrendChart";
 import OnboardingChecklist from "@/components/help/OnboardingChecklist";
-import CurrencySwitch from "@/components/dashboard/CurrencySwitch";
 import MonthNav from "@/components/dashboard/MonthNav";
 import { useSwipe } from "@/hooks/useSwipe";
-import { useSessionString, VIEW_STATE_KEYS } from "@/hooks/useSessionState";
 
 export default function DashboardPage() {
   const t = useTranslations("Dashboard");
@@ -41,12 +36,8 @@ export default function DashboardPage() {
     month: string;
     instances: PaymentInstanceOut[];
     trend: TrendPoint[];
-    defaultCurrency: string | null;
   } | null>(() => getCached(`dashboard:${currentMonth}`) ?? null);
   const [error, setError] = useState<string | null>(null);
-  // Kept for the signed-in session, so coming back from another page shows the same currency
-  const [storedCurrency, setSelectedCurrency] = useSessionString(VIEW_STATE_KEYS.dashboardCurrency);
-  const selectedCurrency = storedCurrency || null;
 
   useEffect(() => {
     let cancelled = false;
@@ -57,12 +48,11 @@ export default function DashboardPage() {
         Promise.all([
           fetchPayments(month),
           fetchTrend(month),
-          fetchMe().then((me) => me.default_currency).catch(() => null),
         ]),
       )
-      .then(([instances, trend, defaultCurrency]) => {
+      .then(([instances, trend]) => {
         if (cancelled) return;
-        const next = { month, instances, trend, defaultCurrency };
+        const next = { month, instances, trend };
         setCached(`dashboard:${month}`, next);
         setData(next);
       })
@@ -82,9 +72,13 @@ export default function DashboardPage() {
   };
   const swipe = useSwipe(() => stepMonth(1), () => stepMonth(-1));
 
+  // Currencies with bills this month first (biggest first), then those that only have history.
   const currencies = data ? currenciesByVolume(data.instances, data.trend) : [];
-  const currency = data ? pickCurrency(selectedCurrency, currencies, data.defaultCurrency) : null;
-  const summary = data && currency ? summarize(data.instances, currency) : null;
+  const activeNow = data ? currenciesByVolume(data.instances, []) : [];
+  const rows = [...activeNow, ...currencies.filter((c) => !activeNow.includes(c))].map((c) => ({
+    currency: c,
+    summary: data ? summarize(data.instances, c) : null,
+  }));
   // Label and chart follow the month the data was loaded for, not the one just clicked.
   const shownMonth = data?.month ?? month;
   const [yy, mm] = shownMonth.split("-").map(Number);
@@ -110,7 +104,7 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
-      {data && !currency && (
+      {data && rows.length === 0 && (
         // No payments in any currency for this window: keep the month nav so you can go back
         <section className={CARD_CLASS} {...swipe}>
           <div className="max-sm:grid max-sm:grid-cols-2 max-sm:gap-2">
@@ -127,36 +121,27 @@ export default function DashboardPage() {
           )}
         </section>
       )}
-      {data && summary && currency && (
-        <div className="mb-8 flex flex-col gap-4">
-          {currencies.length > 1 && (
-            <CurrencySwitch
-              currencies={currencies}
-              active={currenciesByVolume(data.instances, [])}
-              value={currency}
-              onChange={setSelectedCurrency}
-              label={t("summary.currency")}
-            />
-          )}
-          <div {...swipe}>
-            <MonthSummaryCard
-              summary={summary}
-              currency={currency}
-              title={
-                <MonthNav
-                  month={shownMonth}
-                  currentMonth={currentMonth}
-                  minMonth={minMonth} maxMonth={maxMonth}
-                  monthLabel={monthLabel}
-                  onChange={setMonth}
-                />
-              }
-            />
-          </div>
-          <div className="grid gap-4 xl:grid-cols-2">
-            <CategoryDonut rows={summary.byCategory} currency={currency} monthLabel={monthLabel} />
-            <TrendChart onSelectMonth={setMonth} points={data.trend} currency={currency} month={shownMonth} minMonth={minMonth} maxMonth={maxMonth} />
-          </div>
+      {data && rows.length > 0 && (
+        <div className="mb-8">
+          <MonthSummaryCard
+            headerProps={swipe}
+            rows={rows}
+            trend={data.trend}
+            month={shownMonth}
+            minMonth={minMonth}
+            maxMonth={maxMonth}
+            monthLabel={monthLabel}
+            onSelectMonth={setMonth}
+            title={
+              <MonthNav
+                month={shownMonth}
+                currentMonth={currentMonth}
+                minMonth={minMonth} maxMonth={maxMonth}
+                monthLabel={monthLabel}
+                onChange={setMonth}
+              />
+            }
+          />
         </div>
       )}
     </div>

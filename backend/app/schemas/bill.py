@@ -153,6 +153,7 @@ class TrendPointOut(BaseModel):
     currency: str
     paid: Decimal
     unpaid: Decimal
+    overdue: Decimal  # part of `unpaid` already past its due date
 
 
 class MarkPaidRequest(BaseModel):

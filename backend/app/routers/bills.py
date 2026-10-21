@@ -356,7 +356,8 @@ def payments_trend(
     me: User = Depends(current_user),
 ):
     """Paid vs unpaid totals per currency for the 12 months ending at `month`."""
-    return payment_trend(db, me.id, month or today_for(me).strftime("%Y-%m"))
+    today = today_for(me)
+    return payment_trend(db, me.id, month or today.strftime("%Y-%m"), today)
 
 
 @router.post("/payments/{instance_id}/pay", response_model=PaymentInstanceOut)

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import date
 from decimal import Decimal
 
 from sqlalchemy.orm import Session, selectinload
@@ -18,9 +19,10 @@ def trend_periods(month: str) -> list[str]:
     ]
 
 
-def payment_trend(db: Session, user_id: int, month: str) -> list[dict]:
+def payment_trend(db: Session, user_id: int, month: str, today: date) -> list[dict]:
     """Per (period, currency) paid vs unpaid totals for the 12 months ending at
-    `month`. Currencies are never mixed; periods with no instances are omitted."""
+    `month`. `overdue` is the part of `unpaid` already past due on `today`.
+    Currencies are never mixed; periods with no instances are omitted."""
     periods = trend_periods(month)
     instances = (
         db.query(PaymentInstance)
@@ -34,7 +36,7 @@ def payment_trend(db: Session, user_id: int, month: str) -> list[dict]:
         .all()
     )
     totals: dict[tuple[str, str], list[Decimal]] = defaultdict(
-        lambda: [Decimal(0), Decimal(0)]
+        lambda: [Decimal(0), Decimal(0), Decimal(0)]
     )
     for inst in instances:
         bucket = totals[(inst.period, inst.template.currency)]
@@ -45,7 +47,9 @@ def payment_trend(db: Session, user_id: int, month: str) -> list[dict]:
             )
         else:
             bucket[1] += inst.current_amount
+            if inst.status_on(today) == PaymentStatus.overdue:
+                bucket[2] += inst.current_amount
     return [
-        {"period": p, "currency": c, "paid": paid, "unpaid": unpaid}
-        for (p, c), (paid, unpaid) in sorted(totals.items())
+        {"period": p, "currency": c, "paid": paid, "unpaid": unpaid, "overdue": overdue}
+        for (p, c), (paid, unpaid, overdue) in sorted(totals.items())
     ]

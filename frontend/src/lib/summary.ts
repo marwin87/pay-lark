@@ -56,17 +56,6 @@ export function currenciesByVolume(
   return [...vol.entries()].sort((a, b) => b[1] - a[1]).map(([c]) => c);
 }
 
-/** The user's default currency when it has data, else the biggest one. */
-export function pickCurrency(
-  selected: string | null,
-  currencies: string[],
-  defaultCurrency: string | null,
-): string | null {
-  if (selected && currencies.includes(selected)) return selected;
-  if (defaultCurrency && currencies.includes(defaultCurrency)) return defaultCurrency;
-  return currencies[0] ?? null;
-}
-
 /** Formats a raw two-decimal amount string/number with the user's chosen decimal separator. */
 export function formatAmount(raw: string | number, separator: "." | ","): string {
   const n = typeof raw === "string" ? parseFloat(raw) : raw;

@@ -78,7 +78,6 @@
             "remaining": "Ancora da pagare",
             "loadError": "Impossibile caricare il riepilogo. Riprova.",
             "loading": "Caricamento del riepilogo",
-            "currency": "Mostra riepilogo in:",
             "emptyMonth": "Nessun pagamento questo mese.",
             "emptyHelp": "I pagamenti compaiono qui da soli appena aggiungi una bolletta.",
             "addBill": "Aggiungi una bolletta"
@@ -98,8 +97,6 @@
             "title": "Ultimi 12 mesi",
             "empty": "Ancora nessuno storico dei pagamenti in questa valuta.",
             "chartLabel": "Pagamenti mensili",
-            "paid": "Pagato",
-            "unpaid": "Da pagare",
             "average": "media {amount}",
             "detail": "pagato {paid}, da pagare {unpaid}",
             "above": "{amount} sopra la media",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "Cosa mostra la pagina iniziale?",
-                "s1": "La pagina iniziale mostra il mese in breve: cosa è pagato, cosa resta da pagare e cosa è scaduto.",
-                "s2": "Sotto ci sono le spese per categoria e gli ultimi 12 mesi. Con le frecce cambi mese, <b>{today}</b> torna a quello attuale.",
-                "s3": "Bollette in più valute? Cambia valuta sopra il riepilogo. La scelta viene ricordata."
+                "s1": "La pagina iniziale mostra il mese in breve, una riga per valuta: <b>verde</b> è pagato, <b>rosso</b> scaduto e <b>blu</b> in arrivo. La legenda dei colori è sopra le righe.",
+                "s2": "Tocca una riga per vedere le spese per categoria e gli ultimi 12 mesi. Nel grafico dei 12 mesi gli importi scaduti sono in rosso.",
+                "s3": "Con le frecce cambi mese, <b>{today}</b> torna a quello attuale."
             },
             "seePayments": {
                 "q": "Dove si vede cosa c’è da pagare?",

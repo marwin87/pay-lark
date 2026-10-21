@@ -71,6 +71,21 @@ def test_trend_splits_paid_unpaid_and_never_mixes_currencies(client_db):
     assert float(got["PLN"]["paid"]) == 100 and float(got["PLN"]["unpaid"]) == 0
 
 
+def test_trend_reports_the_overdue_part_of_unpaid(client_db):
+    client, db = client_db
+    token = register_and_login(client, "tr4@test.com")
+    bill = _bill(client, token, "Rent", "EUR")
+    db.query(PaymentInstance).delete()
+    # A past month's unpaid payment is overdue; a stored "upcoming" status must not hide it.
+    past = trend_periods(today_utc().strftime("%Y-%m"))[-3]
+    _inst(db, bill, past, PaymentStatus.upcoming)
+    db.commit()
+
+    r = client.get(f"/bills/payments/trend?month={past}", headers=auth(token))
+    got = next(p for p in r.json() if p["period"] == past)
+    assert float(got["unpaid"]) == 100 and float(got["overdue"]) == 100
+
+
 def test_trend_is_scoped_to_the_user(client_db):
     client, db = client_db
     a = register_and_login(client, "tr2a@test.com")

@@ -193,6 +193,16 @@ button:not(:disabled) {
   border-color: #7d6636;
 }
 
+/* Month stepper tile (mobile): slate-900 @ 40% reads near-black on the warm body, so tint it
+   like the panels above. From `sm` up the stepper is bare and keeps its transparent background. */
+@media (max-width: 639px) {
+  .theme-vesperfall .stepper-tile {
+    background-color: rgba(85, 74, 59, 0.45);
+    background-image: linear-gradient(180deg, rgba(255, 235, 190, 0.05), rgba(0, 0, 0, 0.12));
+    border-color: #7d6636;
+  }
+}
+
 /* Payment row tiles: neutral card, only a faint semantic tint at the left end. */
 .theme-vesperfall .dark\:from-red-500\/10 { --tw-gradient-from: color-mix(in srgb, var(--color-semantic-red) 26%, transparent); }
 .theme-vesperfall .dark\:from-emerald-500\/10 { --tw-gradient-from: color-mix(in srgb, var(--color-semantic-green) 26%, transparent); }

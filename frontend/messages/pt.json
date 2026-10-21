@@ -78,7 +78,6 @@
             "remaining": "Ainda por pagar",
             "loadError": "Não foi possível carregar o resumo. Tente novamente.",
             "loading": "A carregar o resumo",
-            "currency": "Mostrar resumo em:",
             "emptyMonth": "Sem pagamentos este mês.",
             "emptyHelp": "Os pagamentos aparecem aqui sozinhos assim que adicionar uma fatura.",
             "addBill": "Adicionar uma fatura"
@@ -98,8 +97,6 @@
             "title": "Últimos 12 meses",
             "empty": "Ainda sem histórico de pagamentos nesta moeda.",
             "chartLabel": "Pagamentos mensais",
-            "paid": "Pago",
-            "unpaid": "Ainda por pagar",
             "average": "média {amount}",
             "detail": "pago {paid}, por pagar {unpaid}",
             "above": "{amount} acima da média",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "O que mostra a página inicial?",
-                "s1": "A página inicial mostra o mês de relance: o que está pago, o que falta pagar e o que está em atraso.",
-                "s2": "Abaixo estão os gastos por categoria e os últimos 12 meses. Use as setas para mudar de mês e <b>{today}</b> para voltar ao atual.",
-                "s3": "Contas em várias moedas? Mude a moeda acima do resumo. A escolha fica guardada."
+                "s1": "A página inicial mostra o mês de relance, uma linha por moeda: <b>verde</b> é pago, <b>vermelho</b> em atraso e <b>azul</b> a vencer. A legenda das cores está acima das linhas.",
+                "s2": "Toque numa linha para ver os gastos por categoria e os últimos 12 meses. No gráfico de 12 meses, os valores em atraso são vermelhos.",
+                "s3": "Use as setas para mudar de mês e <b>{today}</b> para voltar ao atual."
             },
             "seePayments": {
                 "q": "Onde se vê o que há a pagar?",

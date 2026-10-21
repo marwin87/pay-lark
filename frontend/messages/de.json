@@ -78,7 +78,6 @@
             "remaining": "Noch zu zahlen",
             "loadError": "Die Übersicht konnte nicht geladen werden. Bitte erneut versuchen.",
             "loading": "Übersicht wird geladen",
-            "currency": "Zusammenfassung anzeigen in:",
             "emptyMonth": "Keine Zahlungen in diesem Monat.",
             "emptyHelp": "Zahlungen erscheinen hier von selbst, sobald eine Rechnung hinzugefügt wird.",
             "addBill": "Rechnung hinzufügen"
@@ -98,8 +97,6 @@
             "title": "Letzte 12 Monate",
             "empty": "Noch kein Zahlungsverlauf in dieser Währung.",
             "chartLabel": "Monatliche Zahlungen",
-            "paid": "Bezahlt",
-            "unpaid": "Noch zu zahlen",
             "average": "Durchschnitt {amount}",
             "detail": "bezahlt {paid}, offen {unpaid}",
             "above": "{amount} über dem Durchschnitt",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "Was zeigt die Startseite?",
-                "s1": "Die Startseite zeigt den Monat auf einen Blick: was bezahlt ist, was noch offen ist und was überfällig ist.",
-                "s2": "Darunter stehen die Ausgaben nach Kategorie und die letzten 12 Monate. Mit den Pfeilen wechselst du den Monat, <b>{today}</b> bringt dich zurück.",
-                "s3": "Rechnungen in mehreren Währungen? Wechsle die Währung über der Übersicht. Die Auswahl wird gemerkt."
+                "s1": "Die Startseite zeigt den Monat auf einen Blick, eine Zeile pro Währung: <b>grün</b> ist bezahlt, <b>rot</b> überfällig und <b>blau</b> anstehend. Die Farblegende steht über den Zeilen.",
+                "s2": "Tippe auf eine Zeile, um die Ausgaben nach Kategorie und die letzten 12 Monate zu sehen. Im 12-Monats-Diagramm sind überfällige Beträge rot.",
+                "s3": "Mit den Pfeilen wechselst du den Monat, <b>{today}</b> bringt dich zurück."
             },
             "seePayments": {
                 "q": "Wo ist zu sehen, was zu zahlen ist?",

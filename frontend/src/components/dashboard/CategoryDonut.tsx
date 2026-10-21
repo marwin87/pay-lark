@@ -11,7 +11,7 @@ const R = 76;
 const CIRC = 2 * Math.PI * R;
 const GAP = 1; // px of space between segments
 
-export default function CategoryDonut({ rows, currency, monthLabel }: { rows: CategoryTotal[]; currency: string; monthLabel: string }) {
+export default function CategoryDonut({ rows, currency, monthLabel, embedded = false }: { rows: CategoryTotal[]; currency: string; monthLabel: string; embedded?: boolean }) {
   const t = useTranslations("Dashboard.categories");
   const tCat = useTranslations("Categories");
   const locale = useLocale();
@@ -25,16 +25,16 @@ export default function CategoryDonut({ rows, currency, monthLabel }: { rows: Ca
   const starts = rows.map((_, i) => rows.slice(0, i).reduce((sum, r) => sum + (r.total / total) * CIRC, 0));
 
   return (
-    <section className={CARD_CLASS} aria-labelledby="category-donut-title">
-      <h2 id="category-donut-title" className="mb-4 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+    <section className={embedded ? undefined : CARD_CLASS} aria-labelledby={`category-donut-title-${currency}`}>
+      <h2 id={`category-donut-title-${currency}`} className="mb-4 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
         {t("title")}
       </h2>
 
       {rows.length === 0 ? (
         <p className="text-sm text-slate-500 dark:text-slate-400">{t("empty")}</p>
       ) : (
-        <div className="grid items-center gap-5 sm:grid-cols-[200px_1fr]">
-          <svg viewBox="0 0 200 200" className="mx-auto w-full max-w-[200px]" role="img" aria-label={t("chartLabel")}>
+        <div className="grid items-center gap-5">
+          <svg viewBox="0 0 200 200" className="mx-auto w-full max-w-[160px] lg:max-w-[220px]" role="img" aria-label={t("chartLabel")}>
             {rows.map((r, i) => {
               const len = (r.total / total) * CIRC;
               const dash = Math.max(len - GAP, 0.1);

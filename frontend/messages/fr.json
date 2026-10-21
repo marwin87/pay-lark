@@ -78,7 +78,6 @@
             "remaining": "Reste à payer",
             "loadError": "Impossible de charger le résumé. Veuillez réessayer.",
             "loading": "Chargement du résumé",
-            "currency": "Afficher le résumé en :",
             "emptyMonth": "Aucun paiement ce mois-ci.",
             "emptyHelp": "Les paiements apparaissent ici d’eux-mêmes dès qu’une facture est ajoutée.",
             "addBill": "Ajouter une facture"
@@ -98,8 +97,6 @@
             "title": "12 derniers mois",
             "empty": "Pas encore d'historique de paiements dans cette devise.",
             "chartLabel": "Paiements mensuels",
-            "paid": "Payé",
-            "unpaid": "À payer",
             "average": "moyenne {amount}",
             "detail": "payé {paid}, à payer {unpaid}",
             "above": "{amount} au-dessus de la moyenne",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "Que montre la page d’accueil ?",
-                "s1": "La page d’accueil montre le mois en un coup d’œil : ce qui est payé, ce qui reste à payer et ce qui est en retard.",
-                "s2": "En dessous : les dépenses par catégorie et les 12 derniers mois. Les flèches changent de mois, <b>{today}</b> revient au mois en cours.",
-                "s3": "Des factures dans plusieurs devises ? Changez la devise au-dessus du résumé. Le choix est mémorisé."
+                "s1": "La page d’accueil montre le mois en un coup d’œil, une ligne par devise : <b>vert</b> pour payé, <b>rouge</b> pour en retard et <b>bleu</b> pour à venir. La légende des couleurs est au-dessus des lignes.",
+                "s2": "Touchez une ligne pour voir les dépenses par catégorie et les 12 derniers mois. Dans le graphique des 12 mois, les montants en retard sont en rouge.",
+                "s3": "Les flèches changent de mois, <b>{today}</b> revient au mois en cours."
             },
             "seePayments": {
                 "q": "Où voir ce qu’il y a à payer ?",

@@ -15,7 +15,6 @@ export const VIEW_STATE_KEYS = {
   billsCategories: "bills-categories",
   billsSort: "bills-sort",
   billsShowPaused: "bills-show-paused",
-  dashboardCurrency: "dashboard-currency",
 } as const;
 
 export function clearViewState(): void {

@@ -13,8 +13,9 @@ Notable changes, release by release.
 - Payment popups are tinted by payment status
 - Collapse/expand all tiles in Settings
 - Help explains draft bills and “Generate payments”
+- Compact dashboard: every currency in one row, tap to open its categories and trend
 - “Get started” card moved to the Dashboard
-- Dashboard currency switch adapts to screen width and remembers your choice
+- Dashboard color key; the 12-month chart shows overdue amounts in red
 
 ### Breaking changes
 

@@ -78,7 +78,6 @@
             "remaining": "Still to pay",
             "loadError": "Couldn't load the summary. Please try again.",
             "loading": "Loading summary",
-            "currency": "Show summary in:",
             "emptyMonth": "No payments this month.",
             "emptyHelp": "Payments show up here by themselves once a bill is added.",
             "addBill": "Add a bill"
@@ -98,8 +97,6 @@
             "title": "Last 12 months",
             "empty": "No payment history in this currency yet.",
             "chartLabel": "Monthly payments",
-            "paid": "Paid",
-            "unpaid": "Still to pay",
             "average": "average {amount}",
             "detail": "paid {paid}, to pay {unpaid}",
             "above": "{amount} above average",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "What does the start page show?",
-                "s1": "The start page shows the month at a glance: what is paid, what is still to pay and what is overdue.",
-                "s2": "Below it are the spending by category and the last 12 months. Use the arrows to change the month, <b>{today}</b> to come back.",
-                "s3": "Bills in more than one currency? Switch the currency above the summary. The choice is remembered."
+                "s1": "The start page shows the month at a glance, one row per currency: <b>green</b> is paid, <b>red</b> overdue and <b>blue</b> upcoming. The color key is above the rows.",
+                "s2": "Tap a row to open its spending by category and the last 12 months. In the 12-month chart overdue amounts are red.",
+                "s3": "Use the arrows to change the month, <b>{today}</b> to come back."
             },
             "seePayments": {
                 "q": "Where is what needs to be paid shown?",

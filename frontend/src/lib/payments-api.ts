@@ -32,6 +32,8 @@ export interface TrendPoint {
   currency: string;
   paid: string;
   unpaid: string;
+  /** The part of `unpaid` already past its due date. */
+  overdue: string;
 }
 
 /** Totals for the 12 months ending at `month` ("YYYY-MM"); months without payments are absent. */

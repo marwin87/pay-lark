@@ -7,7 +7,7 @@
 import { test, expect } from '@playwright/test';
 import { loginNewUser, createBillViaApi, syncPaymentsViaApi } from './helpers';
 
-test('dashboard summarises each currency separately and is reachable from the logo', async ({ page }) => {
+test('dashboard shows each currency in its own row and is reachable from the logo', async ({ page }) => {
   const stamp = Date.now();
 
   await loginNewUser(page);
@@ -25,28 +25,28 @@ test('dashboard summarises each currency separately and is reachable from the lo
   await page.getByRole('navigation').getByRole('link', { name: 'Overview' }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
-  // Step: pick EUR — only the €50 bill counts
-  const currencies = page.getByRole('group', { name: 'Show summary in:' });
-  await currencies.getByRole('button', { name: 'EUR' }).click();
+  // Step: each currency has its own row, and its totals never include the other currency
   const card = page.getByRole('region', { name: /\d{4}/ }); // month-summary section, titled "<Month> <Year>"
-  await expect(card).toContainText('€50');
-  await expect(card).not.toContainText('200');
+  const eurRow = card.getByRole('button', { name: /^EUR / });
+  const plnRow = card.getByRole('button', { name: /^PLN / });
+  await expect(eurRow).toContainText('€50');
+  await expect(eurRow).not.toContainText('200');
+  await expect(plnRow).toContainText(/PLN\s?200/);
+  await expect(plnRow).not.toContainText('€');
 
-  // Step: pick PLN — only the 200 zł bill counts
-  await currencies.getByRole('button', { name: 'PLN' }).click();
-  await expect(card).toContainText(/PLN\s?200/);
-  await expect(card).not.toContainText('€');
+  // Step: with several currencies the rows start folded; opening PLN shows its donut and trend
+  await expect(plnRow).toHaveAttribute('aria-expanded', 'false');
+  await plnRow.click();
+  await expect(plnRow).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByRole('region', { name: 'By category' })).toContainText('Utilities');
+  await expect(page.getByRole('region', { name: 'Last 12 months' })).toBeVisible();
 
-  // Step: the choice survives a visit to another page
+  // Step: the rows are still there after a visit to another page
   await page.getByRole('navigation').getByRole('link', { name: 'To pay' }).click();
   await expect(page).toHaveURL(/\/dashboard\/payments/);
   await page.getByRole('navigation').getByRole('link', { name: 'Overview' }).click();
-  await expect(page.getByRole('group', { name: 'Show summary in:' }).getByRole('button', { name: 'PLN' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(card).toContainText(/PLN\s?200/);
-
-  // Step: donut lists the bill's category and the trend chart is rendered
-  await expect(page.getByRole('region', { name: 'By category' })).toContainText('Utilities');
-  await expect(page.getByRole('region', { name: 'Last 12 months' })).toBeVisible();
+  await expect(card.getByRole('button', { name: /^EUR / })).toContainText('€50');
+  await expect(card.getByRole('button', { name: /^PLN / })).toContainText(/PLN\s?200/);
 
   // Step: Settings is not among the nav links; it sits in the sidebar's lower block
   await expect(page.getByRole('navigation').getByRole('link', { name: 'Settings' })).toHaveCount(0);

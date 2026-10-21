@@ -33,9 +33,11 @@ interface Props {
   maxMonth: string;
   /** Called with "YYYY-MM" when a bar is clicked. */
   onSelectMonth: (month: string) => void;
+  /** Rendered inside another card: no card chrome of its own. */
+  embedded?: boolean;
 }
 
-export default function TrendChart({ points: initialPoints, currency, month, minMonth, maxMonth, onSelectMonth }: Props) {
+export default function TrendChart({ points: initialPoints, currency, month, minMonth, maxMonth, onSelectMonth, embedded = false }: Props) {
   const t = useTranslations("Dashboard.trend");
   const tYear = useTranslations("PaymentsPage");
   const locale = useLocale();
@@ -88,7 +90,8 @@ export default function TrendChart({ points: initialPoints, currency, month, min
     const pt = points?.find((p) => p.period === period && p.currency === currency);
     const paid = pt ? parseFloat(pt.paid) : 0;
     const unpaid = pt ? parseFloat(pt.unpaid) : 0;
-    return { period, paid, unpaid, total: paid + unpaid };
+    const overdue = pt ? parseFloat(pt.overdue) : 0;
+    return { period, paid, overdue, unpaid, total: paid + unpaid };
   });
   const filled = bars.filter((b) => b.total > 0);
   const avg = filled.length ? filled.reduce((s, b) => s + b.total, 0) / filled.length : 0;
@@ -111,14 +114,12 @@ export default function TrendChart({ points: initialPoints, currency, month, min
   const diff = shown.total - avg;
 
   return (
-    <section className={CARD_CLASS} aria-labelledby="trend-title" {...swipe}>
+    <section className={embedded ? undefined : CARD_CLASS} aria-labelledby={`trend-title-${currency}`} {...swipe}>
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="trend-title" className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+        <h2 id={`trend-title-${currency}`} className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
           {t("title")}
         </h2>
         <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />{t("paid")}</span>
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-blue-400" />{t("unpaid")}</span>
           {avg > 0 && <span>{t("average", { amount: money(avg) })}</span>}
         </span>
       </div>
@@ -166,12 +167,16 @@ export default function TrendChart({ points: initialPoints, currency, month, min
                     <rect x={x} y={y(b.paid)} width={bw} height={BASE - y(b.paid)} rx={2}
                       className="fill-emerald-500 dark:fill-emerald-600" opacity={dim} />
                   )}
-                  {b.unpaid > 0 && (
-                    <rect x={x} y={y(b.total)} width={bw} height={y(b.paid) - y(b.total)} rx={2}
+                  {b.overdue > 0 && (
+                    <rect x={x} y={y(b.paid + b.overdue)} width={bw} height={y(b.paid) - y(b.paid + b.overdue)} rx={2}
+                      className="fill-red-500" opacity={dim} />
+                  )}
+                  {b.unpaid > b.overdue && (
+                    <rect x={x} y={y(b.total)} width={bw} height={y(b.paid + b.overdue) - y(b.total)} rx={2}
                       className="fill-blue-400 dark:fill-blue-500" opacity={dim} />
                   )}
                   <text x={x + bw / 2} y={BASE + 22} textAnchor="middle"
-                    className={`text-[20px] sm:text-[11px] ${isSel ? "fill-slate-800 font-bold dark:fill-slate-100" : "fill-slate-400 dark:fill-slate-500"}`}>
+                    className={`text-[20px] sm:text-[11px] lg:text-[13px] ${isSel ? "fill-slate-800 font-bold dark:fill-slate-100" : "fill-slate-400 dark:fill-slate-500"}`}>
                     {monthName(b.period, "short")}
                   </text>
                 </g>
@@ -184,7 +189,7 @@ export default function TrendChart({ points: initialPoints, currency, month, min
                     className="stroke-slate-300 dark:stroke-slate-600" />
                 )}
                 <text x={LEFT + (y.from + y.count / 2) * step} y={BASE + 46} textAnchor="middle"
-                  className="fill-slate-600 text-[22px] font-bold sm:text-[13px] dark:fill-slate-300">
+                  className="fill-slate-600 text-[22px] font-bold sm:text-[13px] lg:text-[15px] dark:fill-slate-300">
                   {y.year}
                 </text>
               </g>

@@ -78,7 +78,6 @@
             "remaining": "Nog te betalen",
             "loadError": "Het overzicht kon niet worden geladen. Probeer het opnieuw.",
             "loading": "Overzicht laden",
-            "currency": "Overzicht tonen in:",
             "emptyMonth": "Geen betalingen deze maand.",
             "emptyHelp": "Betalingen verschijnen hier vanzelf zodra een rekening is toegevoegd.",
             "addBill": "Rekening toevoegen"
@@ -98,8 +97,6 @@
             "title": "Afgelopen 12 maanden",
             "empty": "Nog geen betalingsgeschiedenis in deze valuta.",
             "chartLabel": "Maandelijkse betalingen",
-            "paid": "Betaald",
-            "unpaid": "Nog te betalen",
             "average": "gemiddeld {amount}",
             "detail": "betaald {paid}, te betalen {unpaid}",
             "above": "{amount} boven het gemiddelde",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "Wat toont de startpagina?",
-                "s1": "De startpagina toont de maand in één oogopslag: wat betaald is, wat nog te betalen is en wat te laat is.",
-                "s2": "Daaronder staan de uitgaven per categorie en de laatste 12 maanden. Met de pijlen wissel je van maand, <b>{today}</b> brengt je terug.",
-                "s3": "Rekeningen in meer valuta’s? Wissel de valuta boven het overzicht. De keuze wordt onthouden."
+                "s1": "De startpagina toont de maand in één oogopslag, één rij per valuta: <b>groen</b> is betaald, <b>rood</b> te laat en <b>blauw</b> binnenkort. De kleurenlegenda staat boven de rijen.",
+                "s2": "Tik op een rij voor de uitgaven per categorie en de laatste 12 maanden. In de grafiek van 12 maanden zijn bedragen die te laat zijn rood.",
+                "s3": "Met de pijlen wissel je van maand, <b>{today}</b> brengt je terug."
             },
             "seePayments": {
                 "q": "Waar is te zien wat betaald moet worden?",

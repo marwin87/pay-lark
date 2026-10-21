@@ -78,7 +78,6 @@
             "remaining": "Do zapłaty jeszcze",
             "loadError": "Nie udało się wczytać podsumowania. Spróbuj ponownie.",
             "loading": "Wczytywanie podsumowania",
-            "currency": "Pokaż podsumowanie w:",
             "emptyMonth": "Brak płatności w tym miesiącu.",
             "emptyHelp": "Płatności pojawią się tu same, po dodaniu rachunku.",
             "addBill": "Dodaj rachunek"
@@ -98,8 +97,6 @@
             "title": "Ostatnie 12 miesięcy",
             "empty": "Brak historii płatności w tej walucie.",
             "chartLabel": "Płatności miesięczne",
-            "paid": "Zapłacone",
-            "unpaid": "Do zapłaty",
             "average": "średnia {amount}",
             "detail": "zapłacono {paid}, do zapłaty {unpaid}",
             "above": "{amount} powyżej średniej",
@@ -799,9 +796,9 @@
             },
             "dashboard": {
                 "q": "Co pokazuje strona startowa?",
-                "s1": "Strona startowa pokazuje miesiąc w skrócie: ile jest zapłacone, ile jeszcze do zapłaty i co jest po terminie.",
-                "s2": "Niżej są wydatki według kategorii i ostatnie 12 miesięcy. Strzałkami zmienisz miesiąc, a <b>{today}</b> wraca do bieżącego.",
-                "s3": "Rachunki w kilku walutach? Przełącz walutę nad podsumowaniem. Wybór jest zapamiętywany."
+                "s1": "Strona startowa pokazuje miesiąc w skrócie, po jednym wierszu na walutę: <b>zielony</b> to zapłacone, <b>czerwony</b> po terminie, a <b>niebieski</b> nadchodzące. Legenda kolorów jest nad wierszami.",
+                "s2": "Dotknij wiersza, by zobaczyć wydatki według kategorii i ostatnie 12 miesięcy. Na wykresie z 12 miesięcy kwoty po terminie są czerwone.",
+                "s3": "Strzałkami zmienisz miesiąc, a <b>{today}</b> wraca do bieżącego."
             },
             "seePayments": {
                 "q": "Gdzie widać, co jest do zapłaty?",
