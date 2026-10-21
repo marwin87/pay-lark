@@ -34,17 +34,24 @@ test('dashboard shows each currency in its own row and is reachable from the log
   await expect(plnRow).toContainText(/PLN\s?200/);
   await expect(plnRow).not.toContainText('€');
 
-  // Step: with several currencies the rows start folded; opening PLN shows its donut and trend
-  await expect(plnRow).toHaveAttribute('aria-expanded', 'false');
-  await plnRow.click();
+  // Step: the first row (biggest volume, PLN) starts open; the other starts folded
   await expect(plnRow).toHaveAttribute('aria-expanded', 'true');
+  await expect(eurRow).toHaveAttribute('aria-expanded', 'false');
   await expect(page.getByRole('region', { name: 'By category' })).toContainText('Utilities');
   await expect(page.getByRole('region', { name: 'Last 12 months' })).toBeVisible();
 
-  // Step: the rows are still there after a visit to another page
+  // Step: open EUR as well, then close PLN
+  await eurRow.click();
+  await expect(eurRow).toHaveAttribute('aria-expanded', 'true');
+  await plnRow.click();
+  await expect(plnRow).toHaveAttribute('aria-expanded', 'false');
+
+  // Step: the open rows are remembered after a visit to another page
   await page.getByRole('navigation').getByRole('link', { name: 'To pay' }).click();
   await expect(page).toHaveURL(/\/dashboard\/payments/);
   await page.getByRole('navigation').getByRole('link', { name: 'Overview' }).click();
+  await expect(card.getByRole('button', { name: /^EUR / })).toHaveAttribute('aria-expanded', 'true');
+  await expect(card.getByRole('button', { name: /^PLN / })).toHaveAttribute('aria-expanded', 'false');
   await expect(card.getByRole('button', { name: /^EUR / })).toContainText('€50');
   await expect(card.getByRole('button', { name: /^PLN / })).toContainText(/PLN\s?200/);
 

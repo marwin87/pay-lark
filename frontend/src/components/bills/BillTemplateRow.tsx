@@ -114,7 +114,7 @@ export default function BillTemplateRow({
     >
       {ribbon && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
-          <span className={`absolute -left-9 top-5 w-32 -rotate-45 ${ribbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
+          <span className={`ribbon absolute -left-9 top-5 w-32 -rotate-45 ${ribbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
             {ribbon.label}
           </span>
         </div>

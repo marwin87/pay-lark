@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type HTMLAttributes, type ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useLocale as useAppLocale } from "@/context/locale-context";
 import { formatMoney, type MonthSummary } from "@/lib/summary";
 import type { TrendPoint } from "@/lib/payments-api";
+import { useSessionState, VIEW_STATE_KEYS } from "@/hooks/useSessionState";
 import CategoryDonut from "./CategoryDonut";
 import TrendChart from "./TrendChart";
 
@@ -39,7 +40,19 @@ export default function MonthSummaryCard({
   rows, trend, month, minMonth, maxMonth, monthLabel, onSelectMonth, title, headerProps,
 }: Props) {
   const t = useTranslations("Dashboard.summary");
-  const [open, setOpen] = useState<Record<string, boolean>>({});
+  // Open currencies are kept for the session. Until the user clicks, the first row is open.
+  const [stored, setStored] = useSessionState<Set<string> | null>(
+    VIEW_STATE_KEYS.dashboardOpen,
+    null,
+    (v) => (Array.isArray(v) ? new Set(v.filter((x): x is string => typeof x === "string")) : undefined),
+    (set) => (set ? [...set] : null),
+  );
+  const openSet = stored ?? new Set(rows.length ? [rows[0].currency] : []);
+  const toggle = (currency: string) => {
+    const next = new Set(openSet);
+    if (!next.delete(currency)) next.add(currency);
+    setStored(next);
+  };
   const paidCount = rows.reduce((n, r) => n + (r.summary?.paidCount ?? 0), 0);
   const count = rows.reduce((n, r) => n + (r.summary ? countOf(r.summary) : 0), 0);
 
@@ -69,17 +82,18 @@ export default function MonthSummaryCard({
       </ul>
 
       {rows.map(({ currency, summary }) => {
-        // A lone currency starts open; with several, everything starts folded.
-        const isOpen = open[currency] ?? rows.length === 1;
+        const isOpen = openSet.has(currency);
         return (
           <div
             key={currency}
-            className={`border-t border-slate-100 dark:border-slate-700 ${isOpen ? "bg-green-50/70 dark:bg-green-900/15" : ""}`}
+            className={`border-l-4 border-t border-t-slate-100 dark:border-t-slate-700 ${
+              isOpen ? "border-l-green-500 bg-green-50 dark:border-l-green-600 dark:bg-green-900/25" : "border-l-transparent"
+            }`}
           >
             <button
               type="button"
               aria-expanded={isOpen}
-              onClick={() => setOpen({ ...open, [currency]: !isOpen })}
+              onClick={() => toggle(currency)}
               className="w-full px-4 py-3 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-700/40"
             >
               <CurrencyRowHead currency={currency} summary={summary} isOpen={isOpen} />
@@ -147,7 +161,7 @@ function CurrencyRowHead({ currency, summary, isOpen }: { currency: string; summ
       ) : (
         <p className="col-span-2 text-sm text-slate-500 dark:text-slate-400">{t("empty")}</p>
       )}
-      <span aria-hidden className={`text-slate-400 transition-transform ${isOpen ? "rotate-90" : ""}`}>›</span>
+      <span aria-hidden className={`transition-transform ${isOpen ? "rotate-90 text-green-600 dark:text-green-400" : "text-slate-400"}`}>›</span>
     </div>
   );
 }

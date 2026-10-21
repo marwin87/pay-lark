@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { COLLAPSED_CATEGORIES_KEYS } from "./useCollapsedCategories";
 
-// Search / filter / sort state of the Payments and Bills lists, and the Dashboard currency. It survives
+// Search / filter / sort state of the Payments and Bills lists, and which Dashboard rows are open. It survives
 // navigating between pages (and a reload) while signed in, and is wiped on
 // login, logout and session expiry so every sign-in starts from the defaults.
 export const VIEW_STATE_KEYS = {
@@ -15,6 +15,7 @@ export const VIEW_STATE_KEYS = {
   billsCategories: "bills-categories",
   billsSort: "bills-sort",
   billsShowPaused: "bills-show-paused",
+  dashboardOpen: "dashboard-open",
 } as const;
 
 export function clearViewState(): void {

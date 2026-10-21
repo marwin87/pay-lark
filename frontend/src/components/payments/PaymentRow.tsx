@@ -95,14 +95,14 @@ export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, o
       {ribbonCount > 0 && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
           {statusRibbon && (
-            <span className={`absolute -left-9 top-5 w-32 -rotate-45 ${statusRibbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
+            <span className={`ribbon absolute -left-9 top-5 w-32 -rotate-45 ${statusRibbon.color} py-0.5 text-center text-[11px] font-bold uppercase tracking-wide text-white shadow`}>
               {statusRibbon.label}
             </span>
           )}
           {instance.is_last && (
             <span
               aria-hidden="true"
-              className={`absolute -rotate-45 bg-violet-600 py-0.5 text-center font-bold uppercase tracking-wide text-white shadow ${
+              className={`ribbon absolute -rotate-45 bg-violet-600 py-0.5 text-center font-bold uppercase tracking-wide text-white shadow ${
                 statusRibbon ? "-left-[1.6rem] top-[1.9rem] w-36 text-[10px]" : "-left-9 top-5 w-32 text-[11px]"
               }`}
             >
