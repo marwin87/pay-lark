@@ -17,7 +17,7 @@ test('dashboard shows each currency in its own row and is reachable from the log
 
   // Step: reach the dashboard through the logo, not by URL
   await page.goto('/dashboard/payments');
-  await page.getByRole('link', { name: /Pay\s?Tracker/ }).first().click();
+  await page.getByRole('link', { name: /Pay\s?Lark/ }).first().click();
   await expect(page).toHaveURL(/\/dashboard$/);
 
   // Step: the menu marks the dashboard as the current page and leads back to it

@@ -6,7 +6,7 @@
 
 **Rule:** Store JWT access tokens in HttpOnly cookies, not localStorage. localStorage is accessible to any JavaScript on the page — a single XSS vector exposes the token.
 
-**Why:** Pay Tracker originally stored the JWT in localStorage (flagged during the bill-template-management impl review). Migrated: the backend now sets the token via `Set-Cookie` (HttpOnly, plus a non-HttpOnly presence flag for the frontend — see `_set_auth_cookie` in `backend/app/routers/auth.py`) and the frontend sends cookies automatically.
+**Why:** PayLark originally stored the JWT in localStorage (flagged during the bill-template-management impl review). Migrated: the backend now sets the token via `Set-Cookie` (HttpOnly, plus a non-HttpOnly presence flag for the frontend — see `_set_auth_cookie` in `backend/app/routers/auth.py`) and the frontend sends cookies automatically.
 
 **Applies to:** Any future auth implementation or auth refactor. Never reintroduce token storage in localStorage/sessionStorage. When implementing auth from scratch, always start with HttpOnly cookies.
 
@@ -22,7 +22,7 @@
 
 **Rule:** Any data entity that belongs to a user (bills, payments, expenses, budgets) must carry a `user_id` FK on the table from the first migration. Never model shared-household views as "flat" if the system has per-user accounts — the access-control model must be decided before the schema is created, not retrofitted afterward.
 
-**Why:** Pay Tracker was initially designed as a flat household model (all users share one view). This was changed to per-user isolation after several slices were already shipped, requiring a breaking Alembic migration, a full audit of every bill/payment router endpoint, and updates to both export endpoints. The retrofit cost was significant and the window between "flat schema shipped" and "isolation added" was a real data-leak window.
+**Why:** PayLark was initially designed as a flat household model (all users share one view). This was changed to per-user isolation after several slices were already shipped, requiring a breaking Alembic migration, a full audit of every bill/payment router endpoint, and updates to both export endpoints. The retrofit cost was significant and the window between "flat schema shipped" and "isolation added" was a real data-leak window.
 
 **Applies to:** Any new data model that touches user-owned resources. Before writing the first migration, answer: "Should User A ever see User B's rows?" If no → add `user_id` FK + NOT NULL constraint in the initial migration. PaymentInstance (and similar child rows) can inherit user scope transitively via their parent FK — no need to denormalize `user_id` onto every table, but the root entity must carry it.
 

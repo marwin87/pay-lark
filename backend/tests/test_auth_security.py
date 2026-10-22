@@ -94,8 +94,8 @@ def _token_with_claims(**overrides) -> str:
         "sub": "1",
         "ver": 0,
         "exp": datetime.now(UTC) + timedelta(minutes=5),
-        "iss": "pay-tracker",
-        "aud": "pay-tracker-app",
+        "iss": "paylark",
+        "aud": "paylark-app",
     }
     payload.update(overrides)
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
@@ -121,7 +121,7 @@ def test_token_missing_audience_is_rejected(client):
         "sub": "1",
         "ver": 0,
         "exp": datetime.now(UTC) + timedelta(minutes=5),
-        "iss": "pay-tracker",
+        "iss": "paylark",
     }
     bad_token = jwt.encode(
         payload, settings.jwt_secret, algorithm=settings.jwt_algorithm

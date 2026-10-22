@@ -1,5 +1,5 @@
 [project]
-name = "pay-tracker"
+name = "paylark"
 version = "1.5.0"
 requires-python = ">=3.13"
 dependencies = [

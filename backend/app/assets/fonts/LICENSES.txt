@@ -1,7 +1,7 @@
-Third-party fonts bundled with Pay Tracker (used for PDF export)
+Third-party fonts bundled with PayLark (used for PDF export)
 =================================================================
 
-These fonts are NOT covered by the Pay Tracker LICENSE. Each remains under
+These fonts are NOT covered by the PayLark LICENSE. Each remains under
 its own license, reproduced below.
 
   DejaVuSans.ttf, DejaVuSans-Bold.ttf   DejaVu Sans 2.35

@@ -1,6 +1,6 @@
 # Telegram reminders — setup
 
-Pay Tracker can send your bill reminders and the monthly summary to Telegram, in addition to (or
+PayLark can send your bill reminders and the monthly summary to Telegram, in addition to (or
 instead of) email. The messages have the same content and follow the same schedule and timing
 windows as the email reminders, but Telegram has its **own settings** (see below).
 
@@ -17,14 +17,14 @@ change anything in the app. This takes about five minutes and needs only your ph
 
 1. Open Telegram and search for **@BotFather** (the one with the blue verified check).
 2. Send `/newbot`.
-3. Give it a **name** (display name, anything: `My Pay Tracker`).
+3. Give it a **name** (display name, anything: `My PayLark`).
 4. Give it a **username** — globally unique, must end in `bot`, e.g. `mariusz_pt_bot`.
 5. BotFather replies with a line like `Use this token to access the HTTP API:` followed by the
    token (`8123456789:AAF3k...`). Copy it — this is your **bot token**.
 
 > The token is a credential: anyone who has it can post as your bot. Do not paste it in a chat,
 > an issue or a screenshot. If it leaks, send BotFather `/revoke` and paste the new one in
-> Settings. Pay Tracker stores it encrypted and never shows it again after saving.
+> Settings. PayLark stores it encrypted and never shows it again after saving.
 
 ## 2. Say something to your bot
 
@@ -53,7 +53,7 @@ close the tab afterwards.
 it. Add your bot to the group, send a message in the group, then use option B. Only numeric ids
 are accepted (no `@channelname`).
 
-## 4. Paste both into Pay Tracker
+## 4. Paste both into PayLark
 
 Settings → Notifications → **Telegram Notifications** → paste the bot token and the chat id →
 **Save**. Then press **Send test message**: you should get a message from your bot within a second

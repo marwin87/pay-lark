@@ -17,7 +17,7 @@ COPY . .
 COPY --from=i18n . /app/i18n
 
 # SQLite lives on a volume mounted at /data (created here so it is owned by appuser)
-ENV DATABASE_URL=sqlite:////data/paytracker.db
+ENV DATABASE_URL=sqlite:////data/paylark.db
 RUN useradd -m appuser && mkdir /data && chown -R appuser:appuser /app /data
 VOLUME /data
 USER appuser

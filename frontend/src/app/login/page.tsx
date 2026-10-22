@@ -3,7 +3,6 @@
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Mail, LockKeyhole, ArrowRight, Loader2 } from "lucide-react";
 import { apiFetch, ApiError } from "@/lib/api";
@@ -13,8 +12,7 @@ import { SESSION_EXPIRED_KEY } from "@/lib/auth";
 import { validateEmail, validateRequired } from "@/lib/auth-validation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { BRAND } from "@/lib/brand";
-import BrandWordmark from "@/components/BrandWordmark";
+import AuthBrand from "@/components/AuthBrand";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -109,20 +107,7 @@ export default function LoginPage() {
       />
 
       <div className="relative mx-auto w-full max-w-[760px] px-4 sm:px-6">
-        {/* Brand */}
-        <div className="mb-8 flex flex-col items-center gap-3">
-          <Image
-            src="/pt-logo.png"
-            alt={BRAND.name}
-            width={96}
-            height={96}
-            className="rounded-2xl shadow-md"
-            priority
-          />
-          <p className="text-xl font-bold tracking-tight sm:text-2xl">
-            <BrandWordmark />
-          </p>
-        </div>
+        <AuthBrand />
 
         {/* Heading */}
         <div className="mb-8 text-center">

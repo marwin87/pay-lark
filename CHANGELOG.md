@@ -2,6 +2,12 @@
 
 Notable changes, release by release.
 
+## v1.6.0 (Not released yet)
+
+### Features
+
+- Rebranded to PayLark, with a new logo and green theme color
+
 ## v1.5.0 — 21-10-2026
 
 ### Features
@@ -103,7 +109,7 @@ Notable changes, release by release.
 
 ### License
 
-- Pay Tracker is no longer MIT-licensed; commercial use now requires permission. See [LICENSE](LICENSE)
+- PayLark is no longer MIT-licensed; commercial use now requires permission. See [LICENSE](LICENSE)
 
 ### Features
 

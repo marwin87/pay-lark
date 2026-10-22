@@ -7,6 +7,7 @@
         "welcomeHeading": "欢迎回来 👋",
         "registerSubtitle": "创建您的账户",
         "registerTagline": "开始用 {brand} 追踪您的账单",
+        "brandTagline": "简单管理家庭账单",
         "emailLabel": "邮箱",
         "emailPlaceholder": "请输入邮箱",
         "passwordLabel": "密码",

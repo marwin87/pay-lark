@@ -9,8 +9,8 @@ from app.core.config import settings
 # for some other issuer/audience (a different deployment sharing the same
 # secret by mistake, say) is rejected outright rather than merely trusted on
 # signature alone.
-_TOKEN_ISSUER = "pay-tracker"
-_TOKEN_AUDIENCE = "pay-tracker-app"
+_TOKEN_ISSUER = "paylark"
+_TOKEN_AUDIENCE = "paylark-app"
 
 
 def hash_password(password: str) -> str:

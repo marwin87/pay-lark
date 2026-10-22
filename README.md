@@ -1,4 +1,4 @@
-# <img src="assets/pt-logo-rounded.png" width="32" alt="Pay Tracker logo" valign="middle"> Pay Tracker
+# <img src="assets/paylark-icon-1024.png" width="32" alt="PayLark logo" valign="middle"> PayLark
 
 A self-hosted household bill tracking PWA. Define your recurring bills once, then each month's payment instances are generated automatically. Mark bills paid from any device — phone, tablet, or desktop.
 
@@ -31,7 +31,7 @@ No third-party data sharing. No subscription. Runs locally with Docker Compose o
 
 ## 📋 What it does
 
-- **Bill templates** — define a bill once: name, category, amount, currency, due day of month, and how often it repeats: monthly (every 1–12 months), annual (every 1–5 years) or one-off. Optionally set an end month to stop a recurring bill after its last installment. A new bill starts as a draft you can edit freely; **Generate payments** turns it on, and from then on Pay Tracker generates payment instances automatically each period.
+- **Bill templates** — define a bill once: name, category, amount, currency, due day of month, and how often it repeats: monthly (every 1–12 months), annual (every 1–5 years) or one-off. Optionally set an end month to stop a recurring bill after its last installment. A new bill starts as a draft you can edit freely; **Generate payments** turns it on, and from then on PayLark generates payment instances automatically each period.
 - **Dashboard** — month summary, a category donut and a 12-month trend at a glance.
 - **Pause bills** — pause a bill you no longer need to hide it from the list; its payment history stays intact. Use "Show paused" to see them and resume one any time to start generating payments again. A bill with nothing paid (a draft, or a paused one) can be deleted instead.
 - **Category grouping** — bills and payments are grouped under category headers. Every account starts with 9 defaults (Housing, Utilities, Insurance, Subscriptions, Entertainment, Transport, Healthcare, Education, Other); add your own, rename or recolor any of them, or delete ones you no longer use from Settings (a category used by bills is archived instead). Category is required on every bill. Archiving a category hides it from the "new bill" picker but doesn't touch bills already using it — they keep working and stay filterable, just flagged as archived.
@@ -55,9 +55,9 @@ No third-party data sharing. No subscription. Runs locally with Docker Compose o
 Pull the published images from GitHub Container Registry and run the app with just two files — no repo clone required.
 
 ```bash
-mkdir pay-tracker && cd pay-tracker
-curl -O https://raw.githubusercontent.com/marwin87/pay-tracker/main/docker-compose.prod.yml
-curl -O https://raw.githubusercontent.com/marwin87/pay-tracker/main/.env.example
+mkdir paylark && cd paylark
+curl -O https://raw.githubusercontent.com/marwin87/paylark/main/docker-compose.prod.yml
+curl -O https://raw.githubusercontent.com/marwin87/paylark/main/.env.example
 cp .env.example .env
 ```
 
@@ -77,12 +77,12 @@ To try it with pre-seeded demo data instead of starting empty:
 docker compose -f docker-compose.prod.yml --profile demo up -d
 ```
 
-Pin a specific released version instead of the latest one by setting `PAY_TRACKER_VERSION` (e.g. `PAY_TRACKER_VERSION=1.1.0 docker compose -f docker-compose.prod.yml up -d`).
+Pin a specific released version instead of the latest one by setting `PAYLARK_VERSION` (e.g. `PAYLARK_VERSION=1.1.0 docker compose -f docker-compose.prod.yml up -d`).
 
 
 ## 🏁 Getting started
 
-The steps below build the images from source — use this if you're developing Pay Tracker or want to run unreleased changes. If you just want to run the app, see [Quick start without cloning](#quick-start-without-cloning) above.
+The steps below build the images from source — use this if you're developing PayLark or want to run unreleased changes. If you just want to run the app, see [Quick start without cloning](#quick-start-without-cloning) above.
 
 ### 1. Set up environment
 
@@ -107,7 +107,7 @@ Open http://localhost:3010 and register. Each account is isolated — register s
 
 ### 4. Add your first bill
 
-Go to **Bills → New Bill**. Fill in the name, category, amount, frequency (monthly/annual + interval), and due day of month. Save it as a draft, then click **Generate payments** on its tile — Pay Tracker generates this month's payment instance and keeps creating them automatically.
+Go to **Bills → New Bill**. Fill in the name, category, amount, frequency (monthly/annual + interval), and due day of month. Save it as a draft, then click **Generate payments** on its tile — PayLark generates this month's payment instance and keeps creating them automatically.
 
 ### 5. Track payments
 
@@ -127,7 +127,7 @@ Send times and "today" follow your own time zone: it is taken from your browser 
 | `ENVIRONMENT` | no (default: `development`) | Set to `production` for any real deployment — enables the `Secure` cookie flag, rejects a weak/default `JWT_SECRET`, and disables `/docs`, `/redoc`, `/openapi.json` |
 | `JWT_SECRET` | yes | JWT signing secret — use a long random string |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | no | Login session lifetime in minutes (default: 60) |
-| `DATABASE_URL` | no | SQLite URL (default: `sqlite:///./paytracker.db`; the Docker image uses `/data/paytracker.db` on the `app_data` volume) |
+| `DATABASE_URL` | no | SQLite URL (default: `sqlite:///./paylark.db`; the Docker image uses `/data/paylark.db` on the `app_data` volume) |
 | `NEXT_PUBLIC_API_URL` | yes | Backend URL as seen by the browser. **Baked in at frontend build time**, not read at container startup — only takes effect when building the frontend yourself (`docker compose up --build`, see [Getting started](#getting-started)). The pre-built images used in [Quick start without cloning](#quick-start-without-cloning) always ship with this set to `http://localhost:8010`, since it's baked in once at release time before any deployment's real domain is known |
 | `NEXT_PUBLIC_SESSION_HEARTBEAT_SECONDS` | no | Seconds between session-expiry checks on an idle open tab (default: 180). Build-time, like `NEXT_PUBLIC_API_URL` |
 | `SMTP_HOST` | no | SMTP server for email reminders |
@@ -181,7 +181,7 @@ docker compose exec backend alembic revision --autogenerate -m "describe the cha
 
 ## 📲 Installing as a PWA
 
-- **Chrome / Brave (desktop):** install icon (⊕) in the address bar, or browser menu → Install Pay Tracker
+- **Chrome / Brave (desktop):** install icon (⊕) in the address bar, or browser menu → Install PayLark
 - **Android:** browser menu (⋮) → Add to Home screen
 - **iOS Safari:** Share (⎋) → Add to Home Screen
 
@@ -199,4 +199,4 @@ Requires HTTPS in production. Localhost works as an exception in most browsers.
 
 ## ⚖️ License
 
-Releases up to and including v1.1.0 are MIT-licensed. **From v1.2.0 onward**, Pay Tracker is free for personal, educational, research and other non-commercial use — including modifying, forking and redistributing — with attribution back to this repository. Commercial use requires the copyright holder's written permission. See [LICENSE](LICENSE) for the full terms.
+Releases up to and including v1.1.0 are MIT-licensed. **From v1.2.0 onward**, PayLark is free for personal, educational, research and other non-commercial use — including modifying, forking and redistributing — with attribution back to this repository. Commercial use requires the copyright holder's written permission. See [LICENSE](LICENSE) for the full terms.

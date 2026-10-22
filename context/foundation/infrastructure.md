@@ -1,5 +1,5 @@
 ---
-project: pay-tracker
+project: paylark
 researched_at: 2026-06-24
 updated: 2026-09-23
 recommended_platform: self-hosted-docker-compose
@@ -16,13 +16,13 @@ tech_stack:
 
 **Self-hosted Docker Compose with images published to GitHub Container Registry (GHCR).**
 
-Deployment is three services (`postgres`, `backend`, `frontend`) plus an optional `demo` profile, defined in `docker-compose.yml` (build from source) and `docker-compose.prod.yml` (pulls `ghcr.io/marwin87/pay-tracker-*:${PAY_TRACKER_VERSION:-latest}`). Images are built and released by `.github/workflows/release.yml`; `ci.yml` runs build/lint/tests on PRs. Reference remote setup: a small VPS (e.g. Hetzner CX22, ~€4/mo) behind Cloudflare's free proxy tier for TLS. Serverless-only platforms (Vercel, Netlify, Workers) are excluded — APScheduler needs a persistent process. Runner-up if managed hosting is ever wanted: Railway (Postgres is already a separate service, so migration is straightforward).
+Deployment is three services (`postgres`, `backend`, `frontend`) plus an optional `demo` profile, defined in `docker-compose.yml` (build from source) and `docker-compose.prod.yml` (pulls `ghcr.io/marwin87/paylark-*:${PAYLARK_VERSION:-latest}`). Images are built and released by `.github/workflows/release.yml`; `ci.yml` runs build/lint/tests on PRs. Reference remote setup: a small VPS (e.g. Hetzner CX22, ~€4/mo) behind Cloudflare's free proxy tier for TLS. Serverless-only platforms (Vercel, Netlify, Workers) are excluded — APScheduler needs a persistent process. Runner-up if managed hosting is ever wanted: Railway (Postgres is already a separate service, so migration is straightforward).
 
 ## Operational Story
 
 - **Preview/staging**: none platform-provided; test with `docker compose up --build`.
 - **Secrets**: `.env` on the host (never committed). Production requires `ENVIRONMENT=production` and a strong `JWT_SECRET` (enables secure cookies, disables `/docs`).
-- **Rollback**: pin `PAY_TRACKER_VERSION` to a previous tag and `docker compose -f docker-compose.prod.yml up -d`. Migrations run automatically on backend start; reverse manually with `alembic downgrade -1` if needed.
+- **Rollback**: pin `PAYLARK_VERSION` to a previous tag and `docker compose -f docker-compose.prod.yml up -d`. Migrations run automatically on backend start; reverse manually with `alembic downgrade -1` if needed.
 - **Logs**: `docker compose logs -f --tail=100 <service>`.
 - **Backups**: users can export JSON from Settings; server-side `pg_dump` via `docker compose exec -T postgres pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB"` on a cron is recommended. Restores also auto-snapshot current data (see `archive/history.md`, restore-auto-backup-safety-net).
 - **Approval**: production actions (deploy, rollback, secret rotation) are human-only.

@@ -6,7 +6,7 @@ import { copyright } from "@/lib/copyright";
 import { Tile, type TileColor } from "@/components/settings/Tile";
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "dev";
-const REPO_URL = "https://github.com/marwin87/pay-tracker";
+const REPO_URL = "https://github.com/marwin87/paylark";
 const LINK_CLASS = "font-medium text-green-700 underline-offset-2 hover:underline dark:text-emerald-400";
 
 // Direct runtime dependencies and shipped fonts; update when adding or removing one (PDF fonts: backend/app/assets/fonts/LICENSES.txt).

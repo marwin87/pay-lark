@@ -1,7 +1,7 @@
 [project]
 name = "backend"
 version = "1.5.0"
-description = "Pay Tracker backend — FastAPI + SQLAlchemy + Alembic"
+description = "PayLark backend — FastAPI + SQLAlchemy + Alembic"
 requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.18.4",

@@ -590,7 +590,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pay-tracker"
+name = "paylark"
 version = "1.4.0"
 source = { virtual = "." }
 dependencies = [

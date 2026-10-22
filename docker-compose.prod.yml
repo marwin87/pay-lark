@@ -1,12 +1,12 @@
 services:
   backend:
-    image: ghcr.io/marwin87/pay-tracker-backend:${PAY_TRACKER_VERSION:-latest}
+    image: ghcr.io/marwin87/paylark-backend:${PAYLARK_VERSION:-latest}
     container_name: backend
     restart: unless-stopped
     env_file: .env
     environment:
       # Beats DATABASE_URL from .env (the local-dev value)
-      DATABASE_URL: sqlite:////data/paytracker.db
+      DATABASE_URL: sqlite:////data/paylark.db
     volumes:
       - app_data:/data  # SQLite file (DATABASE_URL in backend/Dockerfile)
     healthcheck:
@@ -19,7 +19,7 @@ services:
       - "8010:8000"
 
   frontend:
-    image: ghcr.io/marwin87/pay-tracker-frontend:${PAY_TRACKER_VERSION:-latest}
+    image: ghcr.io/marwin87/paylark-frontend:${PAYLARK_VERSION:-latest}
     container_name: frontend
     restart: unless-stopped
     env_file: .env
@@ -36,7 +36,7 @@ services:
       - "3010:3000"
 
   demo-data:
-    image: ghcr.io/marwin87/pay-tracker-demo:${PAY_TRACKER_VERSION:-latest}
+    image: ghcr.io/marwin87/paylark-demo:${PAYLARK_VERSION:-latest}
     container_name: demo-data
     profiles: ["demo"]
     depends_on:

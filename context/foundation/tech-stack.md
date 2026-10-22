@@ -1,7 +1,7 @@
 ---
 starter_id: next
 package_manager: npm
-project_name: pay-tracker
+project_name: paylark
 hints:
   language_family: multi
   team_size: solo
@@ -26,7 +26,7 @@ hints:
 
 ## Why this stack
 
-Pay Tracker is a solo, after-hours project with auth, background tasks
+PayLark is a solo, after-hours project with auth, background tasks
 (auto-generated payment instances, email reminders, monthly summary), Excel/JSON
 export/restore, and a self-hosted Docker Compose deployment target.
 The stack is intentionally polyglot: Next.js 16 (TypeScript, App Router,

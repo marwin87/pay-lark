@@ -50,8 +50,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pay-tracker-backend:${{ needs.version.outputs.value }}
-            ghcr.io/${{ github.repository_owner }}/pay-tracker-backend:latest
+            ghcr.io/${{ github.repository_owner }}/paylark-backend:${{ needs.version.outputs.value }}
+            ghcr.io/${{ github.repository_owner }}/paylark-backend:latest
 
       - name: Build and push demo
         uses: docker/build-push-action@v7
@@ -60,8 +60,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pay-tracker-demo:${{ needs.version.outputs.value }}
-            ghcr.io/${{ github.repository_owner }}/pay-tracker-demo:latest
+            ghcr.io/${{ github.repository_owner }}/paylark-demo:${{ needs.version.outputs.value }}
+            ghcr.io/${{ github.repository_owner }}/paylark-demo:latest
 
   frontend-build:
     name: Docker — build frontend (${{ matrix.platform }}, native)
@@ -101,7 +101,7 @@ jobs:
           platforms: ${{ matrix.platform }}
           build-args: |
             NEXT_PUBLIC_APP_VERSION=${{ needs.version.outputs.value }}
-          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/pay-tracker-frontend,push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/paylark-frontend,push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
@@ -143,13 +143,13 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create \
-            -t ghcr.io/${{ github.repository_owner }}/pay-tracker-frontend:${{ needs.version.outputs.value }} \
-            -t ghcr.io/${{ github.repository_owner }}/pay-tracker-frontend:latest \
-            $(printf 'ghcr.io/${{ github.repository_owner }}/pay-tracker-frontend@sha256:%s ' *)
+            -t ghcr.io/${{ github.repository_owner }}/paylark-frontend:${{ needs.version.outputs.value }} \
+            -t ghcr.io/${{ github.repository_owner }}/paylark-frontend:latest \
+            $(printf 'ghcr.io/${{ github.repository_owner }}/paylark-frontend@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/pay-tracker-frontend:${{ needs.version.outputs.value }}
+          docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/paylark-frontend:${{ needs.version.outputs.value }}
 
   sync-version:
     name: Sync version files to released tag

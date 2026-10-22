@@ -1,6 +1,6 @@
 services:
   backend:
-    image: pay-tracker-backend:latest
+    image: paylark-backend:latest
     build:
       context: ./backend
       additional_contexts:
@@ -12,7 +12,7 @@ services:
     env_file: .env
     environment:
       # Beats DATABASE_URL from .env (the local-dev value)
-      DATABASE_URL: sqlite:////data/paytracker.db
+      DATABASE_URL: sqlite:////data/paylark.db
       # Passed through explicitly so a shell variable (e.g. set by the e2e run) beats .env.
       RATE_LIMIT_ENABLED: ${RATE_LIMIT_ENABLED:-true}
     volumes:
@@ -27,7 +27,7 @@ services:
       - "8010:8000"
 
   frontend:
-    image: pay-tracker-frontend:latest
+    image: paylark-frontend:latest
     build:
       context: ./frontend
       args:

@@ -51,7 +51,7 @@ Convention: `/10x-archive` still moves new changes into `context/archive/<date>-
 **Files/areas:** backend/app/schemas/auth.py, backend/app/routers/auth.py, backend/app/models/user.py, frontend/src/context/locale-context.tsx, frontend/messages/*.json, LanguageToggle
 
 ## xlsx-export (2026-06-13)
-**Outcome:** "Export .xlsx" button on the Payments page downloads `pay-tracker-<year>.xlsx`, a 12-sheet (Jan-Dec) workbook with Category and Currency columns (FR-010).
+**Outcome:** "Export .xlsx" button on the Payments page downloads `paylark-<year>.xlsx`, a 12-sheet (Jan-Dec) workbook with Category and Currency columns (FR-010).
 **Key decisions:**
 - `GET /export/xlsx?year=` defaults to current year; no year picker in UI.
 - Blob download via raw fetch with JWT header, since `apiFetch` is JSON-only; inline error, spinner on button.
@@ -215,7 +215,7 @@ Convention: `/10x-archive` still moves new changes into `context/archive/<date>-
 **Files/areas:** backend/app/routers/export.py, schemas, frontend RestoreButton.tsx, locale files, e2e 06-export-restore.spec.ts.
 
 ## bootstrap-verification
-Scaffold of the Next.js starter (`next`, npm, confidence verified, path custom, self-host, GitHub Actions) into pay-tracker was verified OK on 2026-06-11.
+Scaffold of the Next.js starter (`next`, npm, confidence verified, path custom, self-host, GitHub Actions) into paylark was verified OK on 2026-06-11.
 Follow-ups noted: review CLAUDE.md.scaffold/AGENTS.md, run npm audit (2 moderate), scaffold the FastAPI backend and docker-compose manually.
 
 ## selective-backup (2026-09-23)

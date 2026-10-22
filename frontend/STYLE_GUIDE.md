@@ -1,6 +1,6 @@
 # Frontend Style Guide
 
-Concrete Tailwind conventions for Pay Tracker's UI, extracted from existing components. The rule that caused the most trouble so far: **a new element that looks different from its neighbors is a bug, even if nothing is functionally broken.** Copy an existing pattern; don't improvise one.
+Concrete Tailwind conventions for PayLark's UI, extracted from existing components. The rule that caused the most trouble so far: **a new element that looks different from its neighbors is a bug, even if nothing is functionally broken.** Copy an existing pattern; don't improvise one.
 
 ## Before you write a single className
 

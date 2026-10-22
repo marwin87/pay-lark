@@ -1,4 +1,4 @@
-# E2E Testing Rules — Pay Tracker
+# E2E Testing Rules — PayLark
 
 ## Locator strategy
 - Use `getByRole`, `getByLabel`, `getByText` as primary locators.

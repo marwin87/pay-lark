@@ -254,7 +254,7 @@ export default function DashboardLayout({
             href="/dashboard"
             className="flex items-center gap-2 px-4 py-4 transition-opacity hover:opacity-80"
           >
-            <Image src="/pt-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
+            <Image src="/paylark-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
             <span className="brand-wordmark text-lg font-bold tracking-tight">
               <BrandWordmark />
             </span>
@@ -330,7 +330,7 @@ export default function DashboardLayout({
             href="/dashboard"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <Image src="/pt-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
+            <Image src="/paylark-logo.png" alt={BRAND.name} width={32} height={32} className="rounded-xl" />
             <span className="brand-wordmark text-lg font-bold tracking-tight">
               <BrandWordmark />
             </span>
