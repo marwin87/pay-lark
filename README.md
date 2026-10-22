@@ -56,8 +56,8 @@ Pull the published images from GitHub Container Registry and run the app with ju
 
 ```bash
 mkdir paylark && cd paylark
-curl -O https://raw.githubusercontent.com/marwin87/paylark/main/docker-compose.prod.yml
-curl -O https://raw.githubusercontent.com/marwin87/paylark/main/.env.example
+curl -O https://raw.githubusercontent.com/marwin87/pay-lark/main/docker-compose.prod.yml
+curl -O https://raw.githubusercontent.com/marwin87/pay-lark/main/.env.example
 cp .env.example .env
 ```
 
