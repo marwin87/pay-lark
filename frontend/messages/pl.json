@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Poprzedni miesiąc",
             "next": "Następny miesiąc",
-            "today": "Dziś"
+            "today": "Dziś",
+            "prevYear": "Poprzedni rok",
+            "nextYear": "Następny rok"
         },
         "categories": {
             "title": "Wg kategorii",
@@ -806,12 +808,12 @@
                 "q": "Co pokazuje strona startowa?",
                 "s1": "Strona startowa pokazuje miesiąc w skrócie, po jednym wierszu na walutę: <b>zielony</b> to zapłacone, <b>czerwony</b> po terminie, a <b>niebieski</b> nadchodzące. Legenda kolorów jest nad wierszami.",
                 "s2": "Dotknij wiersza, by zobaczyć wydatki według kategorii i ostatnie 12 miesięcy. Na wykresie z 12 miesięcy kwoty po terminie są czerwone.",
-                "s3": "Strzałkami zmienisz miesiąc, a <b>{today}</b> wraca do bieżącego."
+                "s3": "Strzałkami zmienisz miesiąc, a <b>{today}</b> wraca do bieżącego. Na komputerze podwójne strzałki zmieniają rok."
             },
             "seePayments": {
                 "q": "Gdzie widać, co jest do zapłaty?",
                 "s1": "Wejdź w <b>{payments}</b>. Widać tam rachunki z jednego miesiąca, pogrupowane według kategorii.",
-                "s2": "Strzałki przy nazwie miesiąca przełączają miesiąc. Na telefonie dotknięcie nazwy miesiąca otwiera jego wybór.",
+                "s2": "Strzałki przy nazwie miesiąca przełączają miesiąc. Na telefonie dotknięcie nazwy miesiąca otwiera jego wybór. Na komputerze podwójne strzałki zmieniają rok.",
                 "s3": "Naciśnij <b>{today}</b>, żeby wrócić do tego miesiąca."
             },
             "statusColors": {

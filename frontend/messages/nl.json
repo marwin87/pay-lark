@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Vorige maand",
             "next": "Volgende maand",
-            "today": "Vandaag"
+            "today": "Vandaag",
+            "prevYear": "Vorig jaar",
+            "nextYear": "Volgend jaar"
         },
         "categories": {
             "title": "Per categorie",
@@ -806,12 +808,12 @@
                 "q": "Wat toont de startpagina?",
                 "s1": "De startpagina toont de maand in één oogopslag, één rij per valuta: <b>groen</b> is betaald, <b>rood</b> te laat en <b>blauw</b> binnenkort. De kleurenlegenda staat boven de rijen.",
                 "s2": "Tik op een rij voor de uitgaven per categorie en de laatste 12 maanden. In de grafiek van 12 maanden zijn bedragen die te laat zijn rood.",
-                "s3": "Met de pijlen wissel je van maand, <b>{today}</b> brengt je terug."
+                "s3": "Met de pijlen wissel je van maand, <b>{today}</b> brengt je terug. Op de computer springen de dubbele pijlen een jaar."
             },
             "seePayments": {
                 "q": "Waar is te zien wat betaald moet worden?",
                 "s1": "Open <b>{payments}</b>. Daar staan de rekeningen van één maand, gegroepeerd per categorie.",
-                "s2": "Met de pijlen naast de maandnaam gaat men naar een andere maand. Tik op een telefoon op de maandnaam om er een te kiezen.",
+                "s2": "Met de pijlen naast de maandnaam gaat men naar een andere maand. Tik op een telefoon op de maandnaam om er een te kiezen. Op de computer springen de dubbele pijlen een jaar.",
                 "s3": "Tik op <b>{today}</b> om terug te gaan naar deze maand."
             },
             "statusColors": {

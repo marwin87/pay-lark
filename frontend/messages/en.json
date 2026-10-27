@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Previous month",
             "next": "Next month",
-            "today": "Today"
+            "today": "Today",
+            "prevYear": "Previous year",
+            "nextYear": "Next year"
         },
         "categories": {
             "title": "By category",
@@ -806,12 +808,12 @@
                 "q": "What does the start page show?",
                 "s1": "The start page shows the month at a glance, one row per currency: <b>green</b> is paid, <b>red</b> overdue and <b>blue</b> upcoming. The color key is above the rows.",
                 "s2": "Tap a row to open its spending by category and the last 12 months. In the 12-month chart overdue amounts are red.",
-                "s3": "Use the arrows to change the month, <b>{today}</b> to come back."
+                "s3": "Use the arrows to change the month, <b>{today}</b> to come back. On a computer, the double arrows jump a year."
             },
             "seePayments": {
                 "q": "Where is what needs to be paid shown?",
                 "s1": "Open <b>{payments}</b>. It shows the bills of one month, grouped by category.",
-                "s2": "Use the arrows next to the month name to go to another month. On a phone, tap the month name to pick one.",
+                "s2": "Use the arrows next to the month name to go to another month. On a phone, tap the month name to pick one. On a computer, the double arrows jump a year.",
                 "s3": "Press <b>{today}</b> to come back to this month."
             },
             "statusColors": {

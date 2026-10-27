@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Mese precedente",
             "next": "Mese successivo",
-            "today": "Oggi"
+            "today": "Oggi",
+            "prevYear": "Anno precedente",
+            "nextYear": "Anno successivo"
         },
         "categories": {
             "title": "Per categoria",
@@ -806,12 +808,12 @@
                 "q": "Cosa mostra la pagina iniziale?",
                 "s1": "La pagina iniziale mostra il mese in breve, una riga per valuta: <b>verde</b> è pagato, <b>rosso</b> scaduto e <b>blu</b> in arrivo. La legenda dei colori è sopra le righe.",
                 "s2": "Tocca una riga per vedere le spese per categoria e gli ultimi 12 mesi. Nel grafico dei 12 mesi gli importi scaduti sono in rosso.",
-                "s3": "Con le frecce cambi mese, <b>{today}</b> torna a quello attuale."
+                "s3": "Con le frecce cambi mese, <b>{today}</b> torna a quello attuale. Sul computer, le doppie frecce cambiano anno."
             },
             "seePayments": {
                 "q": "Dove si vede cosa c’è da pagare?",
                 "s1": "Aprire <b>{payments}</b>. Vi compaiono le bollette di un mese, raggruppate per categoria.",
-                "s2": "Con le frecce accanto al nome del mese si cambia mese. Sul telefono, toccare il nome del mese per sceglierne uno.",
+                "s2": "Con le frecce accanto al nome del mese si cambia mese. Sul telefono, toccare il nome del mese per sceglierne uno. Sul computer, le doppie frecce cambiano anno.",
                 "s3": "Premi <b>{today}</b> per tornare a questo mese."
             },
             "statusColors": {

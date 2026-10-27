@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Mês anterior",
             "next": "Mês seguinte",
-            "today": "Hoje"
+            "today": "Hoje",
+            "prevYear": "Ano anterior",
+            "nextYear": "Ano seguinte"
         },
         "categories": {
             "title": "Por categoria",
@@ -806,12 +808,12 @@
                 "q": "O que mostra a página inicial?",
                 "s1": "A página inicial mostra o mês de relance, uma linha por moeda: <b>verde</b> é pago, <b>vermelho</b> em atraso e <b>azul</b> a vencer. A legenda das cores está acima das linhas.",
                 "s2": "Toque numa linha para ver os gastos por categoria e os últimos 12 meses. No gráfico de 12 meses, os valores em atraso são vermelhos.",
-                "s3": "Use as setas para mudar de mês e <b>{today}</b> para voltar ao atual."
+                "s3": "Use as setas para mudar de mês e <b>{today}</b> para voltar ao atual. No computador, as setas duplas mudam de ano."
             },
             "seePayments": {
                 "q": "Onde se vê o que há a pagar?",
                 "s1": "Abrir <b>{payments}</b>. Aparecem as faturas de um mês, agrupadas por categoria.",
-                "s2": "Com as setas ao lado do nome do mês muda-se de mês. No telemóvel, tocar no nome do mês para escolher um.",
+                "s2": "Com as setas ao lado do nome do mês muda-se de mês. No telemóvel, tocar no nome do mês para escolher um. No computador, as setas duplas mudam de ano.",
                 "s3": "Toque em <b>{today}</b> para voltar a este mês."
             },
             "statusColors": {

@@ -543,6 +543,12 @@ function PaymentsPageInner() {
               nextDisabled={atMaxMonth}
               prevLabel={t("previousMonth")}
               nextLabel={t("nextMonth")}
+              onPrevYear={() => stepMonth(-12)}
+              onNextYear={() => stepMonth(12)}
+              prevYearDisabled={selYear <= minYear}
+              nextYearDisabled={selYear >= maxYear}
+              prevYearLabel={t("previousYear")}
+              nextYearLabel={t("nextYear")}
             >
               <StepperTitle title={monthTitle} subtitle={monthRelative(selectedMonth, currentMonth, locale)} onOpen={() => setMonthSheetOpen(true)} />
             </Stepper>

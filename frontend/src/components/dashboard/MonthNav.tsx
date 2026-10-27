@@ -32,6 +32,12 @@ export default function MonthNav({ month, currentMonth, minMonth, maxMonth, mont
         nextDisabled={month >= maxMonth}
         prevLabel={t("prev")}
         nextLabel={t("next")}
+        onPrevYear={() => onChange(shiftMonth(month, -12))}
+        onNextYear={() => onChange(shiftMonth(month, 12))}
+        prevYearDisabled={shiftMonth(month, -12) < minMonth}
+        nextYearDisabled={shiftMonth(month, 12) > maxMonth}
+        prevYearLabel={t("prevYear")}
+        nextYearLabel={t("nextYear")}
       >
         <StepperTitle id="month-summary-title" title={monthLabel} subtitle={monthRelative(month, currentMonth, locale)} onOpen={() => setSheetOpen(true)} />
       </Stepper>

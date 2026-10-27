@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 export const NAV_BTN =
   "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-30 sm:h-9 sm:w-9 dark:text-slate-400 dark:hover:bg-slate-700/50";
 
 // On mobile the arrows are raised white chips inside a tinted tile, like the day-filter banner on Payments.
+// Year jumps are desktop-only: on mobile the title opens the month picker, which has its own year stepper.
+const YEAR_BTN = `${NAV_BTN} max-sm:hidden`;
 const ARROW_BTN = `${NAV_BTN} max-sm:border max-sm:border-slate-200 max-sm:bg-white max-sm:shadow-sm max-sm:hover:border-slate-300 dark:max-sm:border-slate-600 dark:max-sm:bg-slate-800`;
 
 /** Prev / next arrows around a title: a tinted full-width tile on mobile, bare inline arrows from `sm` up. */
@@ -15,6 +17,12 @@ export default function Stepper({
   nextDisabled,
   prevLabel,
   nextLabel,
+  onPrevYear,
+  onNextYear,
+  prevYearDisabled,
+  nextYearDisabled,
+  prevYearLabel,
+  nextYearLabel,
   children,
 }: {
   onPrev: () => void;
@@ -23,10 +31,22 @@ export default function Stepper({
   nextDisabled: boolean;
   prevLabel: string;
   nextLabel: string;
+  /** Optional desktop-only jump by a year; shown when all of its props are given. */
+  onPrevYear?: () => void;
+  onNextYear?: () => void;
+  prevYearDisabled?: boolean;
+  nextYearDisabled?: boolean;
+  prevYearLabel?: string;
+  nextYearLabel?: string;
   children: ReactNode;
 }) {
   return (
     <div className="stepper-tile flex w-full items-center justify-between max-sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-1.5 sm:w-auto sm:justify-start sm:gap-1 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0 dark:border-slate-700 dark:bg-slate-900/40 dark:sm:bg-transparent">
+      {onPrevYear && (
+        <button type="button" onClick={onPrevYear} disabled={prevYearDisabled} aria-label={prevYearLabel} title={prevYearLabel} className={YEAR_BTN}>
+          <ChevronsLeft size={20} />
+        </button>
+      )}
       <button type="button" onClick={onPrev} disabled={prevDisabled} aria-label={prevLabel} title={prevLabel} className={ARROW_BTN}>
         <ChevronLeft size={20} />
       </button>
@@ -34,6 +54,11 @@ export default function Stepper({
       <button type="button" onClick={onNext} disabled={nextDisabled} aria-label={nextLabel} title={nextLabel} className={ARROW_BTN}>
         <ChevronRight size={20} />
       </button>
+      {onNextYear && (
+        <button type="button" onClick={onNextYear} disabled={nextYearDisabled} aria-label={nextYearLabel} title={nextYearLabel} className={YEAR_BTN}>
+          <ChevronsRight size={20} />
+        </button>
+      )}
     </div>
   );
 }

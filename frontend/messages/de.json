@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Vorheriger Monat",
             "next": "Nächster Monat",
-            "today": "Heute"
+            "today": "Heute",
+            "prevYear": "Vorheriges Jahr",
+            "nextYear": "Nächstes Jahr"
         },
         "categories": {
             "title": "Nach Kategorie",
@@ -806,12 +808,12 @@
                 "q": "Was zeigt die Startseite?",
                 "s1": "Die Startseite zeigt den Monat auf einen Blick, eine Zeile pro Währung: <b>grün</b> ist bezahlt, <b>rot</b> überfällig und <b>blau</b> anstehend. Die Farblegende steht über den Zeilen.",
                 "s2": "Tippe auf eine Zeile, um die Ausgaben nach Kategorie und die letzten 12 Monate zu sehen. Im 12-Monats-Diagramm sind überfällige Beträge rot.",
-                "s3": "Mit den Pfeilen wechselst du den Monat, <b>{today}</b> bringt dich zurück."
+                "s3": "Mit den Pfeilen wechselst du den Monat, <b>{today}</b> bringt dich zurück. Am Computer springen die Doppelpfeile um ein Jahr."
             },
             "seePayments": {
                 "q": "Wo ist zu sehen, was zu zahlen ist?",
                 "s1": "<b>{payments}</b> öffnen. Dort stehen die Rechnungen eines Monats, nach Kategorie gruppiert.",
-                "s2": "Mit den Pfeilen neben dem Monatsnamen wechselt der Monat. Am Handy öffnet ein Tipp auf den Monatsnamen die Auswahl.",
+                "s2": "Mit den Pfeilen neben dem Monatsnamen wechselt der Monat. Am Handy öffnet ein Tipp auf den Monatsnamen die Auswahl. Am Computer springen die Doppelpfeile um ein Jahr.",
                 "s3": "Tippe auf <b>{today}</b>, um zu diesem Monat zurückzukehren."
             },
             "statusColors": {

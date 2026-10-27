@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Mois précédent",
             "next": "Mois suivant",
-            "today": "Aujourd'hui"
+            "today": "Aujourd'hui",
+            "prevYear": "Année précédente",
+            "nextYear": "Année suivante"
         },
         "categories": {
             "title": "Par catégorie",
@@ -806,12 +808,12 @@
                 "q": "Que montre la page d’accueil ?",
                 "s1": "La page d’accueil montre le mois en un coup d’œil, une ligne par devise : <b>vert</b> pour payé, <b>rouge</b> pour en retard et <b>bleu</b> pour à venir. La légende des couleurs est au-dessus des lignes.",
                 "s2": "Touchez une ligne pour voir les dépenses par catégorie et les 12 derniers mois. Dans le graphique des 12 mois, les montants en retard sont en rouge.",
-                "s3": "Les flèches changent de mois, <b>{today}</b> revient au mois en cours."
+                "s3": "Les flèches changent de mois, <b>{today}</b> revient au mois en cours. Sur ordinateur, les doubles flèches changent d’année."
             },
             "seePayments": {
                 "q": "Où voir ce qu’il y a à payer ?",
                 "s1": "Ouvrir <b>{payments}</b>. Les factures d’un mois s’y affichent, groupées par catégorie.",
-                "s2": "Les flèches à côté du nom du mois changent de mois. Sur téléphone, touchez le nom du mois pour en choisir un.",
+                "s2": "Les flèches à côté du nom du mois changent de mois. Sur téléphone, touchez le nom du mois pour en choisir un. Sur ordinateur, les doubles flèches changent d’année.",
                 "s3": "Appuyez sur <b>{today}</b> pour revenir à ce mois."
             },
             "statusColors": {

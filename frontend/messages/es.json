@@ -86,7 +86,9 @@
         "nav": {
             "prev": "Mes anterior",
             "next": "Mes siguiente",
-            "today": "Hoy"
+            "today": "Hoy",
+            "prevYear": "Año anterior",
+            "nextYear": "Año siguiente"
         },
         "categories": {
             "title": "Por categoría",
@@ -806,12 +808,12 @@
                 "q": "¿Qué muestra la página de inicio?",
                 "s1": "La página de inicio muestra el mes de un vistazo, una fila por moneda: <b>verde</b> es pagado, <b>rojo</b> vencido y <b>azul</b> próximo. La leyenda de colores está sobre las filas.",
                 "s2": "Toca una fila para ver los gastos por categoría y los últimos 12 meses. En el gráfico de 12 meses, los importes vencidos van en rojo.",
-                "s3": "Con las flechas cambias de mes y <b>{today}</b> vuelve al actual."
+                "s3": "Con las flechas cambias de mes y <b>{today}</b> vuelve al actual. En el ordenador, las flechas dobles cambian de año."
             },
             "seePayments": {
                 "q": "¿Dónde se ve lo que hay que pagar?",
                 "s1": "Abrir <b>{payments}</b>. Allí aparecen las facturas de un mes, agrupadas por categoría.",
-                "s2": "Con las flechas junto al nombre del mes se cambia de mes. En el móvil, tocar el nombre del mes abre la selección.",
+                "s2": "Con las flechas junto al nombre del mes se cambia de mes. En el móvil, tocar el nombre del mes abre la selección. En el ordenador, las flechas dobles cambian de año.",
                 "s3": "Pulsa <b>{today}</b> para volver a este mes."
             },
             "statusColors": {
