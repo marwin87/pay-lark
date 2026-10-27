@@ -631,6 +631,8 @@
         "sortCategoryDesc": "Categorie Z-A",
         "sortPaidFirst": "Betaald eerst",
         "sortUnpaidFirst": "Onbetaald eerst",
+        "sortAllPaidFirst": "Betaald eerst (alle categorieën)",
+        "sortAllUnpaidFirst": "Onbetaald eerst (alle categorieën)",
         "searchPlaceholder": "Zoeken op naam…",
         "resetFilters": "Filters wissen",
         "toolbarTitle": "Zoeken, filteren & sorteren"

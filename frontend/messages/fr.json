@@ -631,6 +631,8 @@
         "sortCategoryDesc": "Catégorie Z-A",
         "sortPaidFirst": "Payées en premier",
         "sortUnpaidFirst": "Impayées en premier",
+        "sortAllPaidFirst": "Payées en premier (toutes catégories)",
+        "sortAllUnpaidFirst": "Impayées en premier (toutes catégories)",
         "searchPlaceholder": "Rechercher par nom…",
         "resetFilters": "Réinitialiser les filtres",
         "toolbarTitle": "Rechercher, filtrer et trier"

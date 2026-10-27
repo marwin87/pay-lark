@@ -44,12 +44,20 @@ import { useSessionSet, useSessionString, VIEW_STATE_KEYS } from "@/hooks/useSes
 import { useSwipe } from "@/hooks/useSwipe";
 import { toastName, useToast } from "@/context/toast-context";
 
-type PaymentSortOption = "category-az" | "category-za" | "paid-first" | "unpaid-first";
+type PaymentSortOption =
+  | "category-az"
+  | "category-za"
+  | "paid-first"
+  | "unpaid-first"
+  | "all-paid-first"
+  | "all-unpaid-first";
 const PAYMENT_SORT_OPTIONS: PaymentSortOption[] = [
   "category-az",
   "category-za",
   "paid-first",
   "unpaid-first",
+  "all-paid-first",
+  "all-unpaid-first",
 ];
 import {
   PaymentActionProvider,
@@ -357,6 +365,7 @@ function PaymentsPageInner() {
     "category-az",
     PAYMENT_SORT_OPTIONS,
   );
+  const isGlobalSort = sortOption === "all-paid-first" || sortOption === "all-unpaid-first";
   const categorySortOrder: CategorySortOrder = sortOption === "category-za" ? "za" : "az";
   const sortedCategories = sortCategoriesByLabel(activeCategories, categorySortOrder, tCategories);
   const sortOptions = [
@@ -364,6 +373,8 @@ function PaymentsPageInner() {
     { value: "category-za", label: tFilters("sortCategoryDesc") },
     { value: "paid-first", label: tFilters("sortPaidFirst") },
     { value: "unpaid-first", label: tFilters("sortUnpaidFirst") },
+    { value: "all-paid-first", label: tFilters("sortAllPaidFirst") },
+    { value: "all-unpaid-first", label: tFilters("sortAllUnpaidFirst") },
   ];
 
   async function handleExportXlsx(scope: ExportScope) {
@@ -725,7 +736,8 @@ function PaymentsPageInner() {
             )}
               <button
                 onClick={allCollapsed ? expandAll : collapseAll}
-                className="flex shrink-0 items-center gap-1.5 ml-auto rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-200"
+                disabled={isGlobalSort}
+                className="flex shrink-0 items-center gap-1.5 ml-auto rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-500 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-200 disabled:pointer-events-none disabled:opacity-50"
               >
                 <ChevronsUpDown size={16} />
                 {allCollapsed ? t("expandAll") : t("collapseAll")}
@@ -782,7 +794,31 @@ function PaymentsPageInner() {
       {/* Payment list */}
       {!loadError && filteredInstances.length > 0 && (
         <div className={`flex flex-col gap-4 transition-opacity ${staleClass}`}>
-          {sortedCategories.map((cat) => {
+          {isGlobalSort && (
+            <div className="flex flex-col gap-2">
+              {[...filteredInstances]
+                .sort(
+                  (a, b) =>
+                    (Number(a.status === "paid") - Number(b.status === "paid")) *
+                      (sortOption === "all-paid-first" ? -1 : 1) ||
+                    a.due_date.localeCompare(b.due_date) ||
+                    a.bill_name.localeCompare(b.bill_name),
+                )
+                .map((inst) => (
+                  <PaymentRow
+                    key={inst.id}
+                    instance={inst}
+                    categoryName={categoryFilterLabel(inst.category, tCategories)}
+                    readOnly={false}
+                    onMarkPaid={setDialogTarget}
+                    onDelete={setDeleteTarget}
+                    onRevert={setRevertTarget}
+                    onEdit={setEditTarget}
+                  />
+                ))}
+            </div>
+          )}
+          {!isGlobalSort && sortedCategories.map((cat) => {
             const key = String(cat.id);
             const group = filteredInstances.filter((inst) => inst.category.id === cat.id);
             if (sortOption === "paid-first" || sortOption === "unpaid-first") {

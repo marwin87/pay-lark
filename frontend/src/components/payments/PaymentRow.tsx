@@ -16,9 +16,11 @@ interface Props {
   onEdit: (instance: PaymentInstanceOut) => void;
   /** True for past months — hides the Mark as Paid button. */
   readOnly?: boolean;
+  /** Shown as a small label next to the name when the list isn't grouped by category. */
+  categoryName?: string;
 }
 
-export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, onEdit, readOnly = false }: Props) {
+export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, onEdit, readOnly = false, categoryName }: Props) {
   const t = useTranslations("PaymentRow");
   const locale = useLocale();
   const { decimalSeparator, timeZone } = useAppLocale();
@@ -118,6 +120,11 @@ export default function PaymentRow({ instance, onMarkPaid, onDelete, onRevert, o
           <span className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">
             {instance.bill_name}
           </span>
+          {categoryName && (
+            <span className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+              {categoryName}
+            </span>
+          )}
           {isCalmUpcoming && (
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
               <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />

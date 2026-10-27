@@ -631,6 +631,8 @@
         "sortCategoryDesc": "类别 Z-A",
         "sortPaidFirst": "已付款优先",
         "sortUnpaidFirst": "未付款优先",
+        "sortAllPaidFirst": "已付款优先（所有类别）",
+        "sortAllUnpaidFirst": "未付款优先（所有类别）",
         "searchPlaceholder": "按名称搜索…",
         "resetFilters": "重置筛选",
         "toolbarTitle": "搜索、筛选与排序"

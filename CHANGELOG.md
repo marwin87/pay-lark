@@ -7,6 +7,7 @@ Notable changes, release by release.
 ### Features
 
 - Rebranded to PayLark, with a new logo and green theme color
+- Sort payments paid or unpaid first across all categories
 
 ## v1.5.0 — 21-10-2026
 
